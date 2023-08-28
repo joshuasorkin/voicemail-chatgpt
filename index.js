@@ -29,12 +29,7 @@ async function chatGPTGenerate(prompt) {
 // Twilio configuration
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// Google Cloud Speech-to-Text configuration
-const speechClient = new SpeechClient();
-
 // Twilio webhook endpoint
-
-
 app.post('/twilio-webhook', async (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
     const gather = twiml.gather({
