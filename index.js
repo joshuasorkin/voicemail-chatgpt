@@ -43,6 +43,7 @@ app.post('/twilio-webhook', async (req, res) => {
 });
 
 app.post('/completed', async (req, res) => {
+    req.setTimeout(process.env.TWILIO_TIMEOUT_SECONDS * 1000);
     prompt = req.body.SpeechResult;
     let result;
     chatGPTGenerate(prompt)
