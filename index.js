@@ -38,6 +38,7 @@ app.post('/twilio-webhook', async (req, res) => {
         speechTimeout:'auto'
     });
     twimlBuilder.sayReading(gather,"What would you like to say to Chat GPT?");
+    twiml.redirect('/twilio-webhook');
     res.send(twiml.toString());
 });
 
