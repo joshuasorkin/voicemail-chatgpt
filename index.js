@@ -61,11 +61,21 @@ app.post('/completed', async (req, res) => {
 
 function twiml_sayRedirect(result){
     const twiml = new twilio.twiml.VoiceResponse();
-    twimlBuilder.say(twiml,result);
+    let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
+    fragments.forEach(fragment => twimlBuilder.say(twiml,fragment));
     twiml.redirect('/twilio-webhook');
     return twiml;
 }
 
+function splitStringIntoFragments(inputString, N) {
+    const fragments = [];
+
+    for (let i = 0; i < inputString.length; i += N) {
+        fragments.push(inputString.slice(i, i + N));
+    }
+
+    return fragments;
+}
 
 // Start the server
 const PORT = process.env.PORT || 3000;
