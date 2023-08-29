@@ -15,6 +15,8 @@ const openai = new OpenAI({
     apiKey:process.env.OPENAI_API_KEY
 });
 
+const callsData = {};
+
 async function chatGPTGenerate(prompt) {
     const completion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
@@ -44,20 +46,27 @@ app.post('/twilio-webhook', async (req, res) => {
 
 app.post('/enqueue-call', async (req, res) => {
     const userSpeech = req.body.SpeechResult;
+    const callSid = req.body.CallSid;
+    callsData[callSid] = {
+        userSpeech: userSpeech
+    }
 
     //enqueue call
     const twiml = new VoiceResponse();
-    twiml.enqueue('holdQueue',{waitUrl: '/wait', method:'POST'})
-        .payload({
-            userSpeech:userSpeech
-        });
+    twiml.enqueue('holdQueue',{waitUrl: '/wait', method:'POST'});
     res.send(twiml.toString());
 });
 
 
 app.post('/wait', async (req,res) => {
-    const queueSid = req.body.queueSid;
-    const userSpeech = req.body.userSpeech;
+    const queueSid = req.body.QueueSid;
+    const callSid = req.body.CallSid;
+    const callData = callsData[callSid];
+    if (!callData){
+        return res.sendStatus(400);
+    }
+    const userSpeech = callData.userSpeech;
+
     try {
         const result = await chatGPTGenerate(userSpeech);
         const client = twilio();
