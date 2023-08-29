@@ -58,6 +58,12 @@ app.post('/enqueue-and-process', async (req, res) => {
     res.send(twiml.toString());
 });
 
+app.post("/wait", function (req, res) {
+    const response = new VoiceResponse();
+    response.play(process.env.WAIT_URL);
+    res.send(response.toString());
+});
+
 async function processCall(callSid){
     const callData = callsData[callSid];
     if (!callData){
