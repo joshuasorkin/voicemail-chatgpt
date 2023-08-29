@@ -34,7 +34,7 @@ app.post('/twilio-webhook', async (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
     const gather = twiml.gather({
         input:'speech',
-        action:'/completed',
+        action:'/enqueue-call',
         speechTimeout:'auto'
     });
     twimlBuilder.sayReading(gather,"What would you like to say to Chat GPT?");
@@ -42,6 +42,42 @@ app.post('/twilio-webhook', async (req, res) => {
     res.send(twiml.toString());
 });
 
+app.post('/enqueue-call', async (req, res) => {
+    const userSpeech = req.body.SpeechResult;
+
+    //enqueue call
+    const twiml = new VoiceResponse();
+    twiml.enqueue('holdQueue',{waitUrl: '/wait', method:'POST'})
+        .payload({
+            userSpeech:userSpeech
+        });
+    res.send(twiml.toString());
+});
+
+
+app.post('/wait', async (req,res) => {
+    const queueSid = req.body.queueSid;
+    const userSpeech = req.body.userSpeech;
+    try {
+        const result = await chatGPTGenerate(userSpeech);
+        const client = twilio();
+        const twiml = twiml_sayRedirect(result);
+        await client.calls(queueSid).update({
+            twiml:twiml
+        });
+    }
+    catch(error){
+        const client = twilio();
+        const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.");
+        await client.calls(queueSid).update({
+            twiml:twiml
+        });
+    }
+    res.sendStatus(200);
+
+})
+
+/*
 app.post('/completed', async (req, res) => {
     req.setTimeout(process.env.TWILIO_TIMEOUT_SECONDS * 1000);
     prompt = req.body.SpeechResult;
@@ -58,6 +94,7 @@ app.post('/completed', async (req, res) => {
         res.send(twiml.toString());
     });
 });
+*/
 
 function twiml_sayRedirect(result){
     const twiml = new twilio.twiml.VoiceResponse();
