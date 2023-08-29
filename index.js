@@ -61,12 +61,15 @@ app.post('/enqueue-call', async (req, res) => {
 app.post('/wait', async (req,res) => {
     const queueSid = req.body.QueueSid;
     const callSid = req.body.CallSid;
+    console.log(queueSid,callSid);
     const callData = callsData[callSid];
     if (!callData){
+        console.log("callData not found");
         return res.sendStatus(400);
     }
+    console.log({callData});
     const userSpeech = callData.userSpeech;
-
+    console.log({userSpeech});
     try {
         const result = await chatGPTGenerate(userSpeech);
         const client = twilio();
