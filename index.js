@@ -19,7 +19,9 @@ const callsData = {};
 
 async function chatGPTGenerate(prompt) {
     const completion = await openai.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
+      messages: [{role: 'system', content: 'Your response must be 3000 characters or less.'},
+                 { role: 'user', content: prompt }
+                ],
       model: 'gpt-3.5-turbo',
     });  
     response = completion.choices[0].message.content;
@@ -58,9 +60,10 @@ app.post('/enqueue-and-process', async (req, res) => {
     res.send(twiml.toString());
 });
 
-app.post("/wait", function (req, res) {
+app.post('/wait', function (req, res) {
     const response = new VoiceResponse();
     response.play(process.env.WAIT_URL);
+    console.log(response.toString());
     res.send(response.toString());
 });
 
@@ -119,7 +122,7 @@ function twiml_sayRedirect(result){
     
     console.log(result);
     //twimlBuilder.say(twiml,result);
-    twiml.redirect('/twilio-webhook');
+    twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
     return twiml;
 }
 
