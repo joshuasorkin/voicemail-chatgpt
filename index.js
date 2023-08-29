@@ -44,7 +44,7 @@ app.post('/twilio-webhook', async (req, res) => {
     res.send(twiml.toString());
 });
 
-app.post('/enqueue-call', async (req, res) => {
+app.post('/enqueue-and-process', async (req, res) => {
     const userSpeech = req.body.SpeechResult;
     const callSid = req.body.CallSid;
     callsData[callSid] = {
@@ -54,14 +54,11 @@ app.post('/enqueue-call', async (req, res) => {
     //enqueue call
     const twiml = new VoiceResponse();
     twiml.enqueue('holdQueue',{waitUrl: '/wait', method:'POST'});
+    process(callSid);
     res.send(twiml.toString());
 });
 
-
-app.post('/wait', async (req,res) => {
-    const queueSid = req.body.QueueSid;
-    const callSid = req.body.CallSid;
-    console.log(queueSid,callSid);
+async function process(callSid){
     const callData = callsData[callSid];
     if (!callData){
         console.log("callData not found");
@@ -74,20 +71,18 @@ app.post('/wait', async (req,res) => {
         const result = await chatGPTGenerate(userSpeech);
         const client = twilio();
         const twiml = twiml_sayRedirect(result);
-        await client.calls(queueSid).update({
+        await client.calls(callSid).update({
             twiml:twiml
         });
     }
     catch(error){
         const client = twilio();
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.");
-        await client.calls(queueSid).update({
+        await client.calls(callSid).update({
             twiml:twiml
         });
     }
-    res.sendStatus(200);
-
-})
+}
 
 /*
 app.post('/completed', async (req, res) => {
