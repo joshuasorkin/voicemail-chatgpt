@@ -54,11 +54,11 @@ app.post('/enqueue-and-process', async (req, res) => {
     //enqueue call
     const twiml = new VoiceResponse();
     twiml.enqueue('holdQueue',{waitUrl: '/wait', method:'POST'});
-    process(callSid);
+    processCall(callSid);
     res.send(twiml.toString());
 });
 
-async function process(callSid){
+async function processCall(callSid){
     const callData = callsData[callSid];
     if (!callData){
         console.log("callData not found");
