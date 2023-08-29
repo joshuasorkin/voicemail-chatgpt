@@ -76,6 +76,7 @@ async function processCall(callSid){
         });
     }
     catch(error){
+        console.log({error});
         const client = twilio();
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.");
         await client.calls(callSid).update({
