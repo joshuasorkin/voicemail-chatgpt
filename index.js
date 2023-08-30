@@ -102,12 +102,14 @@ function twiml_sayRedirect(result){
     fragments.forEach(fragment => twimlBuilder.say(twiml,fragment));
     
     console.log(result);
+    /*
     const gather = twiml.gather({
         input:'speech',
         action:'/twilio-webhook',
         speechTimeout:'auto'
     });
-    //twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
+    */
+    twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
     return twiml;
 }
 
