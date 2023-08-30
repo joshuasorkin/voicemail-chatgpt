@@ -39,7 +39,7 @@ app.post('/twilio-webhook', async (req, res) => {
     const gather = twiml.gather({
         input:'speech',
         action:'/enqueue-and-process',
-        speechTimeout:'auto'
+        speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS
     });
     twimlBuilder.sayReading(gather,"What would you like to say to Chat GPT?");
     twiml.redirect('/twilio-webhook');
