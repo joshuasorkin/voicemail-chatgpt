@@ -97,15 +97,16 @@ async function processCall(callSid){
 function twiml_sayRedirect(result){
     const twiml = new twilio.twiml.VoiceResponse();
     
-    let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
-    console.log({fragments});
-    fragments.forEach(fragment => twimlBuilder.say(twiml,fragment));
-    
-    console.log(result);
-    
     const gather = twiml.gather({
         action:'/twilio-webhook'
-    });
+    });   
+    
+    let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
+    console.log({fragments});
+    fragments.forEach(fragment => twimlBuilder.say(gather,fragment));
+    
+    console.log(result);
+
     
     //twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
     return twiml;
