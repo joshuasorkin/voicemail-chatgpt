@@ -57,6 +57,7 @@ app.post('/enqueue-and-process', async (req, res) => {
     const twiml = new VoiceResponse();
     twiml.enqueue('holdQueue',{waitUrl: '/wait'});
     processCall(callSid);
+    console.log("enqueue-and-process twiml: ",twiml.toString())
     res.send(twiml.toString());
 });
 
