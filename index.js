@@ -20,6 +20,7 @@ const callsData = {};
 async function chatGPTGenerate(prompt) {
     const completion = await openai.chat.completions.create({
       messages: [{role: 'system', content: 'Your response must be 3000 characters or less.'},
+                {role: 'system', content: 'All of your responses must be in rhyming couplets.'}
                  { role: 'user', content: prompt }
                 ],
       model: 'gpt-3.5-turbo',
