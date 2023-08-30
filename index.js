@@ -94,25 +94,6 @@ async function processCall(callSid){
     }
 }
 
-/*
-app.post('/completed', async (req, res) => {
-    req.setTimeout(process.env.TWILIO_TIMEOUT_SECONDS * 1000);
-    prompt = req.body.SpeechResult;
-    let result;
-    chatGPTGenerate(prompt)
-    .then(response => {
-        result = response;
-        const twiml = twiml_sayRedirect(result);
-        res.send(twiml.toString());
-    })
-    .catch(error => {
-        result = error;
-        const twiml = twiml_sayRedirect(response);
-        res.send(twiml.toString());
-    });
-});
-*/
-
 function twiml_sayRedirect(result){
     const twiml = new twilio.twiml.VoiceResponse();
     
@@ -121,8 +102,12 @@ function twiml_sayRedirect(result){
     fragments.forEach(fragment => twimlBuilder.say(twiml,fragment));
     
     console.log(result);
-    //twimlBuilder.say(twiml,result);
-    twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
+    const gather = twiml.gather({
+        input:'speech',
+        action:'/twilio-webhook',
+        speechTimeout:'auto'
+    });
+    //twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
     return twiml;
 }
 
