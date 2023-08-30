@@ -99,7 +99,8 @@ function twiml_sayRedirect(result){
     const twiml = new twilio.twiml.VoiceResponse();
     
     const gather = twiml.gather({
-        action:process.env.ABSOLUTE_URL+'/twilio-webhook'
+        action:process.env.ABSOLUTE_URL+'/twilio-webhook',
+        actionOnEmptyResult:true
     });   
     
     let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
