@@ -47,7 +47,7 @@ app.post('/twilio-webhook', async (req, res) => {
         action:'/enqueue-and-process',
         speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS
     });
-    twimlBuilder.sayReading(gather,"Chat GPT speaking, how may I help you?");
+    twimlBuilder.sayReading(gather,"Chat GPT speaking. How may I help you?");
     twiml.redirect('/twilio-webhook');
     res.send(twiml.toString());
 });
