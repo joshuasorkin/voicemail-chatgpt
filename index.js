@@ -47,7 +47,7 @@ app.post('/twilio-webhook', async (req, res) => {
         action:'/enqueue-and-process',
         speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS
     });
-    twimlBuilder.sayReading(gather,"Chat GPT speaking. How may I help you?");
+    twimlBuilder.sayReading(gather,"Hi!  I'm Chat GPT. What would you like to say?");
     twiml.redirect('/twilio-webhook');
     res.send(twiml.toString());
 });
@@ -87,6 +87,10 @@ async function processCall(callSid){
         const result = await chatGPTGenerate(userSpeech);
         const client = twilio();
         const twiml = twiml_sayRedirect(result);
+        const call = await client.calls(callSid).fetch();
+        if (call.status === 'completed' || call.status === 'canceled'){
+            return new VoiceResponse().say("Thank you for using the system.");
+        }
         await client.calls(callSid).update({
             twiml:twiml
         });
@@ -95,6 +99,10 @@ async function processCall(callSid){
         console.log({error});
         const client = twilio();
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.");
+        const call = await client.calls(callSid).fetch();
+        if (call.status === 'completed' || call.status === 'canceled'){
+            return new VoiceResponse().say("Thank you for using the system.");
+        }
         await client.calls(callSid).update({
             twiml:twiml
         });
