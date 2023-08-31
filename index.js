@@ -63,7 +63,7 @@ app.post('/twilio-webhook', async (req, res) => {
     if(!callsData[callSid] || callsData[callSid].userMessages.length === 0){
         greeting = "Hi!  I'm Chat GPT.  " + greeting;
     }
-    twimlBuilder.sayReading(gather,"Hi!  I'm Chat GPT. What would you like to say?");
+    twimlBuilder.sayReading(gather,greeting);
     twiml.redirect('/twilio-webhook');
     res.send(twiml.toString());
 });
