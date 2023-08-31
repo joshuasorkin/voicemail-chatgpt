@@ -11,6 +11,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 let protocol;
 
+const messages_default = [
+    {role: 'system', content: 'Your response must be 2000 characters or less.'},
+    {role: 'system', content: 'Use conversational American English.'}
+]
+
 // Set up your API key and endpoint
 const openai = new OpenAI({
     apiKey:process.env.OPENAI_API_KEY
@@ -18,6 +23,10 @@ const openai = new OpenAI({
 
 const callsData = {};
 
+
+//todo: separate chatGPT-specific functionality into its own class, e.g.
+//chatGPTGenerate() and messages_default
+//include methods addMessage_user() and addMessage_chatGPT()
 async function chatGPTGenerate(userMessages) {
     const messages = [
         {role: 'system', content: 'Your response must be 2000 characters or less.'},
