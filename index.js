@@ -115,6 +115,7 @@ function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
     
     const gather = twiml.gather({
+        method:'POST',
         action:absoluteUrl+'/twilio-webhook',
         actionOnEmptyResult:true
     });   
