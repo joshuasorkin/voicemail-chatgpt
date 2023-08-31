@@ -63,6 +63,7 @@ app.post('/enqueue-and-process', async (req, res) => {
     const twiml = new VoiceResponse();
     twiml.enqueue({waitUrl: '/wait'},'holdQueue');
     const absoluteUrl = req.protocol+'://'+req.get('host');
+    console.log({absoluteUrl});
     processCall(callSid,absoluteUrl);
     console.log("enqueue-and-process twiml: ",twiml.toString())
     res.send(twiml.toString());
@@ -95,7 +96,6 @@ async function processCall(callSid,absoluteUrl){
         await client.calls(callSid).update({
             twiml:twiml
         });
-        console.log("update successful")
     }
     catch(error){
         console.log({error});
