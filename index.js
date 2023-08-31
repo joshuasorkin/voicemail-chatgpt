@@ -59,7 +59,7 @@ app.post('/twilio-webhook', async (req, res) => {
         speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS
     });
     let greeting = "What would you like to say?";
-    if(!callsData[callSid]){
+    if(!callsData[callSid] || callsData[callSid].userMessages.length === 0){
         greeting = "Hi!  I'm Chat GPT.  " + greeting;
     }
     twimlBuilder.sayReading(gather,"Hi!  I'm Chat GPT. What would you like to say?");
