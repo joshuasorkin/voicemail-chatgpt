@@ -9,6 +9,7 @@ const TwimlBuilder = require('./twimlBuilder');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
+let protocol;
 
 // Set up your API key and endpoint
 const openai = new OpenAI({
@@ -62,7 +63,8 @@ app.post('/enqueue-and-process', async (req, res) => {
     //enqueue call
     const twiml = new VoiceResponse();
     twiml.enqueue({waitUrl: '/wait'},'holdQueue');
-    const absoluteUrl = req.protocol+'://'+req.get('host');
+    protocol = process.env.PROTOCOL || req.protocol;
+    const absoluteUrl = protocol+'://'+req.get('host');
     console.log({absoluteUrl});
     processCall(callSid,absoluteUrl);
     console.log("enqueue-and-process twiml: ",twiml.toString())
