@@ -63,7 +63,7 @@ app.post('/enqueue-and-process', async (req, res) => {
         }
     }
     else{
-        callsData[callSid].userMessages.push([{role:'user',content:userSpeech}]);
+        callsData[callSid].userMessages.push({role:'user',content:userSpeech});
     }     
 
     //enqueue call
