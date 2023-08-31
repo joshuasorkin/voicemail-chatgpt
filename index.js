@@ -52,6 +52,7 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 
 // Twilio webhook endpoint
 app.post('/twilio-webhook', async (req, res) => {
+    const callSid = req.body.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
     const gather = twiml.gather({
         input:'speech',
