@@ -18,20 +18,21 @@ const openai = new OpenAI({
 
 const callsData = {};
 
-async function chatGPTGenerate(prompt) {
+async function chatGPTGenerate(userMessages) {
+    const messages = [
+        {role: 'system', content: 'Your response must be 2000 characters or less.'},
+        {role: 'system', content: 'Use conversational American English.'}
+    ]
+    userMessages.forEach(message => {
+        messages.push(message);
+    })
     const completion = await openai.chat.completions.create({
-      messages: [{role: 'system', content: 'Your response must be 2000 characters or less.'},
-                /*
-                {role: 'system', content: 'If I ask you to pretend that you are something, '
-                                            +'your response should role-play in the character '+
-                                            'I have asked for.'},
-                */
-                {role: 'system', content: 'Use conversational American English.'},
-                 { role: 'user', content: prompt }
-                ],
-      model: 'gpt-3.5-turbo',
+      messages: messages,
+      model: 'gpt-3.5-turbo'
     });  
     response = completion.choices[0].message.content;
+    userMessages.push({role:'assistant',content:response})
+    console.log({userMessages});
     return response;
 }
 
@@ -56,9 +57,14 @@ app.post('/twilio-webhook', async (req, res) => {
 app.post('/enqueue-and-process', async (req, res) => {
     const userSpeech = req.body.SpeechResult;
     const callSid = req.body.CallSid;
-    callsData[callSid] = {
-        userSpeech: userSpeech
+    if (!callsData[callSid]){
+        callsData[callSid] = {
+            userMessages: [{role:'user',content:userSpeech}]
+        }
     }
+    else{
+        callsData[callSid].userMessages.push([{role:'user',content:userSpeech}]);
+    }     
 
     //enqueue call
     const twiml = new VoiceResponse();
@@ -85,10 +91,10 @@ async function processCall(callSid,absoluteUrl){
         return res.sendStatus(400);
     }
     console.log({callData});
-    const userSpeech = callData.userSpeech;
-    console.log({userSpeech});
+    const userMessages = callData.userMessages;
+    console.log({userMessages});
     try {
-        const result = await chatGPTGenerate(userSpeech);
+        const result = await chatGPTGenerate(userMessages);
         const client = twilio();
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call = await client.calls(callSid).fetch();
