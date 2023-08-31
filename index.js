@@ -19,7 +19,7 @@ const callsData = {};
 
 async function chatGPTGenerate(prompt) {
     const completion = await openai.chat.completions.create({
-      messages: [{role: 'system', content: 'Your response must be 3000 characters or less.'},
+      messages: [{role: 'system', content: 'Your response must be 2000 characters or less.'},
                 /*
                 {role: 'system', content: 'If I ask you to pretend that you are something, '
                                             +'your response should role-play in the character '+
@@ -47,7 +47,7 @@ app.post('/twilio-webhook', async (req, res) => {
         action:'/enqueue-and-process',
         speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS
     });
-    twimlBuilder.sayReading(gather,"What would you like to say to Chat GPT?");
+    twimlBuilder.sayReading(gather,"Chat GPT speaking, how may I help you?");
     twiml.redirect('/twilio-webhook');
     res.send(twiml.toString());
 });
