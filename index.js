@@ -62,7 +62,8 @@ app.post('/enqueue-and-process', async (req, res) => {
     //enqueue call
     const twiml = new VoiceResponse();
     twiml.enqueue({waitUrl: '/wait'},'holdQueue');
-    processCall(callSid);
+    const absoluteUrl = req.protocol+'://'+req.get('host');
+    processCall(callSid,absoluteUrl);
     console.log("enqueue-and-process twiml: ",twiml.toString())
     res.send(twiml.toString());
 });
@@ -74,7 +75,7 @@ app.post('/wait', function (req, res) {
     res.send(response.toString());
 });
 
-async function processCall(callSid){
+async function processCall(callSid,absoluteUrl){
     const callData = callsData[callSid];
     if (!callData){
         console.log("callData not found");
@@ -86,7 +87,7 @@ async function processCall(callSid){
     try {
         const result = await chatGPTGenerate(userSpeech);
         const client = twilio();
-        const twiml = twiml_sayRedirect(result);
+        const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call = await client.calls(callSid).fetch();
         if (call.status === 'completed' || call.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
@@ -98,7 +99,7 @@ async function processCall(callSid){
     catch(error){
         console.log({error});
         const client = twilio();
-        const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.");
+        const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.",absoluteUrl);
         const call = await client.calls(callSid).fetch();
         if (call.status === 'completed' || call.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
@@ -109,11 +110,11 @@ async function processCall(callSid){
     }
 }
 
-function twiml_sayRedirect(result){
+function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
     
     const gather = twiml.gather({
-        action:process.env.ABSOLUTE_URL+'/twilio-webhook',
+        action:absoluteUrl+'/twilio-webhook',
         actionOnEmptyResult:true
     });   
     
@@ -123,8 +124,6 @@ function twiml_sayRedirect(result){
     
     console.log(result);
 
-    
-    //twiml.redirect(process.env.ABSOLUTE_URL+'/twilio-webhook');
     return twiml;
 }
 
