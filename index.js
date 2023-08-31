@@ -95,6 +95,7 @@ async function processCall(callSid,absoluteUrl){
         await client.calls(callSid).update({
             twiml:twiml
         });
+        console.log("update successful")
     }
     catch(error){
         console.log({error});
