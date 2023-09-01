@@ -50,6 +50,11 @@ async function chatGPTGenerate(userMessages) {
 // Twilio configuration
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+// GET endpoint for testing
+app.get('/twilio-webhook', async (req, res) => {
+    res.send(`You sent request: ${req.toString()}`);
+}
+
 // Twilio webhook endpoint
 app.post('/twilio-webhook', async (req, res) => {
     const callSid = req.body.CallSid;
