@@ -15,8 +15,10 @@ fs.readFile('.env', 'utf8', (err, data) => {
         const parts = line.split('=');
         if (parts.length === 2) {
             const name = parts[0].trim();
-            const defaultValue = parts[1].trim().replace(/"/g, '\\"');
-            return `          - name: ${name}\n            default: "${defaultValue}"`;
+            if(name !== 'PORT'){
+                const defaultValue = parts[1].trim().replace(/"/g, '\\"');
+                return `          - name: ${name}\n            default: "${defaultValue}"`;
+            }
         }
         return null;
     }).filter(Boolean); // Filter out null values

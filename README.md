@@ -10,12 +10,12 @@ Instructions for deploying a Node.js app and configuring Twilio appropriately ar
 
 You will need to supply the environment variables with a `.env` file in the root folder.  Environment variables are indicated throughout the code with `process.env.[VARIABLE_NAME]`.
 
-# Deta.space deployment
+# Space deployment
 
-If you are deploying the app on [Deta.space](deta.space), once you have generated your default `Spacefile`, add the `.env` file's environment variables to your `Spacefile` as follows (assuming `Spacefile` is in the root folder):
+If you are deploying the app on [Space](deta.space), once you have generated your default `Spacefile`, add the `.env` file's environment variables to your `Spacefile` as follows (assuming `Spacefile` is in the root folder):
 
 `node env-to-spacefile`
 
-Keep in mind that the `ABSOLUTE_URL` in `Spacefile` will need to be changed to the deployment URL provided by Deta.space.
+Note that if the value of `ABSOLUTE_URL` in `Spacefile` is not already set to the Space domain, it will need to be changed accordingly once you have run `env-to-spacefile`.  Storing your Space domain in another environment variable, such as `SPACE_URL`, may be helpful for making this change.
 
 WARNING: running `env-to-spacefile` more than once will result in duplicate environmental variables being appended to `Spacefile`.
