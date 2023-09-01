@@ -34,7 +34,7 @@ fs.readFile('.env', 'utf8', (err, data) => {
         console.log("lastLineIndentation: ",lastLineIndentation.length);
 
         // Construct the Presets section with proper indentation
-        const presetsSection = `${lastLineIndentation}Presets:\n${lastLineIndentation}   env:\n${formattedVariables.join('\n')}`;
+        const presetsSection = `${lastLineIndentation}presets:\n${lastLineIndentation}   env:\n${formattedVariables.join('\n')}`;
 
         // Insert the Presets section
         const updatedSpacefile = spacefileData + `\n${presetsSection}`;
