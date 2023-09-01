@@ -28,22 +28,28 @@ const callsData = {};
 //chatGPTGenerate() and messages_default
 //include methods addMessage_user() and addMessage_chatGPT()
 async function chatGPTGenerate(userMessages) {
-    const messages = [
-        {role: 'system', content: 'Your response must be 2000 characters or less.'},
-        {role: 'system', content: 'Use conversational American English.'}
-    ]
-    userMessages.forEach(message => {
-        messages.push(message);
-    })
-    console.log(`Messages to be sent: ${userMessages}`);
-    const completion = await openai.chat.completions.create({
-      messages: messages,
-      model: 'gpt-3.5-turbo'
-    });  
-    response = completion.choices[0].message.content;
-    userMessages.push({role:'assistant',content:response})
-    console.log({userMessages});
-    return response;
+    try{
+        const messages = [
+            {role: 'system', content: 'Your response must be 2000 characters or less.'},
+            {role: 'system', content: 'Use conversational American English.'}
+        ]
+        userMessages.forEach(message => {
+            messages.push(message);
+        })
+        console.log(`Messages to be sent: ${userMessages}`);
+        const completion = await openai.chat.completions.create({
+        messages: messages,
+        model: 'gpt-3.5-turbo'
+        });
+        console.log(`and the response has returned from OpenAI`);
+        response = completion.choices[0].message.content;
+        userMessages.push({role:'assistant',content:response})
+        console.log({userMessages});
+        return response;
+    }
+    catch(error){
+        return error;
+    }
 }
 
 
