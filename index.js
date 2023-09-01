@@ -35,6 +35,7 @@ async function chatGPTGenerate(userMessages) {
     userMessages.forEach(message => {
         messages.push(message);
     })
+    console.log(`Messages to be sent: ${userMessages}`);
     const completion = await openai.chat.completions.create({
       messages: messages,
       model: 'gpt-3.5-turbo'

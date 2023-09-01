@@ -123,3 +123,4 @@ build/
 
 # spacefile
 Spacefile
+.space/
