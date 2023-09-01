@@ -120,3 +120,6 @@ build/
 
 # Webpack build output
 /dist/
+
+# spacefile
+Spacefile
