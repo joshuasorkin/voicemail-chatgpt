@@ -53,7 +53,7 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 // GET endpoint for testing
 app.get('/twilio-webhook', async (req, res) => {
     res.send(`You sent request: ${req.toString()}`);
-}
+});
 
 // Twilio webhook endpoint
 app.post('/twilio-webhook', async (req, res) => {
