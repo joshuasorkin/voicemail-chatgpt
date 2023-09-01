@@ -18,4 +18,6 @@ If you are deploying the app on [Space](deta.space), once you have generated you
 
 Note that if the value of `ABSOLUTE_URL` in `Spacefile` is not already set to the Space domain, it will need to be changed accordingly once you have run `env-to-spacefile`.  Storing your Space domain in another environment variable, such as `SPACE_URL`, may be helpful for making this change.
 
+`Spacefile` will need to include the line `public: true` to allow Twilio's server to make a POST request to your app.
+
 WARNING: running `env-to-spacefile` more than once will result in duplicate environmental variables being appended to `Spacefile`.

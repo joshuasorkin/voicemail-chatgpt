@@ -74,26 +74,32 @@ app.post('/twilio-webhook', async (req, res) => {
 });
 
 app.post('/enqueue-and-process', async (req, res) => {
-    const userSpeech = req.body.SpeechResult;
-    const callSid = req.body.CallSid;
-    if (!callsData[callSid]){
-        callsData[callSid] = {
-            userMessages: [{role:'user',content:userSpeech}]
+    try{
+        const userSpeech = req.body.SpeechResult;
+        const callSid = req.body.CallSid;
+        if (!callsData[callSid]){
+            callsData[callSid] = {
+                userMessages: [{role:'user',content:userSpeech}]
+            }
         }
-    }
-    else{
-        callsData[callSid].userMessages.push({role:'user',content:userSpeech});
-    }     
+        else{
+            callsData[callSid].userMessages.push({role:'user',content:userSpeech});
+        }     
 
-    //enqueue call
-    const twiml = new VoiceResponse();
-    twiml.enqueue({waitUrl: '/wait'},'holdQueue');
-    protocol = process.env.PROTOCOL || req.protocol;
-    const absoluteUrl = protocol+'://'+req.get('host');
-    console.log({absoluteUrl});
-    processCall(callSid,absoluteUrl);
-    console.log("enqueue-and-process twiml: ",twiml.toString())
-    res.send(twiml.toString());
+        //enqueue call
+        const twiml = new VoiceResponse();
+        twiml.enqueue({waitUrl: '/wait'},'holdQueue');
+        protocol = process.env.PROTOCOL || req.protocol;
+        const absoluteUrl = protocol+'://'+req.get('host');
+        console.log({absoluteUrl});
+        processCall(callSid,absoluteUrl);
+        console.log("enqueue-and-process twiml: ",twiml.toString())
+        res.send(twiml.toString());
+    }
+    catch(error){
+        console.log(error);
+        res.send(`Error occurred during /enqueue-and-process: ${error}`);
+    }
 });
 
 app.post('/wait', function (req, res) {
