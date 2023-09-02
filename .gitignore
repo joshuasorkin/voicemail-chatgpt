@@ -124,3 +124,6 @@ build/
 # spacefile
 Spacefile
 .space/
+
+# fly.io
+fly.toml
