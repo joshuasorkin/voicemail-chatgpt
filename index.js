@@ -72,7 +72,6 @@ app.post('/twilio-webhook', async (req, res) => {
         action:'/enqueue-and-process',
         speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
         timeout:process.env.TWILIO_TIMEOUT_SECONDS,
-        language:'ru-RU'
     });
     let greeting = "What would you like to say?";
     if(!callsData[callSid] || callsData[callSid].userMessages.length === 0){
@@ -165,7 +164,7 @@ function twiml_sayRedirect(result,absoluteUrl){
     
     let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
     console.log({fragments});
-    fragments.forEach(fragment => twimlBuilder.say(gather,fragment,"ru-RU"));
+    fragments.forEach(fragment => twimlBuilder.say(gather,fragment));
     
     console.log(result);
 

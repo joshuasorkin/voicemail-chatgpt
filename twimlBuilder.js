@@ -14,10 +14,9 @@ class TwimlBuilder{
     }
 
     //add a say() in the configured voice and language
-    say(response,message,language="en-US"){
+    say(response,message){
         const sayObj=response.say({
             voice:this.voice,
-            language:language
         });
         sayObj.prosody({
             rate:this.rate
