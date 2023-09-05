@@ -10,15 +10,14 @@ const twilio=require('twilio');
 class TwimlBuilder{
     constructor(){
         this.voice=process.env.TWILIO_SAY_VOICE;
-        this.language=process.env.TWILIO_SAY_LANGUAGE;
         this.rate=process.env.TWILIO_SAY_PROSODY_RATE;
     }
 
     //add a say() in the configured voice and language
-    say(response,message){
+    say(response,message,language="en-US"){
         const sayObj=response.say({
-            voice:this.voice
-            //language:this.language
+            voice:this.voice,
+            language:language
         });
         sayObj.prosody({
             rate:this.rate

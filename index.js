@@ -165,7 +165,7 @@ function twiml_sayRedirect(result,absoluteUrl){
     
     let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
     console.log({fragments});
-    fragments.forEach(fragment => twimlBuilder.say(gather,fragment));
+    fragments.forEach(fragment => twimlBuilder.say(gather,fragment,"ru-RU"));
     
     console.log(result);
 
