@@ -70,7 +70,7 @@ app.post('/twilio-webhook', async (req, res) => {
     const gather = twiml.gather({
         input:'speech',
         action:'/enqueue-and-process',
-        speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS
+        speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
         timeout:process.env.TWILIO_TIMEOUT_SECONDS
     });
     let greeting = "What would you like to say?";
