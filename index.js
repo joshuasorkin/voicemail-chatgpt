@@ -178,8 +178,8 @@ async function processCall(callSid,absoluteUrl){
 
 function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
-    const finalQuestion = getFinalQuestion(result);
-    const url = absoluteUrl+`/twilio-webhook${question ? `?question=${encodeURIComponent(finalQuestion)}` : ''}`;
+    const question = getFinalQuestion(result);
+    const url = absoluteUrl+`/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
     const gather = twiml.gather({
         method:'GET',
         action:url,
