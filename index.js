@@ -64,6 +64,7 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
+    let greeting;
     const gather = twiml.gather({
         input:'speech',
         action:'/enqueue-and-process',
@@ -71,10 +72,10 @@ app.get('/twilio-webhook', async (req, res) => {
         timeout:process.env.TWILIO_TIMEOUT_SECONDS,
     });
     if(req.query.question){
-        const greeting = req.query.question;
+        greeting = req.query.question;
     }
     else{
-        const greeting = "What would you like to say?";
+        greeting = "What would you like to say?";
     }
     twimlBuilder.sayReading(gather,greeting);
     const url = `/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
