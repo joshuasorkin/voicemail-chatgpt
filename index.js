@@ -229,7 +229,7 @@ function twiml_sayRedirect(result,absoluteUrl){
     const question = getFinalQuestion(result);
     const url = absoluteUrl+`/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
     const gather = twiml.gather({
-        input:'speech',
+        input:'dtmf speech',
         speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
         method:'GET',
         action:url,
