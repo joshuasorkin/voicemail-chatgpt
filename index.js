@@ -62,11 +62,13 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
+    console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
+    console.log({speechResult});
     const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
 
-    if (speechResult){
+    if (speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
         twiml.redirect(url);
     }
