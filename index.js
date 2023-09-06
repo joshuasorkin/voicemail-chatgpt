@@ -70,7 +70,7 @@ app.get('/twilio-webhook', async (req, res) => {
 
     if (speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
-        twiml.redirect(url);
+        twiml.redirect({method:'GET'},url);
     }
     else{
         let greeting;
@@ -121,7 +121,9 @@ app.post('/twilio-webhook', async (req, res) => {
 
 app.get('/enqueue-and-process', async (req, res) => {
     try{
+        console.log("now entering GET enqueue-and-process...")
         const userSpeech = req.query.SpeechResult;
+        console.log({userSpeech});
         const callSid = req.query.CallSid;
         if (!callsData[callSid]){
             callsData[callSid] = {
