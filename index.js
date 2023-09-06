@@ -60,7 +60,7 @@ async function chatGPTGenerate(userMessages) {
 // Twilio configuration
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// GET endpoint for testing
+// GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
@@ -78,6 +78,7 @@ app.get('/twilio-webhook', async (req, res) => {
         greeting = "What would you like to say?";
     }
     twimlBuilder.sayReading(gather,greeting);
+    const question = req.query.question;
     const url = `/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
     twiml.redirect({
             method:'GET'
