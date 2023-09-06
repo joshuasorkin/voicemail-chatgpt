@@ -33,7 +33,7 @@ async function chatGPTGenerate(userMessages) {
             {role: 'system', content: 'Your response must be 2000 characters or less.'},
             {role: 'system', content: 'Use casual, conversational American English.'},
             {role: 'system', content: 'If I do not ask for a specific length of response, limit your response to 3 sentences or less.'},
-            {role: 'system', content: 'At the end of your response, ask me an open-ended question related to our discussion.'}
+            {role: 'system', content: 'At the end of your response, always ask me an open-ended question related to our discussion.'}
         ]
         userMessages.forEach(message => {
             messages.push(message);
@@ -62,7 +62,28 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 
 // GET endpoint for testing
 app.get('/twilio-webhook', async (req, res) => {
-    res.send(`You sent request: ${req.toString()}`);
+    const callSid = req.query.CallSid;
+    const twiml = new twilio.twiml.VoiceResponse();
+    const gather = twiml.gather({
+        input:'speech',
+        action:'/enqueue-and-process',
+        speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
+        timeout:process.env.TWILIO_TIMEOUT_SECONDS,
+    });
+    if(req.query.question){
+        const greeting = req.query.question;
+    }
+    else{
+        const greeting = "What would you like to say?";
+    }
+    twimlBuilder.sayReading(gather,greeting);
+    const url = `/twilio-webhook${question ? `?question=${question}` : ''}`;
+    twiml.redirect({
+            method:'GET'
+        },
+        url
+    );
+    res.send(twiml.toString());
 });
 
 // Twilio webhook endpoint
@@ -157,10 +178,14 @@ async function processCall(callSid,absoluteUrl){
 
 function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
-    
+    const finalQuestion = getFinalQuestion(result);
+    let url = absoluteUrl+'/twilio-webhook'
+    if (finalQuestion){
+        url += `?question=${finalQuestion}`
+    }
     const gather = twiml.gather({
-        method:'POST',
-        action:absoluteUrl+'/twilio-webhook',
+        method:'GET',
+        action:url,
         actionOnEmptyResult:true
     });   
     
@@ -181,6 +206,18 @@ function splitStringIntoFragments(inputString, N) {
     }
 
     return fragments;
+}
+
+function getFinalQuestion(str){
+    const regex = /[^.!?]+[?]+\s*$/;
+    const match = str.match(regex);
+
+    if (match) {
+        const lastSentence = match[0].trim();
+        return lastSentence;
+    } else {
+        return null;
+    }
 }
 
 // Start the server
