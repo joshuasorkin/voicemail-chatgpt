@@ -77,7 +77,7 @@ app.get('/twilio-webhook', async (req, res) => {
         const greeting = "What would you like to say?";
     }
     twimlBuilder.sayReading(gather,greeting);
-    const url = `/twilio-webhook${question ? `?question=${question}` : ''}`;
+    const url = `/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
     twiml.redirect({
             method:'GET'
         },
@@ -179,10 +179,7 @@ async function processCall(callSid,absoluteUrl){
 function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
     const finalQuestion = getFinalQuestion(result);
-    let url = absoluteUrl+'/twilio-webhook'
-    if (finalQuestion){
-        url += `?question=${finalQuestion}`
-    }
+    const url = absoluteUrl+`/twilio-webhook${question ? `?question=${encodeURIComponent(finalQuestion)}` : ''}`;
     const gather = twiml.gather({
         method:'GET',
         action:url,
