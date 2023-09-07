@@ -11,11 +11,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 let protocol;
 
-const messages_default = [
-    {role: 'system', content: 'Your response must be 2000 characters or less.'},
-    {role: 'system', content: 'Use conversational American English.'}
-]
-
 // Set up your API key and endpoint
 const openai = new OpenAI({
     apiKey:process.env.OPENAI_API_KEY
