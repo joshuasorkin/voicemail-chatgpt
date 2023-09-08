@@ -97,6 +97,7 @@ app.post('/wait', function (req, res) {
     res.send(response.toString());
 });
 
+//while the user is on hold, get a response to their prompt and then dequeue them and say the response
 async function processCall(callSid,absoluteUrl){
     const callData = callsData[callSid];
     if (!callData){
@@ -153,31 +154,7 @@ function twiml_sayRedirect(result,absoluteUrl){
     return twiml;
 }
 
-function splitStringIntoFragments(inputString, N) {
-    const fragments = [];
 
-    for (let i = 0; i < inputString.length; i += N) {
-        fragments.push(inputString.slice(i, i + N));
-    }
-
-    return fragments;
-}
-
-//todo: create a generateQuestion function that asks ChatGPT to create a question based on the last
-//sentence in the text, this function is to be called if the final sentence is not a question
-
-//todo: if colon is in lastSentence, only return the part after the colon
-function getFinalQuestion(str){
-    const regex = /[^.!?]+[?]+\s*$/;
-    const match = str.match(regex);
-
-    if (match) {
-        const lastSentence = match[0].trim();
-        return lastSentence;
-    } else {
-        return null;
-    }
-}
 
 // Start the server
 const PORT = process.env.PORT || 3000;
