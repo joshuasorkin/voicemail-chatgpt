@@ -1,3 +1,5 @@
+//include methods addMessage_user() and addMessage_chatGPT()
+
 import {OpenAI} from 'openai';
 
 
