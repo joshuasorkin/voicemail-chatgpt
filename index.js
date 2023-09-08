@@ -28,7 +28,8 @@ app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
 
-    if (speechResult !== undefined){
+    //
+    if (speechResult && speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
         twiml.redirect({method:'GET'},url);
     }
@@ -45,6 +46,9 @@ app.get('/twilio-webhook', async (req, res) => {
         }
         else{
             greeting = "What would you like to say?";
+            if(!callsData[callSid] || callsData[callSid].userMessages.length === 0){
+                greeting = "Hi!  I'm Chat GPT.  " + greeting;
+            }
         }
         twimlBuilder.sayReading(gather,greeting);
         const question = req.query.question;
