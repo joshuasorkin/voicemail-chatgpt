@@ -3,7 +3,7 @@
 //the idea is that rather than redirecting to an endpoint that then returns the
 //twiml block, instead we just add the twiml block on in whatever endpoint we're already in
 
-import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
+import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import twilio from 'twilio';
 
 class TwimlBuilder{
@@ -40,4 +40,4 @@ class TwimlBuilder{
 
 }
 
-module.exports=TwimlBuilder;
+export default TwimlBuilder;
