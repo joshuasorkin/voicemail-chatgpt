@@ -97,14 +97,7 @@ app.post('/enqueue-and-process', async (req, res) => {
     try{
         const userSpeech = req.body.SpeechResult;
         const callSid = req.body.CallSid;
-        if (!callsData[callSid]){
-            callsData[callSid] = {
-                userMessages: [{role:'user',content:userSpeech}]
-            }
-        }
-        else{
-            callsData[callSid].userMessages.push({role:'user',content:userSpeech});
-        }     
+        callsData[callSid].userMessages.push({role:'user',content:userSpeech});     
 
         //enqueue call
         const twiml = new VoiceResponse();
