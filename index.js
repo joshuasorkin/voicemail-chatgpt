@@ -1,10 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const twilio = require('twilio');
-const OpenAI = require('openai');
-const VoiceResponse = require('twilio/lib/twiml/VoiceResponse');
-const TwimlBuilder = require('./twimlBuilder');
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import bodyParser from 'body-parser';
+import twilio from 'twilio';
+import OpenAI from 'openai';
+import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
+import TwimlBuilder from './twimlBuilder.js';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
