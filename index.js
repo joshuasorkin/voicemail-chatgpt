@@ -38,6 +38,7 @@ app.get('/twilio-webhook', async (req, res) => {
         const gather = twiml.gather({
             input:'speech',
             action:'/enqueue-and-process',
+            method:'GET',
             speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
             timeout:process.env.TWILIO_TIMEOUT_SECONDS,
         });
