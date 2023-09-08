@@ -90,30 +90,6 @@ app.get('/enqueue-and-process', async (req, res) => {
         res.send(`Error occurred during /enqueue-and-process: ${error}`);
     }
 
-})
-
-
-
-app.post('/enqueue-and-process', async (req, res) => {
-    try{
-        const userSpeech = req.body.SpeechResult;
-        const callSid = req.body.CallSid;
-        callsData[callSid].userMessages.push({role:'user',content:userSpeech});     
-
-        //enqueue call
-        const twiml = new VoiceResponse();
-        twiml.enqueue({waitUrl: '/wait'},'holdQueue');
-        protocol = process.env.PROTOCOL || req.protocol;
-        const absoluteUrl = protocol+'://'+req.get('host');
-        console.log({absoluteUrl});
-        processCall(callSid,absoluteUrl);
-        console.log("enqueue-and-process twiml: ",twiml.toString())
-        res.send(twiml.toString());
-    }
-    catch(error){
-        console.log(error);
-        res.send(`Error occurred during /enqueue-and-process: ${error}`);
-    }
 });
 
 app.post('/wait', function (req, res) {
