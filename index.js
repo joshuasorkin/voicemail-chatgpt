@@ -6,15 +6,16 @@ import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
-import TwimlBuilder from './twimlBuilder.js';
-import OpenAIUtil from './openAI-util.js'
+import TwimlBuilder from './twimlBuilder.js'
+import OpenAIUtility from './OpenAIUtilty.js'
+import StringAnalyzer from './StringAnalyzer.js'
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
+const stringAnalyzer = new StringAnalyzer();
+const openAIUtility = new OpenAIUtility();
 let protocol;
-const openAIUtil = new OpenAIUtil();
-
 const callsData = {};
 
 // Twilio configuration
@@ -109,7 +110,7 @@ async function processCall(callSid,absoluteUrl){
     console.log({userMessages});
     try {
         //generate response to user's prompt
-        const result = await openAIUtil.chatGPTGenerate(userMessages);
+        const result = await openAIUtility.chatGPTGenerate(userMessages);
         
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call = await client.calls(callSid).fetch();
@@ -135,7 +136,7 @@ async function processCall(callSid,absoluteUrl){
 
 function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
-    const question = getFinalQuestion(result);
+    const question = stringAnalyzer.getFinalQuestion(result);
     const url = absoluteUrl+`/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
     const gather = twiml.gather({
         input:'dtmf speech',
@@ -145,7 +146,7 @@ function twiml_sayRedirect(result,absoluteUrl){
         actionOnEmptyResult:true
     });   
     
-    let fragments = splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
+    let fragments = stringAnalyzer.splitStringIntoFragments(result,process.env.TWILIO_MAX_RESPONSE_LENGTH)
     console.log({fragments});
     fragments.forEach(fragment => twimlBuilder.say(gather,fragment));
     
