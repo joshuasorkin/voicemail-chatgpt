@@ -19,7 +19,6 @@ const callsData = {};
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-//const client = twilio();
 
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
@@ -122,7 +121,6 @@ async function processCall(callSid,absoluteUrl){
     }
     catch(error){
         console.log({error});
-        //const client = twilio();
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.",absoluteUrl);
         const call = await client.calls(callSid).fetch();
         if (call.status === 'completed' || call.status === 'canceled'){
