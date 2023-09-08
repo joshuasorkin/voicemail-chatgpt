@@ -46,8 +46,10 @@ app.get('/twilio-webhook', async (req, res) => {
         }
         else{
             greeting = "What would you like to say?";
-            if(!callsData[callSid] || callsData[callSid].userMessages.length === 0){
+            if(!callsData[callSid]){
                 greeting = "Hi!  I'm Chat GPT.  " + greeting;
+                //todo: callsData should be a collection of CallData objects defined in a calldata.js class
+                callsData[callSid] = {userMessages:[]};
             }
         }
         twimlBuilder.sayReading(gather,greeting);
@@ -62,25 +64,6 @@ app.get('/twilio-webhook', async (req, res) => {
     res.send(twiml.toString());
 });
 
-// Twilio webhook endpoint
-app.post('/twilio-webhook', async (req, res) => {
-    const callSid = req.body.CallSid;
-    const twiml = new twilio.twiml.VoiceResponse();
-    const gather = twiml.gather({
-        input:'speech',
-        action:'/enqueue-and-process',
-        speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
-        timeout:process.env.TWILIO_TIMEOUT_SECONDS,
-    });
-    let greeting = "What would you like to say?";
-    if(!callsData[callSid] || callsData[callSid].userMessages.length === 0){
-        greeting = "Hi!  I'm Chat GPT.  " + greeting;
-    }
-    twimlBuilder.sayReading(gather,greeting);
-    twiml.redirect('/twilio-webhook');
-    res.send(twiml.toString());
-});
-
 //todo: need to refactor code duplicated between GET/POST endpoints of '/enqueue-and-process' and '/twilio-webhook'
 
 app.get('/enqueue-and-process', async (req, res) => {
@@ -89,14 +72,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
         const callSid = req.query.CallSid;
-        if (!callsData[callSid]){
-            callsData[callSid] = {
-                userMessages: [{role:'user',content:userSpeech}]
-            }
-        }
-        else{
-            callsData[callSid].userMessages.push({role:'user',content:userSpeech});
-        }     
+        callsData[callSid].userMessages.push({role:'user',content:userSpeech});    
 
         //enqueue call
         const twiml = new VoiceResponse();
@@ -218,6 +194,9 @@ function splitStringIntoFragments(inputString, N) {
 
     return fragments;
 }
+
+//todo: create a generateQuestion function that asks ChatGPT to create a question based on the last
+//sentence in the text, this function is to be called if the final sentence is not a question
 
 function getFinalQuestion(str){
     const regex = /[^.!?]+[?]+\s*$/;
