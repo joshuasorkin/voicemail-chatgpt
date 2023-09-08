@@ -65,8 +65,6 @@ app.get('/twilio-webhook', async (req, res) => {
     res.send(twiml.toString());
 });
 
-//todo: need to refactor code duplicated between GET/POST endpoints of '/enqueue-and-process' and '/twilio-webhook'
-
 app.get('/enqueue-and-process', async (req, res) => {
     try{
         console.log("now entering GET enqueue-and-process...")
