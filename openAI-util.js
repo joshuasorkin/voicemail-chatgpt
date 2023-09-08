@@ -25,7 +25,7 @@ class OpenAIUtil {
             model: 'gpt-3.5-turbo'
             });
             console.log(`and the response has returned from OpenAI`);
-            response = completion.choices[0].message.content;
+            const response = completion.choices[0].message.content;
             userMessages.push({role:'assistant',content:response})
             console.log({userMessages});
             return response;
