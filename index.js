@@ -7,16 +7,13 @@ import twilio from 'twilio';
 import OpenAI from 'openai';
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js';
+import OpenAIUtil from './openAI-util.js'
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 let protocol;
-
-// Set up your API key and endpoint
-const openai = new OpenAI({
-    apiKey:process.env.OPENAI_API_KEY
-});
+const openAIUtil = new OpenAIUtil();
 
 const callsData = {};
 
@@ -196,7 +193,7 @@ async function processCall(callSid,absoluteUrl){
     const userMessages = callData.userMessages;
     console.log({userMessages});
     try {
-        const result = await chatGPTGenerate(userMessages);
+        const result = await openAIUtil.chatGPTGenerate(userMessages);
         const client = twilio();
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call = await client.calls(callSid).fetch();
