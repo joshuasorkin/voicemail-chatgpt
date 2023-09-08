@@ -18,7 +18,8 @@ const openAIUtil = new OpenAIUtil();
 const callsData = {};
 
 // Twilio configuration
-const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+//const client = twilio();
 
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
@@ -107,8 +108,9 @@ async function processCall(callSid,absoluteUrl){
     const userMessages = callData.userMessages;
     console.log({userMessages});
     try {
+        //generate response to user's prompt
         const result = await openAIUtil.chatGPTGenerate(userMessages);
-        const client = twilio();
+        
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call = await client.calls(callSid).fetch();
         if (call.status === 'completed' || call.status === 'canceled'){
@@ -120,7 +122,7 @@ async function processCall(callSid,absoluteUrl){
     }
     catch(error){
         console.log({error});
-        const client = twilio();
+        //const client = twilio();
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.",absoluteUrl);
         const call = await client.calls(callSid).fetch();
         if (call.status === 'completed' || call.status === 'canceled'){
@@ -166,6 +168,7 @@ function splitStringIntoFragments(inputString, N) {
 //todo: create a generateQuestion function that asks ChatGPT to create a question based on the last
 //sentence in the text, this function is to be called if the final sentence is not a question
 
+//todo: if colon is in lastSentence, only return the part after the colon
 function getFinalQuestion(str){
     const regex = /[^.!?]+[?]+\s*$/;
     const match = str.match(regex);
