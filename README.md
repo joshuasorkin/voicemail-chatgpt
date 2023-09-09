@@ -6,7 +6,7 @@ Voicemail-ChatGPT is an IVR telephony interface for communicating with [ChatGPT]
 
 You will need a Twilio account so that you can provide your account SID and auth token in `.env`.  You will also need a Twilio phone number.  Details on getting a free phone number are [here](https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account).
 
-Instructions for deploying a Node.js app and configuring Twilio appropriately are [here](https://www.twilio.com/docs/voice/tutorials/how-to-respond-to-incoming-phone-calls/node). Set your Twilio phone number's voice webhook to `[YOUR BASE URL]/twilio-webhook`.  Once the web server is running and the webhook is configured, you can use the service by calling your Twilio phone number from any phone.
+Instructions for deploying a Node.js app and configuring Twilio appropriately are [here](https://www.twilio.com/docs/voice/tutorials/how-to-respond-to-incoming-phone-calls/node). Set your Twilio phone number's voice webhook to `[YOUR BASE URL]/twilio-webhook`, and set the HTTP method to GET.  Once the web server is running and the webhook is configured, you can use the service by calling your Twilio phone number from any phone.
 
 # Local deployment
 
