@@ -53,6 +53,8 @@ app.get('/twilio-webhook', async (req, res) => {
                 //todo: callsData should be a collection of CallData objects defined in a calldata.js class
                 callsData[callSid] = {userMessages:[]};
             }
+            console.log(`callsData[${callSid}]:`);
+            console.log(callsData[callSid]);
         }
         twimlBuilder.sayReading(gather,greeting);
         const question = req.query.question;
@@ -72,6 +74,8 @@ app.get('/enqueue-and-process', async (req, res) => {
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
         const callSid = req.query.CallSid;
+        console.log(`callsData[${callSid}]:`);
+        console.log(callsData[callSid]);
         callsData[callSid].userMessages.push({role:'user',content:userSpeech});    
 
         //enqueue call
