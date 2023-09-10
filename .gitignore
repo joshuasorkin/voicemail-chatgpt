@@ -127,3 +127,6 @@ Spacefile
 
 # fly.io
 fly.toml
+
+# google cloud credentials
+google-credentials.*

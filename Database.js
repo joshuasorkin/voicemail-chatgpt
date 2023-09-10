@@ -3,8 +3,10 @@ import { getFirestore, Timestamp, FieldValue, Filter } from 'firebase-admin/fire
 
 class Database{
     constructor(){
-        const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
-        const firebaseApp = initializeApp(firebaseConfig); 
+        const buffer = Buffer.from(process.env.BASE_64, 'base64');
+        const firebaseApp = initializeApp({
+            credential: JSON.parse(buffer.toString('ascii'))
+        }); 
         const db = getFirestore();
         this.calls = db.collection('calls');
 
