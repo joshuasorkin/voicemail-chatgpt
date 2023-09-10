@@ -20,14 +20,15 @@ import OpenAIUtility from './OpenAIUtilty.js'
 import StringAnalyzer from './StringAnalyzer.js'
 
 // Initialize Firebase
+const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 const firebaseApp = initializeApp(firebaseConfig);
 
+// Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
-const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 let protocol;
 console.log("initializing callsData...");
 const callsData = {};
