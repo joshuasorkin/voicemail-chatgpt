@@ -127,6 +127,7 @@ Spacefile
 
 # fly.io
 fly.toml
+fly-postgres-credentials
 
 # google cloud credentials
 google-credentials.*
