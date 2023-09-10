@@ -1,14 +1,22 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+//package imports
 import express from 'express';
 import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+//local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js'
 import OpenAIUtility from './OpenAIUtilty.js'
 import StringAnalyzer from './StringAnalyzer.js'
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
