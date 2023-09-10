@@ -21,7 +21,7 @@ class Database{
 
     async addCall(callSid){
         try{
-            this.calls.child(callSid).set({userMessages:[]});
+            await this.calls.child(callSid).set({userMessages:[]});
         }
         catch(error){
             throw error;
@@ -29,14 +29,19 @@ class Database{
     }
 
     async addUserMessage(callSid,message){
-        try{
-            const snapshot = await this.calls.child(callSid).once("value");
-            const call = snapshot.val();
-            call.userMessages.push({role:'user',content:message});
+        const snapshot = await this.calls.child(callSid).once("value");
+        const call = snapshot.val();
+        call.userMessages.push({role:'user',content:message});
+        await this.calls.child(callSid).set(call);
+    }
+
+    async getUserMessages(callSid){
+        const snapshot = await this.calls.child(callSid).once("value");
+        if (!snapshot.exists()){
+            throw `CallSid ${callSid} not found in Calls table`
         }
-        catch(error){
-            throw error;
-        }
+        const call = snapshot.val();
+        return call.userMessages;
     }
 }
 
