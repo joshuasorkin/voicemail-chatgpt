@@ -13,7 +13,8 @@ class Database{
         const firebaseApp = initializeApp(firebaseConfig);
         console.log({firebaseConfig},{firebaseApp});
         const database = getDatabase();
-        this.calls = database.ref("calls");
+        console.log({database});
+        this.calls = ref(database,"calls");
     }
 
     async callExists(callSid){
