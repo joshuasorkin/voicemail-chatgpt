@@ -31,6 +31,13 @@ let protocol;
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+// database test function
+import { main } from './mongo-test.js';
+// GET endpoint for testing database
+app.get('/dbtest', async (req,res) => {
+    main();
+});
+
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     console.log("Entering GET twilio-webhook...");

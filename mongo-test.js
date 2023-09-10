@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const main = async () => {
+export async function main(){
     const client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     try {
         await client.connect();
@@ -29,5 +29,3 @@ const main = async () => {
         await client.close();
     }
 }
-
-main();
