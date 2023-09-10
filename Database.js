@@ -3,19 +3,21 @@ import { getFirestore, Timestamp, FieldValue, Filter } from 'firebase-admin/fire
 
 class Database{
     constructor(){
-        initializeApp({
-            credential: applicationDefault()
-        }); 
+        const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+        const firebaseApp = initializeApp(firebaseConfig); 
         const db = getFirestore();
         this.calls = db.collection('calls');
 
     }
 
     async callExists(callSid){ 
+        c
         const snapshot = await this.calls   
                                     .where('callSid','==',callSid)
                                     .get();
-        return (!snapshot.empty)
+        return (!snapshot.empty);
     }
 }
+
+export default Database;
   
