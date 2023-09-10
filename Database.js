@@ -11,10 +11,9 @@ class Database{
         // Initialize Firebase
         const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
         const firebaseApp = initializeApp(firebaseConfig);
-        console.log({firebaseConfig},{firebaseApp});
         const database = getDatabase();
-        console.log({database});
         this.calls = ref(database,"calls");
+        console.log(this.calls);
     }
 
     async callExists(callSid){
