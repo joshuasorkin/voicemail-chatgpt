@@ -1,6 +1,4 @@
-//todo: decouple index.js from firebase by separating callsData operations into its own callsData.js class
-//and a DatabaseController class that gets extended as a DatabaseController_Firebase class,
-//as suggested by chatGPT here: https://chat.openai.com/share/f0a4417b-481a-462a-8662-5d23434e11e0
+
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -10,8 +8,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+
 
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
@@ -19,9 +16,7 @@ import TwimlBuilder from './twimlBuilder.js'
 import OpenAIUtility from './OpenAIUtilty.js'
 import StringAnalyzer from './StringAnalyzer.js'
 
-// Initialize Firebase
-const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
-const firebaseApp = initializeApp(firebaseConfig);
+
 
 // Miscellaneous object initialization
 const app = express();
