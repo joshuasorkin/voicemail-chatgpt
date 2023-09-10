@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
+const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 let protocol;
 console.log("initializing callsData...");
 const callsData = {};
