@@ -16,6 +16,7 @@ const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
 let protocol;
+console.log("initializing callsData...");
 const callsData = {};
 
 // Twilio configuration
