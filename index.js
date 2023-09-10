@@ -12,10 +12,10 @@ import OpenAI from 'openai';
 
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
-import TwimlBuilder from './twimlBuilder.js'
-import OpenAIUtility from './OpenAIUtilty.js'
-import StringAnalyzer from './StringAnalyzer.js'
-
+import TwimlBuilder from './twimlBuilder.js';
+import OpenAIUtility from './OpenAIUtilty.js';
+import StringAnalyzer from './StringAnalyzer.js';
+import Database from './Database.js';
 
 
 // Miscellaneous object initialization
@@ -24,9 +24,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
+const database = new Database();
 let protocol;
-console.log("initializing callsData...");
-const callsData = {};
+
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
