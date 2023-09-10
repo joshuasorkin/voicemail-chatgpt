@@ -4,12 +4,14 @@
 
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get, set } from "firebase/database";
+//import firebase from "firebase";
 
 class Database{
     constructor(){
         // Initialize Firebase
         const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
         const firebaseApp = initializeApp(firebaseConfig);
+        console.log({firebaseConfig},{firebaseApp});
         const database = getDatabase();
         this.calls = database.ref("calls");
     }
