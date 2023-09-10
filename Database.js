@@ -11,7 +11,6 @@ class Database{
     }
 
     async callExists(callSid){ 
-        c
         const snapshot = await this.calls   
                                     .where('callSid','==',callSid)
                                     .get();
