@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import Database from './Database.js';
+import Database from './Database_RTDB.js';
 
 const database = new Database();
 

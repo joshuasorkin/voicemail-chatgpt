@@ -15,7 +15,7 @@ import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
-import Database from './Database.js';
+import Database from './Database_RTDB.js';
 
 
 // Miscellaneous object initialization
