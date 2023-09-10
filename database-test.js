@@ -6,12 +6,15 @@ const callSid = "123xyz";
 const message = "black on the red"
 
 
-function callExists_test(){
-console.log("checking for non-existent call...");
-    if(!database.callExists(callSid)){
-        console.log("call does not exist");
-    }
-    else{
+async function callExists_test(callSid){
+console.log(`checking for call ${callSid}...`);
+    const result = await database.callExists(callSid);
+    if (result){
         console.log("call exists");
     }
+    else{
+        console.log("call does not exist");
+    }
 }
+
+callExists(callSid);
