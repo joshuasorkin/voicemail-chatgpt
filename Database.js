@@ -11,17 +11,21 @@ class Database{
         const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
         const firebaseApp = initializeApp(firebaseConfig);
         const database = getDatabase();
-        const calls = database.ref("calls");
+        this.calls = database.ref("calls");
     }
 
-    callExists(callSid){
-        return calls.child(callSid).once("value").then((snapshot) => {
-            return snapshot.exists();
-        });
+    async callExists(callSid){
+        const snapshot = await this.calls.child(callSid).once("value");
+        return snapshot.exists();
     }
 
-    addCall(callSid){
-        calls.child(callSid).set({userMessages:[]});
+    async addCall(callSid){
+        try{
+            calls.child(callSid).set({userMessages:[]});
+        }
+        catch(error){
+            throw error;
+        }
     }
 }
 
