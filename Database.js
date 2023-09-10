@@ -17,13 +17,14 @@ class Database{
     }
 
     async callExists(callSid){
-        const snapshot = await this.calls.child(callSid).once("value");
+        const snapshot = await get(ref(this.calls,callSid);
         return snapshot.exists();
     }
 
     async addCall(callSid){
         try{
-            await this.calls.child(callSid).set({userMessages:[]});
+            const callRef = await ref(this.calls,callSid);
+            set({userMessages:[]});
         }
         catch(error){
             throw error;
