@@ -21,7 +21,18 @@ class Database{
 
     async addCall(callSid){
         try{
-            calls.child(callSid).set({userMessages:[]});
+            this.calls.child(callSid).set({userMessages:[]});
+        }
+        catch(error){
+            throw error;
+        }
+    }
+
+    async addUserMessage(callSid,message){
+        try{
+            const snapshot = await this.calls.child(callSid).once("value");
+            const call = snapshot.val();
+            call.userMessages.push({role:'user',content:message});
         }
         catch(error){
             throw error;
