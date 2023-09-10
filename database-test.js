@@ -20,4 +20,4 @@ console.log(`checking for call ${callSid}...`);
     }
 }
 
-callExists(callSid);
+callExists_test(callSid);
