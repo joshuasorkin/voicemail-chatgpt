@@ -32,13 +32,17 @@ let protocol;
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+//todo: take this out once we confirm that mongo is working on fly.io
 // database test function
 import { main } from './mongo-test.js';
+
 // GET endpoint for testing database
+//todo: take this out once we confirm that mongo is working on fly.io
 app.get('/dbtest', async (req,res) => {
     main();
 });
 
+//todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     console.log("Entering GET twilio-webhook...");
@@ -117,6 +121,9 @@ app.post('/wait', function (req, res) {
 });
 
 //while the user is on hold, get a response to their prompt and then dequeue them and say the response
+//todo: this should be refactored into getPromptResponse() and dequeue() and sayResponse() or something like that,
+//right now the function is doing too much
+//also it doesn't belong in index.js, we should just have endpoint handlers here
 async function processCall(callSid,absoluteUrl){
     const call = await database.getCall(callSid);
     if (!call){

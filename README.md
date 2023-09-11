@@ -29,12 +29,14 @@ WARNING: running `env-to-spacefile` more than once will result in duplicate envi
 When the server is running, users can talk to ChatGPT as follows:
 
 1. User calls the Twilio phone number.
-2. User waits for the receiver to say "What would you like to say?"
-3. User speaks a prompt (equivalent to typing a prompt into ChatGPT's [text interface](chat.openai.com)).
-4. When the user stops speaking for TWILIO_SPEECH_TIMEOUT_SECONDS, their prompt will be sent to ChatGPT.
-5. There will be a brief sound as ChatGPT processes the prompt (based on whatever sound is at WAIT_URL).
-6. ChatGPT will speak its response.
-7. User can press any number key to skip to the end of the message (in case they don't want to wait for the entire response before asking a follow-up prompt).
-8. Repeat steps 2-7, until user hangs up.
+2. ChatGPT responds with a greeting.
+3. If the user waits, ChatGPT will repeat the last question it asked in its greeting.
+4. User speaks a prompt (equivalent to typing a prompt into ChatGPT's [text interface](chat.openai.com)).
+5. When the user stops speaking for TWILIO_SPEECH_TIMEOUT_SECONDS, their prompt will be sent to ChatGPT.
+6. There will be a brief sound as ChatGPT processes the prompt (based on whatever sound is at WAIT_URL).
+7. ChatGPT will speak its response.
+8. User can press any number key to skip to the end of the message (in case they don't want to wait for the entire response before asking a follow-up prompt).
+9. If the user waits, ChatGPT will repeat the last question it asked in its response, or ask a generic question if the response did not include a question.
+10. Repeat steps 4-9, until user hangs up.
 
 During each call, the conversation history is re-submitted to ChatGPT each time the user speaks their next prompt, so a single phone call is equivalent to a single "New Chat".
