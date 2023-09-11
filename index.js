@@ -44,7 +44,7 @@ app.get('/dbtest', async (req,res) => {
 
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
-app.get('/twilio-webhook', async (req, res) => {
+app.get('/twilio-webhook', twilio.webhook(), async (req, res) => {
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
@@ -88,7 +88,7 @@ app.get('/twilio-webhook', async (req, res) => {
     res.send(twiml.toString());
 });
 
-app.get('/enqueue-and-process', async (req, res) => {
+app.get('/enqueue-and-process', twilio.webhook(), async (req, res) => {
     try{
         console.log("now entering GET enqueue-and-process...")
         const userSpeech = req.query.SpeechResult;
