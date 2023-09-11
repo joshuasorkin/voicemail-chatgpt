@@ -13,7 +13,7 @@ class Database{
     async initialize(){
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-            await this.connect();
+            await this.client.connect();
             this.database = this.client.db("voice-chatGPT");
             this.calls = this.database.collection("calls");
         }
