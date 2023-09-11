@@ -15,7 +15,7 @@ import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
-import Database from './Database_RTDB.js';
+import Database from './Database.js';
 
 
 // Miscellaneous object initialization
@@ -25,6 +25,7 @@ const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
 const database = new Database();
+await database.initialize();
 let protocol;
 
 
@@ -65,13 +66,11 @@ app.get('/twilio-webhook', async (req, res) => {
         }
         else{
             greeting = "What would you like to say?";
-            if(!callsData[callSid]){
+            const call = await database.getCall(callSid);
+            if(!call){
                 greeting = "Hi!  I'm Chat GPT.  " + greeting;
-                //todo: callsData should be a collection of CallData objects defined in a calldata.js class
-                callsData[callSid] = {userMessages:[]};
+                await database.addCall(callSid);
             }
-            console.log(`callsData[${callSid}]:`);
-            console.log(callsData[callSid]);
         }
         twimlBuilder.sayReading(gather,greeting);
         const question = req.query.question;
@@ -91,9 +90,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
         const callSid = req.query.CallSid;
-        console.log(`callsData[${callSid}]:`);
-        console.log(callsData[callSid]);
-        callsData[callSid].userMessages.push({role:'user',content:userSpeech});    
+        await database.addUserMessage(callSid,userSpeech);
 
         //enqueue call
         const twiml = new VoiceResponse();
@@ -121,21 +118,22 @@ app.post('/wait', function (req, res) {
 
 //while the user is on hold, get a response to their prompt and then dequeue them and say the response
 async function processCall(callSid,absoluteUrl){
-    const callData = callsData[callSid];
-    if (!callData){
-        console.log("callData not found");
+    const call = await database.getCall(callSid);
+    if (!call){
+        console.log("call not found");
         return res.sendStatus(400);
     }
-    console.log({callData});
-    const userMessages = callData.userMessages;
+    console.log(call);
+    const userMessages = call.userMessages;
     console.log({userMessages});
+    //todo: move end of these try catch blocks into a finally block
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(userMessages);
         
         const twiml = twiml_sayRedirect(result,absoluteUrl);
-        const call = await client.calls(callSid).fetch();
-        if (call.status === 'completed' || call.status === 'canceled'){
+        const call_twilio = await client.calls(callSid).fetch();
+        if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
         }
         await client.calls(callSid).update({
@@ -145,8 +143,8 @@ async function processCall(callSid,absoluteUrl){
     catch(error){
         console.log({error});
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.",absoluteUrl);
-        const call = await client.calls(callSid).fetch();
-        if (call.status === 'completed' || call.status === 'canceled'){
+        const call_twilio = await client.calls(callSid).fetch();
+        if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
         }
         await client.calls(callSid).update({
