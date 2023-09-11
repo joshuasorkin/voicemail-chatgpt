@@ -11,8 +11,8 @@ const message = "black on the red"
 
 async function callExists_test(callSid){
 console.log(`checking for call ${callSid}...`);
-    const result = await database.callExists(callSid);
-    if (result){
+    const call = await database.getCall(callSid);
+    if (call){
         console.log("call exists");
     }
     else{
