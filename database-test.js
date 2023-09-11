@@ -1,3 +1,6 @@
+//note that these functions rely heavily on mongo implementation, so
+//todo: make test database-agnostic
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -14,27 +17,37 @@ async function initialize(){
     console.log("Database initialized");
 }
 
-async function callExists_test(callSid){
+async function getCall_test(){
 console.log(`checking for call ${callSid}...`);
     const call = await database.getCall(callSid);
     if (call){
-        console.log("call exists");
+        console.log("call exists: ",call);
     }
     else{
         console.log("call does not exist");
     }
 }
 
-async function addCall_test(callSid){
+async function addCall_test(){
     const result = await database.addCall(callSid);
-    console.log("New call added:",result.ops[0]);
+    console.log(`Inserted call with doc ID ${result.insertedId}`);
+}
+
+async function addUserMessage_test(){
+    const result = await database.addUserMessage(callSid,message);
+    console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+    );
 }
 
 async function test(){
     await initialize();
     await database.resetCalls();
-    await callExists_test(callSid);
-    await addCall_test(callSid);
+    await getCall_test();
+    await addCall_test();
+    await getCall_test();
+    await addUserMessage_test();
+    await getCall_test();
 }
 
 test();

@@ -39,7 +39,7 @@ class Database{
                 userMessages:[]
             };
             const result = await this.calls.insertOne(newCall);
-            console.log(`Inserted call with doc ID ${result.insertedId}`);
+            return result;
         }
         catch(error){
             throw error;
@@ -50,9 +50,7 @@ class Database{
         const filter = {callSid: callSid};
         const update = { $push: { userMessages: {role:'user',content:message}}};
         const result = await this.calls.updateOne(filter,update);
-        console.log(
-            `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-        );
+        return result;
     }
 
     async getUserMessages(callSid){
