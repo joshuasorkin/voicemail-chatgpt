@@ -7,23 +7,19 @@ import { MongoClient } from 'mongodb';
 
 class Database{
     constructor(){
+        this.initialize();
+    }
+
+    async initialize(){
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+            await this.connect();
             this.database = this.client.db("voice-chatGPT");
             this.calls = this.database.collection("calls");
         }
         catch (error){
             console.error(error);
             throw error;
-        }
-    }
-
-    async connect(){
-        try{
-            await this.client.connect();
-        }
-        catch (error){
-            console.error(error);
         }
     }
 
