@@ -6,9 +6,6 @@
 import { MongoClient } from 'mongodb';
 
 class Database{
-    constructor(){
-        this.initialize();
-    }
 
     async initialize(){
         try {
@@ -16,9 +13,10 @@ class Database{
             await this.client.connect();
             this.database = this.client.db("voice-chatGPT");
             this.calls = this.database.collection("calls");
+            console.log("Database connected");
         }
         catch (error){
-            console.error(error);
+            console.error("Error in initialize:",error);
             throw error;
         }
     }

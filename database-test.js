@@ -10,6 +10,9 @@ const message = "black on the red"
 
 
 async function callExists_test(callSid){
+console.log("Initializing Database....");
+await database.initialize();
+console.log("Database initialized");
 console.log(`checking for call ${callSid}...`);
     const call = await database.getCall(callSid);
     if (call){
