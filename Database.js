@@ -21,6 +21,10 @@ class Database{
         }
     }
 
+    async resetCalls(){
+        await this.calls.drop();
+    }
+
     async getCall(callSid){
         const query = { callSid: callSid };
         const result = await this.calls.findOne(query);

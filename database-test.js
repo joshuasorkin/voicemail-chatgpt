@@ -31,6 +31,7 @@ async function addCall_test(callSid){
 }
 
 async function test(){
+    await database.resetCalls();
     await initialize();
     await callExists_test(callSid);
     await addCall_test(callSid);
