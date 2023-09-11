@@ -8,11 +8,13 @@ const database = new Database();
 const callSid = "123xyz";
 const message = "black on the red"
 
+async function initialize(){
+    console.log("Initializing Database....");
+    await database.initialize();
+    console.log("Database initialized");
+}
 
 async function callExists_test(callSid){
-console.log("Initializing Database....");
-await database.initialize();
-console.log("Database initialized");
 console.log(`checking for call ${callSid}...`);
     const call = await database.getCall(callSid);
     if (call){
@@ -23,4 +25,12 @@ console.log(`checking for call ${callSid}...`);
     }
 }
 
+async function addCall_test(callSid){
+    const result = await database.addCall(callSid);
+    console.log("New call added:",{result});
+}
+
+
+initialize();
 callExists_test(callSid);
+addCall_test(callSid);
