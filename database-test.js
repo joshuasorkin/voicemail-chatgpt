@@ -13,11 +13,16 @@ const userMessage = "white on white, translucent black capes"
 const assistantMessage = "back on the rack"
 
 async function initialize(){
-    console.log("Initializing Database....");
+    console.log("Initializing Database with 'test' collection....");
     await database.initialize('test');
     console.log("Database initialized");
 }
 
+async function reset_test(){
+    console.log("resetting collection");
+    await database.resetCalls();
+    console.log("collection reset");
+}
 async function getCall_test(){
 console.log(`checking for call ${callSid}...`);
     const call = await database.getCall(callSid);
@@ -55,14 +60,12 @@ async function getUserMessages_test(){
 
 async function test(){
     await initialize();
-    await database.resetCalls();
+    await reset_test();
     await getCall_test();
     await addCall_test();
     await getCall_test();
     await addUserMessage_test();
     await getCall_test();
-    await addUserMessage_test();
-    await getUserMessages_test();
     await addAssistantMessage_test();
     await getUserMessages_test();
 
