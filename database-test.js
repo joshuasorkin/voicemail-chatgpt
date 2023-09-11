@@ -40,6 +40,11 @@ async function addUserMessage_test(){
     );
 }
 
+async function getUserMessages_test(){
+    const result = await database.getUserMessages(callSid);
+    console.log("userMessages: ",result);
+}
+
 async function test(){
     await initialize();
     await database.resetCalls();
@@ -48,6 +53,8 @@ async function test(){
     await getCall_test();
     await addUserMessage_test();
     await getCall_test();
+    await addUserMessage_test();
+    await getUserMessages_test();
 }
 
 test();
