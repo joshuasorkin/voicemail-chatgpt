@@ -9,8 +9,8 @@ class Database{
     constructor(){
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-            this.database = client.db("voice-chatGPT");
-            this.calls = database.collection("calls");
+            this.database = this.client.db("voice-chatGPT");
+            this.calls = this.database.collection("calls");
         }
         catch (error){
             console.error(error);
