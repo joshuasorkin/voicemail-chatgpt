@@ -30,7 +30,10 @@ async function addCall_test(callSid){
     console.log("New call added:",{result});
 }
 
+async function test(){
+    await initialize();
+    await callExists_test(callSid);
+    await addCall_test(callSid);
+}
 
-initialize();
-callExists_test(callSid);
-addCall_test(callSid);
+test();
