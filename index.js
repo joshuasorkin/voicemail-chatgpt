@@ -113,7 +113,7 @@ app.get('/enqueue-and-process', twilio.webhook(), async (req, res) => {
 
 });
 
-app.post('/wait', function (req, res) {
+app.post('/wait', twilio.webhook(), function (req, res) {
     const response = new VoiceResponse();
     response.play(process.env.WAIT_URL);
     console.log(response.toString());
