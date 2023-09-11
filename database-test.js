@@ -9,11 +9,12 @@ import Database from './Database.js';
 const database = new Database();
 
 const callSid = "123xyz";
-const message = "black on the red"
+const userMessage = "white on white, translucent black capes" 
+const assistantMessage = "back on the rack"
 
 async function initialize(){
     console.log("Initializing Database....");
-    await database.initialize();
+    await database.initialize('test');
     console.log("Database initialized");
 }
 
@@ -41,7 +42,7 @@ async function addUserMessage_test(){
 }
 
 async function addAssistantMessage_test(){
-    const result = await database.addAssistantMessage(callSid,userMessage);
+    const result = await database.addAssistantMessage(callSid,assistantMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
@@ -62,6 +63,9 @@ async function test(){
     await getCall_test();
     await addUserMessage_test();
     await getUserMessages_test();
+    await addAssistantMessage_test();
+    await getUserMessages_test();
+
 }
 
 test();
