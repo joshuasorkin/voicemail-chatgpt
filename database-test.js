@@ -27,7 +27,7 @@ console.log(`checking for call ${callSid}...`);
 
 async function addCall_test(callSid){
     const result = await database.addCall(callSid);
-    console.log("New call added:",{result});
+    console.log("New call added:",result.ops[0]);
 }
 
 async function test(){
