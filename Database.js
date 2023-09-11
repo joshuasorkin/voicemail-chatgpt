@@ -7,12 +7,12 @@ import { MongoClient } from 'mongodb';
 
 class Database{
 
-    async initialize(){
+    async initialize(collectionName='calls'){
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
             await this.client.connect();
             this.database = this.client.db("voice-chatGPT");
-            this.calls = this.database.collection("calls");
+            this.calls = this.database.collection(collectionName);
             console.log("Database connected");
         }
         catch (error){
@@ -46,10 +46,22 @@ class Database{
         }
     }
 
-    async addUserMessage(callSid,message){
+    async addMessage(callSid,role,message){
         const filter = {callSid: callSid};
-        const update = { $push: { userMessages: {role:'user',content:message}}};
+        const update = { $push: { userMessages: {role:role,content:message}}};
         const result = await this.calls.updateOne(filter,update);
+        return result;
+    }
+
+    //todo: the roles probably don't belong hardcoded in the database class,
+    //maybe OpenAIUtility.chatGPTGenerate() should produce an object with the role
+    async addUserMessage(callSid,message){
+        const result = await this.addMessage(callSid,'user',message);
+        return result;
+    }
+
+    async addAssistantMessage(callSid,message){
+        const result = await this.addMessage(callSid,'assistant',message);
         return result;
     }
 

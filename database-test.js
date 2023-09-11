@@ -34,7 +34,14 @@ async function addCall_test(){
 }
 
 async function addUserMessage_test(){
-    const result = await database.addUserMessage(callSid,message);
+    const result = await database.addUserMessage(callSid,userMessage);
+    console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+    );
+}
+
+async function addAssistantMessage_test(){
+    const result = await database.addAssistantMessage(callSid,userMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
