@@ -130,7 +130,7 @@ async function processCall(callSid,absoluteUrl){
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(userMessages);
-        
+        database.addAssistantMessage(callSid,result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call_twilio = await client.calls(callSid).fetch();
         if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){

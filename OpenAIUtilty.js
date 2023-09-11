@@ -4,15 +4,10 @@ import {OpenAI} from 'openai';
 
 
 class OpenAIUtility {
-    //todo: is passing the database to this class a pattern or anti-pattern?
-    //we need to be able to add the response to the database, but maybe that should happen outside
-    //of chatGPTGenerate()?  should chatGPTGenerate be limited to getting the response and returning it
-    //as a string, not also adding it to userMessages?
-    constructor(database) {
+    constructor() {
         this.openai = new OpenAI({
             apiKey:process.env.OPENAI_API_KEY
         });
-        this.database = database;
     }
 
     async chatGPTGenerate(userMessages) {
@@ -33,8 +28,6 @@ class OpenAIUtility {
             });
             console.log(`and the response has returned from OpenAI`);
             const response = completion.choices[0].message.content;
-            userMessages.push({role:'assistant',content:response})
-            console.log({userMessages});
             return response;
         }
         catch(error){
