@@ -1,6 +1,6 @@
 
-//todo: decouple db operations from firebase by separating operations into a 
-//DatabaseController class that gets extended as a DatabaseController_Firebase class,
+//todo: decouple db operations from mongo by separating operations into a 
+//DatabaseController class that gets extended as a DatabaseController_Mongo class,
 //as suggested by chatGPT here: https://chat.openai.com/share/f0a4417b-481a-462a-8662-5d23434e11e0
 
 import { MongoClient } from 'mongodb';
