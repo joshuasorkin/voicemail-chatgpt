@@ -10,7 +10,7 @@ class AssemblyWebsocket{
   //takes Express app object as parameter
   constructor(app){
     this.server = createServer(app);
-    this.wss = new WebSocket.Server({ server });
+    this.wss = new WebSocket.Server({ server:this.server });
     this.assembly = null;
     this.chunks = [];
   }
