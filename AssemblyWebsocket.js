@@ -2,7 +2,8 @@
 //of Twilio media stream
 
 import WebSocket from "ws";
-import { WaveFile } from 'wavefile';
+import pkg from 'wavefile';
+const {WaveFile} = pkg;
 import { createServer } from 'http';
 class Websocket{
 
