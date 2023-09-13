@@ -53,7 +53,8 @@ app.get('/twilio-webhook', async (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
 
     console.log("Checking for existing stream...");
-    const streams = await client.calls(callSid).streams.length;
+    const streams = await client.calls(callSid).streams;
+    console.log({streams});
     if(streams.length === 0){
         console.log("no streams found, creating new stream...");
         const start = twiml.start();
