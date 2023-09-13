@@ -89,14 +89,18 @@ class Database{
         return result;
     }
 
-    async getValue(callSid,valueName){
+    async getValue(callSid,key){
         const call = await this.getCall(callSid);
-        if (call && call[valueName]===undefined){
+        if (call && call[key]===undefined){
             return null;
         }
         else{
-            return call[valueName];
+            return call[key];
         }
+    }
+
+    async setValue(callSid,valueName,value){
+
     }
 }
 
