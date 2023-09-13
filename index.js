@@ -99,6 +99,7 @@ app.get('/twilio-webhook', async (req, res) => {
             url
         );
     }
+    console.log(twiml.toString());
     res.send(twiml.toString());
 });
 
