@@ -60,6 +60,7 @@ app.get('/twilio-webhook', async (req, res) => {
         let greeting;
         const gather = twiml.gather({
             input:'speech',
+            speechModel:'experimental_conversations',
             action:'/enqueue-and-process',
             method:'GET',
             speechTimeout:process.env.TWILIO_SPEECH_TIMEOUT_SECONDS,
