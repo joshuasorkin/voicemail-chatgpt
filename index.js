@@ -61,7 +61,7 @@ app.get('/twilio-webhook', async (req, res) => {
             name:'AssemblyAI',
             url: `wss://${req.headers.host}`
         });
-    });
+    }
 
     //
     if (speechResult && speechResult !== undefined){
