@@ -96,6 +96,14 @@ class Websocket{
       });
     });
   }
+
+  getAssemblySocket(){
+    const assembly = new WebSocket(
+      "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=8000",
+      { headers: { authorization: process.env.ASSEMBLYAI_API_KEY } }
+    );
+    return assembly;
+  }
 }
 
 export default AssemblyWebsocket;

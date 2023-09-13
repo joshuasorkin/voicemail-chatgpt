@@ -9,18 +9,19 @@ import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
 
-
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
-
+import AssemblyWebsocket from './AssemblyWebsocket.js';
 
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+const assemblyWebsocket = new AssemblyWebsocket(app);
+assemblyWebsocket.initializeHandlers();
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
