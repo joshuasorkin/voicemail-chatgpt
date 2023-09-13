@@ -70,8 +70,8 @@ async function setStreamSid_test(){
 }
 
 async function getValue_test(){
-    const result = await database.getValue(callSid,"streamSid");
-    console.log()
+    const result = await database.getValue(callSid,valueName);
+    console.log(`${valuename}: ${result}`);
 }
 
 async function test(){
