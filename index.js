@@ -47,8 +47,11 @@ app.get('/dbtest', async (req,res) => {
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     let assembly = await database.getValue(callSid,"assemblySocket");
+    console.log("assemblySocket value from db: ",assembly);
     if(!assembly) {
+        console.log("getting socket...");
         assembly = assemblyWebsocket.getAssemblySocket();
+        console.log("entering socket into db...");
         database.setValue(callSid,"assemblySocket",assembly);
     }
     console.log("Entering GET twilio-webhook...");
