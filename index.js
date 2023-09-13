@@ -62,9 +62,9 @@ app.get('/twilio-webhook', async (req, res) => {
         console.log("getting socket...");
         assembly = assemblyWebsocket.getAssemblySocket();
         console.log("assemblySocket: ",{assembly});
-        call["assemblySocket"] = assembly;
+        call["assemblySocket"] = true;
         console.log("entering socket into db...");
-        await database.setValue(callSid,"assemblySocket",assembly);
+        await database.setValue(callSid,"assemblySocket",true);
     }
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
