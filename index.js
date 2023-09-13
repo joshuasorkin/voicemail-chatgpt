@@ -46,12 +46,10 @@ app.get('/dbtest', async (req,res) => {
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
-    let assembly = await database.getValue(callSid,"socket");
+    let assembly = await database.getValue(callSid,"assemblySocket");
     if(!assembly) {
-        assembly = new WebSocket(
-            "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=8000",
-            { headers: { authorization: process.env.APIKEY } }
-        );
+        assembly = assemblyWebsocket.getAssemblySocket();
+        database.setValue(callSid,"assemblySocket",assembly);
     }
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;

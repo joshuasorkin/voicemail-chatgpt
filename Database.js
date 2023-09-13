@@ -3,6 +3,8 @@
 //DatabaseController class that gets extended as a DatabaseController_Mongo class,
 //as suggested by chatGPT here: https://chat.openai.com/share/f0a4417b-481a-462a-8662-5d23434e11e0
 
+//todo: replace all get
+
 import { MongoClient } from 'mongodb';
 
 class Database{
