@@ -77,7 +77,7 @@ class Database{
         return call.streamSid;
     }
 
-    async setStream(callSid,streamSid){
+    async setStreamSid(callSid,streamSid){
         const filter = {callSid: callSid};
         const update = { $set: { streamSid: streamSid}};
         const result = await this.calls.updateOne(filter,update);
