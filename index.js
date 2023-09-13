@@ -77,11 +77,7 @@ app.get('/twilio-webhook', async (req, res) => {
     console.log(req.headers.host);
     if(streams.length === 1){
         console.log("no streams found, creating new stream...");
-        const start = twiml.start();
-        start.stream({
-            name:'AssemblyAI',
-            url: `wss://${req.headers.host}`
-        });
+        twimlBuilder.startStream(twiml);
     }
 
     //
