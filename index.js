@@ -46,6 +46,7 @@ app.get('/dbtest', async (req,res) => {
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
+    const callSid = req.query.CallSid;
     let assembly = await database.getValue(callSid,"assemblySocket");
     console.log("assemblySocket value from db: ",assembly);
     if(!assembly) {
@@ -57,7 +58,6 @@ app.get('/twilio-webhook', async (req, res) => {
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
-    const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
 
     console.log("Checking for existing stream...");
