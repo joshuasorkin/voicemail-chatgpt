@@ -5,7 +5,7 @@ import WebSocket from "ws";
 import pkg from 'wavefile';
 const {WaveFile} = pkg;
 import { createServer } from 'http';
-class Websocket{
+class AssemblyWebsocket{
 
   //takes Express app object as parameter
   constructor(app){
