@@ -88,6 +88,16 @@ class Database{
         const result = await this.calls.updateOne(filter,update);
         return result;
     }
+
+    async getValue(callSid,valueName){
+        const call = await this.getCall(callSid);
+        if (call && call[valueName]===undefined){
+            return null;
+        }
+        else{
+            return call[valueName];
+        }
+    }
 }
 
 export default Database;
