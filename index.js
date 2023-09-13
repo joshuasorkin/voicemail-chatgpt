@@ -86,6 +86,13 @@ app.get('/twilio-webhook', async (req, res) => {
             url
         );
     }
+
+    const streamSidFromDatabase = database.getStreamSid(callSid);
+    if(!streamSidFromDatabase){
+        const streamSid = await client.calls(callSid).streams.create({url: `wss://${req.headers.host}`});
+        database.setStreamSid(callSid,streamSid);
+    }
+
     res.send(twiml.toString());
 });
 
