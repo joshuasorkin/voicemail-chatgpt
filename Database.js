@@ -71,6 +71,18 @@ class Database{
         const call = await this.getCall(callSid);
         return call.userMessages;
     }
+
+    async getStreamSid(callSid){
+        const call = await this.getCall(callSid);
+        return call.streamSid;
+    }
+
+    async setStream(callSid,streamSid){
+        const filter = {callSid: callSid};
+        const update = { $set: { streamSid: streamSid}};
+        const result = await this.calls.updateOne(filter,update);
+        return result;
+    }
 }
 
 export default Database;
