@@ -3,12 +3,14 @@
 
 import WebSocket from "ws";
 import { WaveFile } from 'wavefile';
-
+import { createServer } from 'http';
 class Websocket{
 
-const app = express();
-const server = require("http").createServer(app);
-const wss = new WebSocket.Server({ server });
+//takes Express app object as parameter
+constructor(app){
+  this.server = createServer(app);
+  this.wss = new WebSocket.Server({ server });
+}
 
 let assembly;
 let chunks = [];
