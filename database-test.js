@@ -67,7 +67,7 @@ async function getStreamSid_test(){
     console.log("streamSid: ",result);
 }
 async function setStreamSid_test(){
-    const result = await database.setStreamSid(callSid,streamSid);
+    const result = await database.setValue(callSid,"streamSid",streamSid);
     console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
 }
 

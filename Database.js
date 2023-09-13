@@ -99,8 +99,15 @@ class Database{
         }
     }
 
-    async setValue(callSid,valueName,value){
-
+    async setValue(callSid, key, value) {
+        const filter = { callSid: callSid };
+        const update = { $set: {} }; // Initialize an empty update object
+      
+        // Dynamically set the key in the update object based on the 'key' parameter
+        update.$set[key] = value;
+      
+        const result = await this.calls.updateOne(filter, update);
+        return result;
     }
 }
 
