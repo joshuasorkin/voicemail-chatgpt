@@ -74,7 +74,12 @@ class Database{
 
     async getStreamSid(callSid){
         const call = await this.getCall(callSid);
-        return call.streamSid;
+        if (call && call.streamSid===undefined){
+            return null;
+        }
+        else{
+            return call.streamSid;
+        }
     }
 
     async setStreamSid(callSid,streamSid){
