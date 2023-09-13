@@ -52,6 +52,17 @@ app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
 
+    console.log("Checking for existing stream...");
+    const streams = await client.calls(callSid).streams.length;
+    if(streams.length === 0){
+        console.log("no streams found, creating new stream...");
+        const start = twiml.start();
+        start.stream({
+            name:'AssemblyAI',
+            url: `wss://${req.headers.host}`
+        });
+    });
+
     //
     if (speechResult && speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
@@ -72,7 +83,7 @@ app.get('/twilio-webhook', async (req, res) => {
         else{
             greeting = "What would you like to say?";
             const call = await database.getCall(callSid);
-            if(!call){
+            if(!call || call.userMessages.length === 0){
                 greeting = "Hi!  I'm Chat GPT.  " + greeting;
                 await database.addCall(callSid);
             }
@@ -86,18 +97,6 @@ app.get('/twilio-webhook', async (req, res) => {
             url
         );
     }
-    console.log("Checking for streamSid...")
-    const streamSidFromDatabase = await database.getStreamSid(callSid);
-    console.log({streamSidFromDatabase})
-    if(!streamSidFromDatabase){
-        console.log("no streamsid found, creating new stream...");
-        const streamSid = await client.calls(callSid).streams.create({url: `wss://${req.headers.host}`});
-        console.log("new stream: ",streamSid);
-        console.log("setting new stream in db...");
-        const result = database.setStreamSid(callSid,streamSid);
-
-    }
-
     res.send(twiml.toString());
 });
 
