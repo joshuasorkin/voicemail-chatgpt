@@ -1,6 +1,7 @@
 //handles websocket events related to AssemblyAI's transcription
 //of Twilio media stream
 
+import WebSocket from 'ws';
 import { WebSocketServer } from "ws";
 import pkg from 'wavefile';
 const {WaveFile} = pkg;
@@ -17,7 +18,7 @@ class AssemblyWebsocket{
 
 
   initializeHandlers(){
-    wss.on("connection", (ws) => {
+    this.wss.on("connection", (ws) => {
       console.info("New Connection Initiated");
 
       ws.on("message", (message) => {

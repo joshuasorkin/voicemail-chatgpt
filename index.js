@@ -86,11 +86,16 @@ app.get('/twilio-webhook', async (req, res) => {
             url
         );
     }
-
+    console.log("Checking for streamSid...")
     const streamSidFromDatabase = database.getStreamSid(callSid);
+    console.log({streamSid})
     if(!streamSidFromDatabase){
+        console.log("no streamsid found, creating new stream...");
         const streamSid = await client.calls(callSid).streams.create({url: `wss://${req.headers.host}`});
-        database.setStreamSid(callSid,streamSid);
+        console.log("new stream: ",streamSid);
+        console.log("setting new stream in db...");
+        const result = database.setStreamSid(callSid,streamSid);
+        
     }
 
     res.send(twiml.toString());
