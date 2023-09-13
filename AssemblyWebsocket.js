@@ -1,7 +1,7 @@
 //handles websocket events related to AssemblyAI's transcription
 //of Twilio media stream
 
-import WebSocket from "ws";
+import { WebSocketServer } from "ws";
 import pkg from 'wavefile';
 const {WaveFile} = pkg;
 import { createServer } from 'http';
@@ -10,7 +10,7 @@ class AssemblyWebsocket{
   //takes Express app object as parameter
   constructor(app){
     this.server = createServer(app);
-    this.wss = new WebSocket.Server({ server:this.server });
+    this.wss = new WebSocketServer({ server:this.server });
     this.assembly = null;
     this.chunks = [];
   }
