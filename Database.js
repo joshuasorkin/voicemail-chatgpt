@@ -29,12 +29,15 @@ class Database{
         await this.calls.drop();
     }
 
+    //todo: do we want to automatically add a call if one isn't found?
     async getCall(callSid){
         const query = { callSid: callSid };
         const result = await this.calls.findOne(query);
         return result;
     }
 
+    //todo: result should be the actual call document, not just the result
+    //of insertOne() so we don't have to call getCall()
     async addCall(callSid){
         try{
             //todo: create a Call class and get an instance of it here

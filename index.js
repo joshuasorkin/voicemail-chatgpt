@@ -43,17 +43,28 @@ app.get('/dbtest', async (req,res) => {
     main();
 });
 
+//todo: use session to cache call data (e.g. streams, messages) locally,
+//and asynchronously push data to database.  should reduce latency,
+//high availability of data in db not as important
+
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
-    let assembly = await database.getValue(callSid,"assemblySocket");
+    let call = await database.getCall(callSid);
+    if(!call){
+        await database.addCall(callSid);
+        call = await database.getCall(callSid);
+    }
+    let assembly = call["assemblySocket"];
     console.log("assemblySocket value from db: ",assembly);
     if(!assembly) {
         console.log("getting socket...");
         assembly = assemblyWebsocket.getAssemblySocket();
+        console.log("assemblySocket: ",{assembly});
+        call["assemblySocket"] = assembly;
         console.log("entering socket into db...");
-        database.setValue(callSid,"assemblySocket",assembly);
+        await database.setValue(callSid,"assemblySocket",assembly);
     }
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
