@@ -9,9 +9,10 @@ import Database from './Database.js';
 const database = new Database();
 
 const callSid = "123xyz";
-const streamSid = "11235813"
-const userMessage = "white on white, translucent black capes" 
-const assistantMessage = "back on the rack"
+const streamSid = "11235813";
+const userMessage = "white on white, translucent black capes";
+const assistantMessage = "back on the rack";
+const valueName = "streamSid";
 
 async function initialize(){
     console.log("Initializing Database with 'test' collection....");
@@ -68,6 +69,11 @@ async function setStreamSid_test(){
     console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
 }
 
+async function getValue_test(){
+    const result = await database.getValue(callSid,"streamSid");
+    console.log()
+}
+
 async function test(){
     await initialize();
     await reset_test();
@@ -81,6 +87,7 @@ async function test(){
     await getStreamSid_test();
     await setStreamSid_test();
     await getStreamSid_test();
+    await getValue_test();
 
 }
 
