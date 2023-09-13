@@ -55,6 +55,7 @@ app.get('/twilio-webhook', async (req, res) => {
     console.log("Checking for existing stream...");
     const streams = await client.calls(callSid).streams;
     console.log({streams});
+    console.log(req.headers.host);
     if(streams.length === 1){
         console.log("no streams found, creating new stream...");
         const start = twiml.start();
