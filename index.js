@@ -87,7 +87,7 @@ app.get('/twilio-webhook', async (req, res) => {
         );
     }
     console.log("Checking for streamSid...")
-    const streamSidFromDatabase = database.getStreamSid(callSid);
+    const streamSidFromDatabase = await database.getStreamSid(callSid);
     console.log({streamSidFromDatabase})
     if(!streamSidFromDatabase){
         console.log("no streamsid found, creating new stream...");
