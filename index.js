@@ -15,14 +15,11 @@ import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
-import AssemblyWebsocket from './AssemblyWebsocket.js';
 import StreamBuilder from './StreamBuilder.js';
 
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
-const assemblyWebsocket = new AssemblyWebsocket(app);
-assemblyWebsocket.initializeHandlers();
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
@@ -54,14 +51,10 @@ app.get('/dbtest', async (req,res) => {
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     const call = database.getOrAddCall(callSid);
-    //todo: revisit this line after more stream testing
-    //assemblyWebsocket.getSocketAndUpdateDatabase(call,database);
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
     const twiml = new twilio.twiml.VoiceResponse();
-    //todo: revisit this line after more stream testing
-    //streamBuilder.startStream(callSid,twiml);
     if (speechResult && speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
         twiml.redirect({method:'GET'},url);
