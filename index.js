@@ -32,16 +32,6 @@ let protocol;
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const streamBuilder = new StreamBuilder(client,twimlBuilder);
 
-//todo: take this out once we confirm that mongo is working on fly.io
-// database test function
-import { main } from './mongo-test.js';
-
-// GET endpoint for testing database
-//todo: take this out once we confirm that mongo is working on fly.io
-app.get('/dbtest', async (req,res) => {
-    main();
-});
-
 //todo: use session to cache call data (e.g. streams, messages) locally,
 //and asynchronously push data to database.  should reduce latency,
 //high availability of data in db not as important
