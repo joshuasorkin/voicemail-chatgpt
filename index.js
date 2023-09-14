@@ -40,7 +40,7 @@ const streamBuilder = new StreamBuilder(client,twimlBuilder);
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
-    const call = database.getOrAddCall(callSid);
+    const call = await database.getOrAddCall(callSid);
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
