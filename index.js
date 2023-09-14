@@ -16,6 +16,7 @@ import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
 import AssemblyWebsocket from './AssemblyWebsocket.js';
+import StreamBuilder from './StreamBuilder.js';
 
 // Miscellaneous object initialization
 const app = express();
@@ -32,6 +33,7 @@ let protocol;
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const streamBuilder = new StreamBuilder(client,twimlBuilder);
 
 //todo: take this out once we confirm that mongo is working on fly.io
 // database test function
@@ -70,17 +72,7 @@ app.get('/twilio-webhook', async (req, res) => {
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
     const twiml = new twilio.twiml.VoiceResponse();
-
-    console.log("Checking for existing stream...");
-    const streams = await client.calls(callSid).streams;
-    console.log({streams});
-    console.log(req.headers.host);
-    if(streams.length === 1){
-        console.log("no streams found, creating new stream...");
-        twimlBuilder.startStream(twiml);
-    }
-
-    //
+    streamBuilder.startStream(callSid,twiml);
     if (speechResult && speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
         twiml.redirect({method:'GET'},url);
