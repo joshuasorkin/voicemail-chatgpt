@@ -53,21 +53,8 @@ app.get('/dbtest', async (req,res) => {
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
-    let call = await database.getCall(callSid);
-    if(!call){
-        await database.addCall(callSid);
-        call = await database.getCall(callSid);
-    }
-    let assembly = call["assemblySocket"];
-    console.log("assemblySocket value from db: ",assembly);
-    if(!assembly) {
-        console.log("getting socket...");
-        assembly = assemblyWebsocket.getAssemblySocket();
-        console.log("assemblySocket: ",{assembly});
-        call["assemblySocket"] = true;
-        console.log("entering socket into db...");
-        await database.setValue(callSid,"assemblySocket",true);
-    }
+    const call = database.getOrAddCall(callSid);
+    assemblyWebsocket.getSocketAndUpdateDatabase(call,database);
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
@@ -91,10 +78,8 @@ app.get('/twilio-webhook', async (req, res) => {
         }
         else{
             greeting = "What would you like to say?";
-            const call = await database.getCall(callSid);
-            if(!call || call.userMessages.length === 0){
+            if(call.userMessages.length === 0){
                 greeting = "Hi!  I'm Chat GPT.  " + greeting;
-                await database.addCall(callSid);
             }
         }
         twimlBuilder.sayReading(gather,greeting);

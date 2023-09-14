@@ -11,6 +11,7 @@ import Database from './Database.js';
 const database = new Database();
 
 const callSid = "123xyz";
+const callSid_getOrAdd = "2416256";
 const streamSid = "11235813";
 const userMessage = "white on white, translucent black capes";
 const assistantMessage = "back on the rack";
@@ -36,6 +37,18 @@ console.log(`checking for call ${callSid}...`);
     else{
         console.log("call does not exist");
     }
+}
+
+async function getOrAddCall_test(){
+    let call = await database.getCall(callSid_getOrAdd);
+    if (call){
+        console.log("call exists: ",call);
+    }
+    else{
+        console.log(`call ${callSid_getOrAdd} does not exist`);
+    }
+    call = await database.getOrAddCall(callSid_getOrAdd);
+    console.log(call);
 }
 
 async function addCall_test(){
@@ -90,6 +103,7 @@ async function test(){
     await setStreamSid_test();
     await getStreamSid_test();
     await getValue_test();
+    await getOrAddCall_test();
 
 }
 

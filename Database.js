@@ -36,6 +36,17 @@ class Database{
         return result;
     }
 
+    async getOrAddCall(callSid){
+        const result = await this.getCall(callSid);
+        if(result){
+            return result;
+        }
+        else{
+            this.addCall(callSid);
+            return await this.getCall(callSid);
+        }
+    }
+
     //todo: result should be the actual call document, not just the result
     //of insertOne() so we don't have to call getCall()
     async addCall(callSid){

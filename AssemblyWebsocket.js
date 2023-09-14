@@ -106,6 +106,22 @@ class AssemblyWebsocket{
     );
     return assembly;
   }
+
+  //this is a placeholder to store the code that was moved from twilio-webhook
+  //so we can merge this branch, it's unfinished but will return to after
+  //more testing of different streaming approaches
+  async getSocketAndUpdateDatabase(call,database){
+    let assembly = call.assemblySocket;
+    console.log("assemblySocket value from db: ",assembly);
+    if(!assembly) {
+        console.log("getting socket...");
+        assembly = assemblyWebsocket.getAssemblySocket();
+        console.log("assemblySocket: ",{assembly});
+        call["assemblySocket"] = true;
+        console.log("entering socket into db...");
+        await database.setValue(callSid,"assemblySocket",true);
+    }
+  }
 }
 
 export default AssemblyWebsocket;
