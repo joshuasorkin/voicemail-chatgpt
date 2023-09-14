@@ -9,18 +9,20 @@ import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
 
-
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
-
+import AssemblyWebsocket from './AssemblyWebsocket.js';
+import StreamBuilder from './StreamBuilder.js';
 
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+const assemblyWebsocket = new AssemblyWebsocket(app);
+assemblyWebsocket.initializeHandlers();
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const openAIUtility = new OpenAIUtility();
@@ -31,6 +33,7 @@ let protocol;
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const streamBuilder = new StreamBuilder(client,twimlBuilder);
 
 //todo: take this out once we confirm that mongo is working on fly.io
 // database test function
@@ -42,16 +45,23 @@ app.get('/dbtest', async (req,res) => {
     main();
 });
 
+//todo: use session to cache call data (e.g. streams, messages) locally,
+//and asynchronously push data to database.  should reduce latency,
+//high availability of data in db not as important
+
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
+    const callSid = req.query.CallSid;
+    const call = database.getOrAddCall(callSid);
+    //todo: revisit this line after more stream testing
+    //assemblyWebsocket.getSocketAndUpdateDatabase(call,database);
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
-    const callSid = req.query.CallSid;
     const twiml = new twilio.twiml.VoiceResponse();
-
-    //
+    //todo: revisit this line after more stream testing
+    //streamBuilder.startStream(callSid,twiml);
     if (speechResult && speechResult !== undefined){
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
         twiml.redirect({method:'GET'},url);
@@ -70,10 +80,8 @@ app.get('/twilio-webhook', async (req, res) => {
         }
         else{
             greeting = "What would you like to say?";
-            const call = await database.getCall(callSid);
-            if(!call){
+            if(call.userMessages.length === 0){
                 greeting = "Hi!  I'm Chat GPT.  " + greeting;
-                await database.addCall(callSid);
             }
         }
         twimlBuilder.sayReading(gather,greeting);
@@ -85,6 +93,7 @@ app.get('/twilio-webhook', async (req, res) => {
             url
         );
     }
+    console.log(twiml.toString());
     res.send(twiml.toString());
 });
 

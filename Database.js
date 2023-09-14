@@ -3,6 +3,8 @@
 //DatabaseController class that gets extended as a DatabaseController_Mongo class,
 //as suggested by chatGPT here: https://chat.openai.com/share/f0a4417b-481a-462a-8662-5d23434e11e0
 
+//todo: replace all get
+
 import { MongoClient } from 'mongodb';
 
 class Database{
@@ -27,12 +29,26 @@ class Database{
         await this.calls.drop();
     }
 
+    //todo: do we want to automatically add a call if one isn't found?
     async getCall(callSid){
         const query = { callSid: callSid };
         const result = await this.calls.findOne(query);
         return result;
     }
 
+    async getOrAddCall(callSid){
+        const result = await this.getCall(callSid);
+        if(result){
+            return result;
+        }
+        else{
+            this.addCall(callSid);
+            return await this.getCall(callSid);
+        }
+    }
+
+    //todo: result should be the actual call document, not just the result
+    //of insertOne() so we don't have to call getCall()
     async addCall(callSid){
         try{
             //todo: create a Call class and get an instance of it here
@@ -70,6 +86,44 @@ class Database{
     async getUserMessages(callSid){
         const call = await this.getCall(callSid);
         return call.userMessages;
+    }
+
+    async getStreamSid(callSid){
+        const call = await this.getCall(callSid);
+        if (call && call.streamSid===undefined){
+            return null;
+        }
+        else{
+            return call.streamSid;
+        }
+    }
+
+    async setStreamSid(callSid,streamSid){
+        const filter = {callSid: callSid};
+        const update = { $set: { streamSid: streamSid}};
+        const result = await this.calls.updateOne(filter,update);
+        return result;
+    }
+
+    async getValue(callSid,key){
+        const call = await this.getCall(callSid);
+        if (call && call[key]===undefined){
+            return null;
+        }
+        else{
+            return call[key];
+        }
+    }
+
+    async setValue(callSid, key, value) {
+        const filter = { callSid: callSid };
+        const update = { $set: {} }; // Initialize an empty update object
+      
+        // Dynamically set the key in the update object based on the 'key' parameter
+        update.$set[key] = value;
+      
+        const result = await this.calls.updateOne(filter, update);
+        return result;
     }
 }
 

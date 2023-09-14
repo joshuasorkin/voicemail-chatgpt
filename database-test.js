@@ -1,6 +1,8 @@
 //note that these functions rely heavily on mongo implementation, so
 //todo: make test database-agnostic
 
+//todo: make these into unit tests that either return true (passed) or false (failed)
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,8 +11,11 @@ import Database from './Database.js';
 const database = new Database();
 
 const callSid = "123xyz";
-const userMessage = "white on white, translucent black capes" 
-const assistantMessage = "back on the rack"
+const callSid_getOrAdd = "2416256";
+const streamSid = "11235813";
+const userMessage = "white on white, translucent black capes";
+const assistantMessage = "back on the rack";
+const valueName = "streamSid";
 
 async function initialize(){
     console.log("Initializing Database with 'test' collection....");
@@ -32,6 +37,18 @@ console.log(`checking for call ${callSid}...`);
     else{
         console.log("call does not exist");
     }
+}
+
+async function getOrAddCall_test(){
+    let call = await database.getCall(callSid_getOrAdd);
+    if (call){
+        console.log("call exists: ",call);
+    }
+    else{
+        console.log(`call ${callSid_getOrAdd} does not exist`);
+    }
+    call = await database.getOrAddCall(callSid_getOrAdd);
+    console.log(call);
 }
 
 async function addCall_test(){
@@ -58,6 +75,20 @@ async function getUserMessages_test(){
     console.log("userMessages: ",result);
 }
 
+async function getStreamSid_test(){
+    const result = await database.getStreamSid(callSid);
+    console.log("streamSid: ",result);
+}
+async function setStreamSid_test(){
+    const result = await database.setValue(callSid,"streamSid",streamSid);
+    console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
+}
+
+async function getValue_test(){
+    const result = await database.getValue(callSid,valueName);
+    console.log(`${valueName}: ${result}`);
+}
+
 async function test(){
     await initialize();
     await reset_test();
@@ -68,6 +99,11 @@ async function test(){
     await getCall_test();
     await addAssistantMessage_test();
     await getUserMessages_test();
+    await getStreamSid_test();
+    await setStreamSid_test();
+    await getStreamSid_test();
+    await getValue_test();
+    await getOrAddCall_test();
 
 }
 

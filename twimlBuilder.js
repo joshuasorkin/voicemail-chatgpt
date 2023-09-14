@@ -38,6 +38,16 @@ class TwimlBuilder{
         response.play(process.env.CHIME_URL);
     }
 
+    //todo: make this generic, pulling the AssemblyAI info from a config object parameter
+    startStream(response){
+        console.log("req.headers.host ",req.headers.host);
+        const start = twiml.start();
+        start.stream({
+            name:'AssemblyAI',
+            url: `wss://${req.headers.host}`
+        });
+    }
+
 }
 
 export default TwimlBuilder;
