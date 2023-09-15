@@ -17,7 +17,7 @@ class OpenAIUtility {
             //todo: we have a memory leak because duplicate messages are getting pushed into the
             //total {messages} and this is causing the token limit to be exceeded
             //hypothesis: the problem is that in this line:
-            const messages = this.personality.messages;
+            const messages = this.personality.messages.slice();
             //we have a pointer to this.personality.messages,
             //so when we push to {messages} here:
             userMessages.forEach(message => {
