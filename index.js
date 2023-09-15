@@ -17,7 +17,7 @@ import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
 import StreamBuilder from './StreamBuilder.js';
 
-function initializeObjects()
+
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
