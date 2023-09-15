@@ -14,10 +14,19 @@ class OpenAIUtility {
     
     async chatGPTGenerate(userMessages) {
         try{
+            //todo: we have a memory leak because duplicate messages are getting pushed into the
+            //total {messages} and this is causing the token limit to be exceeded
+            //hypothesis: the problem is that in this line:
             const messages = this.personality.messages;
+            //we have a pointer to this.personality.messages,
+            //so when we push to {messages} here:
             userMessages.forEach(message => {
                 messages.push(message);
             })
+            //then we have actually increased the total number of messages in this.personality.messages
+            //which then get fed back in on the following response.
+            //proposed solution:
+            //const messages = COPY OF this.personality.messages
             console.log(`Messages to be sent:`);
             userMessages.forEach(message => {
                 console.log({message});
