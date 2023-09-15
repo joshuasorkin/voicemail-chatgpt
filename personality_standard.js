@@ -1,7 +1,7 @@
 export const personality = {
     name: 'standard',
     response_default: 'What\'s on your mind?',
-    response_initial: 'Hi!  I'm ChatGPT.  What would you like to talk about?',
+    response_initial: 'Hi!  I\'m ChatGPT.  What would you like to talk about?',
     messages: [
         {role: 'system', content: 'Your response must be 2000 characters or less.'},
         {role: 'system', content: 'Use casual, conversational American English.'},

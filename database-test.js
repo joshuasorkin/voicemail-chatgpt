@@ -89,6 +89,13 @@ async function getValue_test(){
     console.log(`${valueName}: ${result}`);
 }
 
+async function getAllPersonalities_test(){
+    const result = await database.getAllPersonalities().toArray();
+    result.forEach(personality => {
+        console.log({personality});
+    })
+}
+
 async function test(){
     await initialize();
     await reset_test();
@@ -104,6 +111,7 @@ async function test(){
     await getStreamSid_test();
     await getValue_test();
     await getOrAddCall_test();
+    await getAllPersonalities_test();
 
 }
 

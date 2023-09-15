@@ -3,7 +3,9 @@
 //DatabaseController class that gets extended as a DatabaseController_Mongo class,
 //as suggested by chatGPT here: https://chat.openai.com/share/f0a4417b-481a-462a-8662-5d23434e11e0
 
-//todo: replace all get
+//todo: there are a bunch of call-related CRUD here, should those instead be operations in a Call
+//class and call generic getValue,insertRecord,setValue,updateRecord operations from that class?
+//maybe getValue and setValue shouldn't be dependent on callSid
 
 import { MongoClient } from 'mongodb';
 
@@ -124,6 +126,12 @@ class Database{
       
         const result = await this.calls.updateOne(filter, update);
         return result;
+    }
+
+    async getAllPersonalities(){
+        const collection = this.database.collection('personality');
+        const personalities = await collection.find({});
+        return personalities;
     }
 }
 
