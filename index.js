@@ -65,9 +65,9 @@ app.get('/twilio-webhook', async (req, res) => {
             greeting = req.query.question;
         }
         else{
-            greeting = "What would you like to say?";
+            greeting = personality.response_default;
             if(call && call !== undefined && call.userMessages.length === 0){
-                greeting = "Hi!  I'm Chat GPT.  " + greeting;
+                greeting = personality.response_initial;
             }
         }
         twimlBuilder.sayReading(gather,greeting);
