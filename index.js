@@ -43,6 +43,7 @@ const streamBuilder = new StreamBuilder(client,twimlBuilder);
 app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     const call = await database.getOrAddCall(callSid);
+    console.log({call});
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
@@ -65,7 +66,7 @@ app.get('/twilio-webhook', async (req, res) => {
         }
         else{
             greeting = "What would you like to say?";
-            if(call.userMessages.length === 0){
+            if(call && call !== undefined && call.userMessages.length === 0){
                 greeting = "Hi!  I'm Chat GPT.  " + greeting;
             }
         }
