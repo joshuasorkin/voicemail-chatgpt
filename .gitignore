@@ -134,3 +134,4 @@ google-credentials.*
 
 # personality files
 /private_personality
+personality-load.js
