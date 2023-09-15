@@ -22,11 +22,12 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
-const openAIUtility = new OpenAIUtility();
+const personalityFile = process.env.PERSONALITY_FILE || 'personality_standard.js';
+import { personality } from `./${personalityFile}`;
+const openAIUtility = new OpenAIUtility(personality);
 const database = new Database();
 await database.initialize();
 let protocol;
-
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
