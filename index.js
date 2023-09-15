@@ -17,13 +17,14 @@ import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
 import StreamBuilder from './StreamBuilder.js';
 
+function initializeObjects()
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
 const personalityFile = process.env.PERSONALITY_FILE || 'personality_standard.js';
-import { personality } from `./${personalityFile}`;
+import { personality } from `./personality_standard.js`;
 const openAIUtility = new OpenAIUtility(personality);
 const database = new Database();
 await database.initialize();
