@@ -18,7 +18,14 @@ class OpenAIUtility {
             userMessages.forEach(message => {
                 messages.push(message);
             })
-            console.log(`Messages to be sent: ${userMessages}`);
+            console.log(`Messages to be sent:`);
+            userMessages.forEach(message => {
+                console.log({message});
+            })
+            console.log(`total messages:`);
+            messages.forEach(message => {
+                console.log({message});
+            });
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo'
