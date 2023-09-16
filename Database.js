@@ -3,7 +3,9 @@
 //DatabaseController class that gets extended as a DatabaseController_Mongo class,
 //as suggested by chatGPT here: https://chat.openai.com/share/f0a4417b-481a-462a-8662-5d23434e11e0
 
-//todo: replace all get
+//todo: there are a bunch of call-related CRUD here, should those instead be operations in a Call
+//class and call generic getValue,insertRecord,setValue,updateRecord operations from that class?
+//maybe getValue and setValue shouldn't be dependent on callSid
 
 import { MongoClient } from 'mongodb';
 
@@ -124,6 +126,38 @@ class Database{
       
         const result = await this.calls.updateOne(filter, update);
         return result;
+    }
+
+    async getAllPersonalities(){
+        const collection = this.database.collection('personality');
+        const cursor = await collection.find();
+        const documentDictionary = {};
+        while (await cursor.hasNext()) {
+            const document = await cursor.next();
+            const name = document.name;
+            documentDictionary[name] = document;
+        }
+        return documentDictionary;
+    }
+
+    //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
+    async getPhone_Personality(){
+        const collection = this.database.collection('phone_personality');
+        const cursor = await collection.find();
+        const documentDictionary = {};
+        while (await cursor.hasNext()) {
+            const document = await cursor.next();
+            const phone = document.phone;
+            documentDictionary[phone] = document;
+        }
+        return documentDictionary;
+    }
+
+    //todo: change this collection's name to 'phone' and store all data unique to that phone #
+    async getPersonalityNameFromPhoneNumber(phonenumber){
+        const collection = this.database.collection('phone_personality');
+        const doc = await collection.findOne({phone:phonenumber});
+        return doc.name;
     }
 }
 

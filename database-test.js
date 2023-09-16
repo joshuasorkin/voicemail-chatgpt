@@ -89,6 +89,16 @@ async function getValue_test(){
     console.log(`${valueName}: ${result}`);
 }
 
+async function getAllPersonalities_test(){
+    const result = await database.getAllPersonalities();
+    console.log(result["standard"]);
+}
+
+async function getPersonalityNameFromPhoneNumber_test(){
+    const result = await database.getPersonalityNameFromPhoneNumber("+15107564445");
+    console.log(result);
+}
+
 async function test(){
     await initialize();
     await reset_test();
@@ -104,6 +114,8 @@ async function test(){
     await getStreamSid_test();
     await getValue_test();
     await getOrAddCall_test();
+    await getAllPersonalities_test();
+    await getPersonalityNameFromPhoneNumber_test();
 
 }
 

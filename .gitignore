@@ -131,3 +131,7 @@ fly-postgres-credentials
 
 # google cloud credentials
 google-credentials.*
+
+# personality files
+/private_personality
+personality-load.js

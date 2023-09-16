@@ -16,17 +16,21 @@ import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
 import StreamBuilder from './StreamBuilder.js';
+import PersonalityCache from './PersonalityCache.js'
 
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
+//const personalityFile = process.env.PERSONALITY_FILE || 'personality_standard.js';
+//import { personality } from './private_personality/personality_xyz.js';
 const openAIUtility = new OpenAIUtility();
 const database = new Database();
 await database.initialize();
+const personalityCache = new PersonalityCache();
+await personalityCache.load(database);
 let protocol;
-
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
@@ -39,8 +43,11 @@ const streamBuilder = new StreamBuilder(client,twimlBuilder);
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
+    console.log(req.query.Called);
+    const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
     const call = await database.getOrAddCall(callSid);
+    console.log({call});
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
@@ -62,9 +69,9 @@ app.get('/twilio-webhook', async (req, res) => {
             greeting = req.query.question;
         }
         else{
-            greeting = "What would you like to say?";
-            if(call.userMessages.length === 0){
-                greeting = "Hi!  I'm Chat GPT.  " + greeting;
+            greeting = personality.response_default;
+            if(call && call !== undefined && call.userMessages.length === 0){
+                greeting = personality.response_initial;
             }
         }
         twimlBuilder.sayReading(gather,greeting);
@@ -82,6 +89,7 @@ app.get('/twilio-webhook', async (req, res) => {
 
 app.get('/enqueue-and-process', async (req, res) => {
     try{
+        const personality = personalityCache.getPersonality(req.query.Called);
         console.log("now entering GET enqueue-and-process...")
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
@@ -94,7 +102,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         protocol = process.env.PROTOCOL || req.protocol;
         const absoluteUrl = protocol+'://'+req.get('host');
         console.log({absoluteUrl});
-        processCall(callSid,absoluteUrl);
+        processCall(callSid,absoluteUrl,personality);
         console.log("enqueue-and-process twiml: ",twiml.toString())
         res.send(twiml.toString());
     }
@@ -116,7 +124,7 @@ app.post('/wait', function (req, res) {
 //todo: this should be refactored into getPromptResponse() and dequeue() and sayResponse() or something like that,
 //right now the function is doing too much
 //also it doesn't belong in index.js, we should just have endpoint handlers here
-async function processCall(callSid,absoluteUrl){
+async function processCall(callSid,absoluteUrl,personality){
     const call = await database.getCall(callSid);
     if (!call){
         console.log("call not found");
@@ -128,7 +136,7 @@ async function processCall(callSid,absoluteUrl){
     //todo: move end of these try catch blocks into a finally block
     try {
         //generate response to user's prompt
-        const result = await openAIUtility.chatGPTGenerate(userMessages);
+        const result = await openAIUtility.chatGPTGenerate(userMessages,personality);
         await database.addAssistantMessage(callSid,result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         const call_twilio = await client.calls(callSid).fetch();
