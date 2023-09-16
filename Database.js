@@ -130,8 +130,33 @@ class Database{
 
     async getAllPersonalities(){
         const collection = this.database.collection('personality');
-        const personalities = await collection.find({});
-        return personalities;
+        const cursor = await collection.find();
+        const documentDictionary = {};
+        while (await cursor.hasNext()) {
+            const document = await cursor.next();
+            const name = document.name;
+            documentDictionary[name] = document;
+        }
+        return documentDictionary;
+    }
+
+    //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
+    async getPhone_Personality(){
+        const cursor = await collection.find();
+        const documentDictionary = {};
+        while (await cursor.hasNext()) {
+            const document = await cursor.next();
+            const phone = document.phone;
+            documentDictionary[phone] = document;
+        }
+        return documentDictionary;
+    }
+
+    //todo: change this collection's name to 'phone' and store all data unique to that phone #
+    async getPersonalityNameFromPhoneNumber(phonenumber){
+        const collection = this.database.collection('phone_personality');
+        const doc = await collection.findOne({phone:phonenumber});
+        return doc.name;
     }
 }
 

@@ -90,10 +90,13 @@ async function getValue_test(){
 }
 
 async function getAllPersonalities_test(){
-    const result = await database.getAllPersonalities().toArray();
-    result.forEach(personality => {
-        console.log({personality});
-    })
+    const result = await database.getAllPersonalities();
+    console.log(result["standard"]);
+}
+
+async function getPersonalityNameFromPhoneNumber_test(){
+    const result = await database.getPersonalityNameFromPhoneNumber("+15107564445");
+    console.log(result);
 }
 
 async function test(){
@@ -112,6 +115,7 @@ async function test(){
     await getValue_test();
     await getOrAddCall_test();
     await getAllPersonalities_test();
+    await getPersonalityNameFromPhoneNumber_test();
 
 }
 
