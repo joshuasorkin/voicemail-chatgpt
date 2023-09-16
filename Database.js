@@ -142,6 +142,7 @@ class Database{
 
     //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
     async getPhone_Personality(){
+        const collection = this.database.collection('phone_personality');
         const cursor = await collection.find();
         const documentDictionary = {};
         while (await cursor.hasNext()) {

@@ -9,8 +9,8 @@ class PersonalityCache {
     }
 
     getPersonality(phone){
-        const name = phone_personality[phone];
-        const personality = personalities[name];
+        const name = this.phone_personality[phone];
+        const personality = this.personalities[name];
         return personality;
     }
 }
