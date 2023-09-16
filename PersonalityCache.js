@@ -1,5 +1,4 @@
-
-class Personality {
+class PersonalityCache {
     constructor(){
         this.personalities = null;
         this.phone_personality = null;
@@ -16,4 +15,4 @@ class Personality {
     }
 }
 
-export default Personality;
+export default PersonalityCache;

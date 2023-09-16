@@ -16,18 +16,20 @@ import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
 import StreamBuilder from './StreamBuilder.js';
-
+import PersonalityCache from './PersonalityCache.js'
 
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
-const personalityFile = process.env.PERSONALITY_FILE || 'personality_standard.js';
-import { personality } from './private_personality/personality_xyz.js';
-const openAIUtility = new OpenAIUtility(personality);
+//const personalityFile = process.env.PERSONALITY_FILE || 'personality_standard.js';
+//import { personality } from './private_personality/personality_xyz.js';
+const openAIUtility = new OpenAIUtility();
 const database = new Database();
 await database.initialize();
+const personalityCache = new PersonalityCache();
+await personalityCache.load(database);
 let protocol;
 
 // Twilio configuration
@@ -41,6 +43,7 @@ const streamBuilder = new StreamBuilder(client,twimlBuilder);
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
+    const personality = personalityCache.getPersonality(req.from);
     const callSid = req.query.CallSid;
     const call = await database.getOrAddCall(callSid);
     console.log({call});
