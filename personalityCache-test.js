@@ -23,6 +23,7 @@ async function getPersonality_test(){
 }
 
 async function test(){
+    await initialize();
     await getPersonality_test();
 }
 
