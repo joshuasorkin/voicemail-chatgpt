@@ -43,7 +43,7 @@ const streamBuilder = new StreamBuilder(client,twimlBuilder);
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
-    const personality = personalityCache.getPersonality(req.From);
+    const personality = personalityCache.getPersonality(req.query.From);
     console.log({personality});
     const callSid = req.query.CallSid;
     const call = await database.getOrAddCall(callSid);
