@@ -3,7 +3,6 @@ dotenv.config();
 
 import Database from './Database.js';
 import PersonalityCache from './PersonalityCache.js';
-import PersonalityCache from './PersonalityCache.js';
 
 const database = new Database();
 const personalityCache = new PersonalityCache();
