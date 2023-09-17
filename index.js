@@ -15,7 +15,6 @@ import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
-import StreamBuilder from './StreamBuilder.js';
 import PersonalityCache from './PersonalityCache.js'
 
 // Miscellaneous object initialization
@@ -23,8 +22,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
-//const personalityFile = process.env.PERSONALITY_FILE || 'personality_standard.js';
-//import { personality } from './private_personality/personality_xyz.js';
 const openAIUtility = new OpenAIUtility();
 const database = new Database();
 await database.initialize();
@@ -34,7 +31,6 @@ let protocol;
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-const streamBuilder = new StreamBuilder(client,twimlBuilder);
 
 //todo: use session to cache call data (e.g. streams, messages) locally,
 //and asynchronously push data to database.  should reduce latency,
@@ -158,6 +154,7 @@ async function processCall(callSid,absoluteUrl,personality){
             twiml:twiml
         });
     }
+
 }
 
 function twiml_sayRedirect(result,absoluteUrl){
