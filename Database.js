@@ -40,7 +40,7 @@ class Database{
 
     async getOrAddCall(callSid){
         const result = await this.getCall(callSid);
-        if(result){
+        if(result && result !== undefined){
             return result;
         }
         else{
