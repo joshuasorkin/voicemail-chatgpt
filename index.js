@@ -65,8 +65,12 @@ app.get('/twilio-webhook', async (req, res) => {
             greeting = req.query.question;
         }
         else{
+            console.log("setting greeting to default");
             greeting = personality.response_default;
-            if(call && call !== undefined && call.userMessages.length === 0){
+            if((!call || call === undefined) || (call && call !== undefined && call.userMessages.length === 0)){
+                console.log("call exists");
+                console.log({call});
+                console.log("setting greeting to initial")
                 greeting = personality.response_initial;
             }
         }
