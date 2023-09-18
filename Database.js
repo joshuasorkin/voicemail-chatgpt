@@ -140,6 +140,17 @@ class Database{
         return documentDictionary;
     }
 
+    async getAllCallSids(){
+        const cursor = await calls.find();
+        const callSidArray = [];
+        while (await cursor.hasNext()) {
+            const document = await cursor.next();
+            const callSid = document.callSid;
+            callSidArray.push(callSid);
+        }
+        return callSidArray;
+    }
+
     //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
     async getPhone_Personality(){
         const collection = this.database.collection('phone_personality');
