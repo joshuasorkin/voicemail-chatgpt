@@ -11,6 +11,11 @@ const database = new Database();
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const report = new Report(database,client);
 
+async function initialize(){
+    console.log("Initializing Database....");
+    await database.initialize();
+    console.log("Database initialized");
+}
 async function getPhoneList_test(){
     const phoneList = await report.getPhoneList();
     for (const phone of phoneList) {
@@ -19,6 +24,7 @@ async function getPhoneList_test(){
 }
 
 async function test(){
+    await initialize();
     await getPhoneList_test();
 }
 
