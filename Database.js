@@ -141,7 +141,7 @@ class Database{
     }
 
     async getAllCallSids(){
-        const cursor = await calls.find();
+        const cursor = await this.calls.find();
         const callSidArray = [];
         while (await cursor.hasNext()) {
             const document = await cursor.next();
