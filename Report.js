@@ -7,12 +7,15 @@ class Report {
     async getPhoneList() {
         const phoneList = new Set();
         const callSids = await this.database.getAllCallSids();
-
         for (const callSid of callSids) {
-            const call = await this.client.calls(callSid).fetch();
-            const from = call.from;
-            if (!phoneList.has(from)) {
-                phoneList.add(from);
+            try{
+                const call = await this.client.calls(callSid).fetch();
+                const from = call.from;
+                if (!phoneList.has(from)) {
+                    phoneList.add(from);
+                }
+            }
+            catch(error){
             }
         }
 
