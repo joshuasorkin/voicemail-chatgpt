@@ -32,34 +32,35 @@ class Database{
     }
 
 
-    //todo: do we want to automatically add a call if one isn't found?
-    async getCall(callSid){
-        const query = { callSid: callSid };
-        const result = await this.calls.findOne(query);
+    async getDocument(collectionName,query){
+        const result = await this.database.collection(collectionName).findOne(query);
         return result;
     }
 
-    async getOrAddCall(callSid){
-        const result = await this.getCall(callSid);
+    async getOrCreateDocument(collectionName,query,data){
+        const result = await this.getDocument(collectionName,query);
         if(result && result !== undefined){
             return result;
         }
         else{
-            this.addCall(callSid);
-            return await this.getCall(callSid);
+            await this.createDocument(collectionName,data);
+            return await this.getDocument(collectionName,query);
         }
     }
 
     //todo: result should be the actual call document, not just the result
     //of insertOne() so we don't have to call getCall()
-    async addCall(callSid){
+    /*newCall data:
+    //todo: create a Call class and get an instance of it here
+                const newCall = {
+                    callSid:callSid,
+                    userMessages:[]
+                };
+    */
+    async createDocument(collectionName,data){
+
         try{
-            //todo: create a Call class and get an instance of it here
-            const newCall = {
-                callSid:callSid,
-                userMessages:[]
-            };
-            const result = await this.calls.insertOne(newCall);
+            const result = await this.database.collection(collectionName).insertOne({data:newCall});
             return result;
         }
         catch(error){
