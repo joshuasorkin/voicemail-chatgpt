@@ -27,9 +27,10 @@ class Database{
 
     //todo: this will cause an error if the collection does not exist,
     //need to check for collection existence before calling drop()
-    async resetCalls(){
-        await this.calls.drop();
+    async resetCollection(collectionName){
+        await this.database.collection(collectionName).drop();
     }
+
 
     //todo: do we want to automatically add a call if one isn't found?
     async getCall(callSid){
