@@ -99,6 +99,13 @@ async function getPersonalityNameFromPhoneNumber_test(){
     console.log(result);
 }
 
+async function getAllCallSids_test(){
+    const result = await database.getAllCallSids();
+    result.forEach(callSid => {
+        console.log("callSid",callSid);
+    })
+}
+
 async function test(){
     await initialize();
     await reset_test();
@@ -116,6 +123,7 @@ async function test(){
     await getOrAddCall_test();
     await getAllPersonalities_test();
     await getPersonalityNameFromPhoneNumber_test();
+    await getAllCallSids_test();
 
 }
 
