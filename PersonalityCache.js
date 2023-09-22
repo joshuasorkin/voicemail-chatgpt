@@ -13,7 +13,6 @@ class PersonalityCache {
     async getAllPersonalities(){
         const name_personality_dictionary = await this.database.getCollectionAsDictionary('personality','name');
         return name_personality_dictionary;
-
     }
 
     getPersonality(phone){
