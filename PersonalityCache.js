@@ -1,11 +1,13 @@
+//holds the data related to looking up a personality via phone number
+//so that it is available locally rather than via frequent db lookup
 class PersonalityCache {
     constructor(){
         this.personalities = null;
         this.phone_personality = null;
     }
     async load(database){
-        this.personalities = await database.getAllPersonalities();
-        this.phone_personality = await database.getPhone_Personality();
+        this.personalities = await this.getAllPersonalities();
+        this.phone_personality = await this.getPhone_Personality();
     }
 
     async getAllPersonalities(){
@@ -31,13 +33,6 @@ class PersonalityCache {
     async getPhone_Personality(){
         const phone_personality_dictionary = await this.database.getCollectionAsDictionary('phone_personality','phone');
         return phone_personality_dictionary;
-    }
-
-    //todo: change this collection's name to 'phone' and store all data unique to that phone #
-    async getPersonalityNameFromPhoneNumber(phonenumber){
-        const collection = this.database.collection('phone_personality');
-        const doc = await collection.findOne({phone:phonenumber});
-        return doc.name;
     }
 }
 
