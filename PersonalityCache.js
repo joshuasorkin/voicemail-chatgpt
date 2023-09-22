@@ -29,15 +29,8 @@ class PersonalityCache {
 
     //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
     async getPhone_Personality(){
-        const collection = this.database.collection('phone_personality');
-        const cursor = await collection.find();
-        const documentDictionary = {};
-        while (await cursor.hasNext()) {
-            const document = await cursor.next();
-            const phone = document.phone;
-            documentDictionary[phone] = document;
-        }
-        return documentDictionary;
+        const phone_personality_dictionary = await this.database.getCollectionAsDictionary('phone_personality','phone');
+        return phone_personality_dictionary;
     }
 
     //todo: change this collection's name to 'phone' and store all data unique to that phone #
