@@ -2,6 +2,7 @@
 //todo: make test database-agnostic
 
 //todo: make these into unit tests that either return true (passed) or false (failed)
+//todo: move tests related to Call and PersonalityCache into their respective [class]-test.js files
 
 import dotenv from 'dotenv';
 dotenv.config();
