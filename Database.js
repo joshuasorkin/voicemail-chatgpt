@@ -11,12 +11,11 @@ import { MongoClient } from 'mongodb';
 
 class Database{
 
-    async initialize(collectionName='calls'){
+    async initialize(dbName = "voice-chatGPT"){
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
             await this.client.connect();
             this.database = this.client.db("voice-chatGPT");
-            this.calls = this.database.collection(collectionName);
             console.log("Database connected");
         }
         catch (error){
@@ -60,11 +59,6 @@ class Database{
         }
     }
 
-
-
-
-
-
     async getValue(callSid,key){
         const call = await this.getCall(callSid);
         if (call && call[key]===undefined){
@@ -78,28 +72,11 @@ class Database{
     async setValue(callSid, key, value) {
         const filter = { callSid: callSid };
         const update = { $set: {} }; // Initialize an empty update object
-      
         // Dynamically set the key in the update object based on the 'key' parameter
-        update.$set[key] = value;
-      
+        update.$set[key] = value;      
         const result = await this.calls.updateOne(filter, update);
         return result;
     }
-
-    
-
-    async getAllCallSids(){
-        const cursor = await this.calls.find();
-        const callSidArray = [];
-        while (await cursor.hasNext()) {
-            const document = await cursor.next();
-            const callSid = document.callSid;
-            callSidArray.push(callSid);
-        }
-        return callSidArray;
-    }
-
-    
 }
 
 export default Database;
