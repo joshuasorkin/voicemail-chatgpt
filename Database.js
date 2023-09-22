@@ -63,22 +63,7 @@ class Database{
 
 
 
-    async getStreamSid(callSid){
-        const call = await this.getCall(callSid);
-        if (call && call.streamSid===undefined){
-            return null;
-        }
-        else{
-            return call.streamSid;
-        }
-    }
 
-    async setStreamSid(callSid,streamSid){
-        const filter = {callSid: callSid};
-        const update = { $set: { streamSid: streamSid}};
-        const result = await this.calls.updateOne(filter,update);
-        return result;
-    }
 
     async getValue(callSid,key){
         const call = await this.getCall(callSid);
@@ -101,17 +86,7 @@ class Database{
         return result;
     }
 
-    async getAllPersonalities(){
-        const collection = this.database.collection('personality');
-        const cursor = await collection.find();
-        const documentDictionary = {};
-        while (await cursor.hasNext()) {
-            const document = await cursor.next();
-            const name = document.name;
-            documentDictionary[name] = document;
-        }
-        return documentDictionary;
-    }
+    
 
     async getAllCallSids(){
         const cursor = await this.calls.find();
@@ -124,25 +99,7 @@ class Database{
         return callSidArray;
     }
 
-    //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
-    async getPhone_Personality(){
-        const collection = this.database.collection('phone_personality');
-        const cursor = await collection.find();
-        const documentDictionary = {};
-        while (await cursor.hasNext()) {
-            const document = await cursor.next();
-            const phone = document.phone;
-            documentDictionary[phone] = document;
-        }
-        return documentDictionary;
-    }
-
-    //todo: change this collection's name to 'phone' and store all data unique to that phone #
-    async getPersonalityNameFromPhoneNumber(phonenumber){
-        const collection = this.database.collection('phone_personality');
-        const doc = await collection.findOne({phone:phonenumber});
-        return doc.name;
-    }
+    
 }
 
 export default Database;

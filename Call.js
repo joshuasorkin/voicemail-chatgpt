@@ -1,6 +1,7 @@
 class Call{
     constructor(database,callSid){
         this.database = database;
+        this.callSid = null;
     }
 
     async getOrCreate(callSid){
@@ -9,6 +10,7 @@ class Call{
             userMessages:[]
         };
         const result = await database.getOrCreateDocument("calls",{callSid:callSid},newCall);
+        this.callSid = callSid;
     }
 
     async addMessage(callSid,role,message){
@@ -33,6 +35,23 @@ class Call{
     async getUserMessages(callSid){
         const call = await this.getCall(callSid);
         return call.userMessages;
+    }
+
+    async getStreamSid(callSid){
+        const call = await this.getCall(callSid);
+        if (call && call.streamSid===undefined){
+            return null;
+        }
+        else{
+            return call.streamSid;
+        }
+    }
+
+    async setStreamSid(callSid,streamSid){
+        const filter = {callSid: callSid};
+        const update = { $set: { streamSid: streamSid}};
+        const result = await this.calls.updateOne(filter,update);
+        return result;
     }
 
 }
