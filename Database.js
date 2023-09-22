@@ -77,6 +77,18 @@ class Database{
         const result = await this.calls.updateOne(filter, update);
         return result;
     }
+
+    async getCollectionAsDictionary(collectionName,key_document){
+        const collection = this.database.collection(collectionName);
+        const cursor = await collection.find();
+        const documentDictionary = {};
+        while (await cursor.hasNext()) {
+            const document = await cursor.next();
+            const key_dictionary = document[key_document];
+            documentDictionary[key] = document;
+        }
+        return documentDictionary;
+    }
 }
 
 export default Database;
