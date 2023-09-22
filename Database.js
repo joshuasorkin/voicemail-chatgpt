@@ -47,8 +47,8 @@ class Database{
         }
     }
 
-    //todo: result should be the actual call document, not just the result
-    //of insertOne() so we don't have to call getCall()
+    //todo: result should be the actual document, not just the result
+    //of insertOne() so we don't have to call getDocument()
     async createDocument(collectionName,data){
         try{
             const result = await this.database.collection(collectionName).insertOne({data:data});
