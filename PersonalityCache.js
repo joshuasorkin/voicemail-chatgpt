@@ -11,15 +11,9 @@ class PersonalityCache {
     }
 
     async getAllPersonalities(){
-        const collection = this.database.collection('personality');
-        const cursor = await collection.find();
-        const documentDictionary = {};
-        while (await cursor.hasNext()) {
-            const document = await cursor.next();
-            const name = document.name;
-            documentDictionary[name] = document;
-        }
-        return documentDictionary;
+        const name_personality_dictionary = await this.database.getCollectionAsDictionary('personality','name');
+        return name_personality_dictionary;
+
     }
 
     getPersonality(phone){
