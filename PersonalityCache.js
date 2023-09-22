@@ -29,7 +29,6 @@ class PersonalityCache {
         return personality;
     }
 
-    //todo: refactor this into a getCollectionAsDictionary(collectionName,key) function
     async getPhone_Personality(){
         const phone_personality_dictionary = await this.database.getCollectionAsDictionary('phone_personality','phone');
         return phone_personality_dictionary;
