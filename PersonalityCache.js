@@ -1,3 +1,6 @@
+//note: because the personalities are cached in local storage once they're queried from the db,
+//changes to the database will not be reflected in the personality until the server restarts
+
 class PersonalityCache {
     constructor(){
         this.personalities = null;
