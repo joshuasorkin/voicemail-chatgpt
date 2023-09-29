@@ -6,7 +6,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import Database from './Database.js';
+import Database from '../Database.js';
 
 const database = new Database();
 
@@ -25,7 +25,7 @@ async function initialize(){
 
 async function reset_test(){
     console.log("resetting collection");
-    await database.resetCalls();
+    await database.resetCollection("test");
     console.log("collection reset");
 }
 async function getCall_test(){
