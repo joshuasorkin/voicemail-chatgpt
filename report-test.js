@@ -32,7 +32,7 @@ async function getPhoneList_from_count_test(){
 
 async function test(){
     await initialize();
-    //await getPhoneList_test();
+    await getPhoneList_test();
     await getPhoneList_from_count_test();
 }
 
