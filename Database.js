@@ -15,7 +15,7 @@ class Database{
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
             await this.client.connect();
-            this.database = this.client.db("voice-chatGPT");
+            this.database = this.client.db(dbName);
             console.log("Database connected");
         }
         catch (error){
