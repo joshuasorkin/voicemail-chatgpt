@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import Database from './Database.js';
-import Report from './Report.js';
+import Database from '../Database.js';
+import Report from '../Report.js';
 import twilio from 'twilio';
 
 const database = new Database();
