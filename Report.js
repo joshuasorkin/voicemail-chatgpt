@@ -38,7 +38,7 @@ class Report {
                     phoneList.set(from,1);
                 }
                 else{
-                    const fromCount = phoneList.get(from);
+                    let fromCount = phoneList.get(from);
                     fromCount++;
                     phoneList.set(from,fromCount);
                 }
