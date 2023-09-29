@@ -23,9 +23,17 @@ async function getPhoneList_test(){
     }
 }
 
+async function getPhoneList_from_count_test(){
+    const phoneList = await report.getPhoneList_from_count();
+    for (const phone of phoneList) {
+        console.log(phone);
+    }
+}
+
 async function test(){
     await initialize();
-    await getPhoneList_test();
+    //await getPhoneList_test();
+    await getPhoneList_from_count_test();
 }
 
 test();

@@ -29,7 +29,7 @@ class Report {
 
     async getPhoneList_from_count(){
         const phoneList = new Map();
-        const callSids = await this.database.getAllCallSids();
+        const callSids = await this.getAllCallSids();
         for (const callSid of callSids) {
             try{
                 const call = await this.client.calls(callSid).fetch();
