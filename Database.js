@@ -85,7 +85,7 @@ class Database{
         while (await cursor.hasNext()) {
             const document = await cursor.next();
             const key_dictionary = document[key_document];
-            documentDictionary[key] = document;
+            documentDictionary[key_dictionary] = document;
         }
         return documentDictionary;
     }
