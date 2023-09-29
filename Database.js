@@ -27,6 +27,7 @@ class Database{
     //todo: this will cause an error if the collection does not exist,
     //need to check for collection existence before calling drop()
     async resetCollection(collectionName){
+        const database = this.database;
         const collections = await database.listCollections().toArray();
         const collectionExists = collections.some(collection => collection.name === collectionName);
         
