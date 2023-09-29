@@ -49,7 +49,7 @@ async function getAllCallSids_test(){
 async function getCollectionAsDictionary_test(){
     await database.createDocument('dictionaryTest',dictDoc1);
     await database.createDocument('dictionaryTest',dictDoc2);
-    const result = await database.getCollectionAsDictionary();
+    const result = await database.getCollectionAsDictionary('dictionaryTest','name');
     console.log(result);
 }
 
