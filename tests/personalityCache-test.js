@@ -22,6 +22,16 @@ async function getPersonality_test(){
     console.log({personality});
 }
 
+async function getAllPersonalities_test(){
+    const result = await database.getAllPersonalities();
+    console.log(result["standard"]);
+}
+
+async function getPersonalityNameFromPhoneNumber_test(){
+    const result = await database.getPersonalityNameFromPhoneNumber("+1234567");
+    console.log(result);
+}
+
 async function test(){
     await initialize();
     await getPersonality_test();
