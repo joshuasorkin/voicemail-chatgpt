@@ -9,6 +9,7 @@ class PersonalityCache {
         this.phone_personality = null;
     }
     async load(database){
+        this.database = database;
         this.personalities = await this.getAllPersonalities();
         this.phone_personality = await this.getPhone_Personality();
     }
