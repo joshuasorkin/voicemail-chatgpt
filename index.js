@@ -8,6 +8,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
+import cookieParser from 'cookie-parser';
 
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
@@ -19,6 +20,7 @@ import PersonalityCache from './PersonalityCache.js'
 
 // Miscellaneous object initialization
 const app = express();
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
