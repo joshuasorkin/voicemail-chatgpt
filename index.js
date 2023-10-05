@@ -47,8 +47,9 @@ app.get('/twilio-webhook', async (req, res) => {
     const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
     let call;
-    if(req.cookie.objData){
-        const objData = req.cookie.objData;
+    const objData = req.cookies.objData;
+    if(objData){
+        
         call = JSON.parse(objData);
     }
     else{
