@@ -1,5 +1,5 @@
 class Call{
-    constructor(database,callSid){
+    constructor(database){
         this.database = database;
         this.callSid = null;
         this.userMessages = [];

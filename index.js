@@ -53,7 +53,7 @@ app.get('/twilio-webhook', async (req, res) => {
         call = JSON.parse(objData);
     }
     else{
-        call = new Call();
+        call = new Call(database);
         const call_document = await call.getOrCreate(callSid);
     }
     console.log({call});
