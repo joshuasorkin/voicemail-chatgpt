@@ -19,7 +19,9 @@ class PersonalityCache {
         return name_personality_dictionary;
     }
 
+    //todo: error handling for when phone number is not recognized
     getPersonality(phone){
+        console.log("phone:",{phone});
         const phone_personality = this.phone_personality[phone];
         console.log({phone_personality});
         const personality = this.personalities[phone_personality.name];
