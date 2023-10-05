@@ -16,7 +16,8 @@ import TwimlBuilder from './twimlBuilder.js';
 import OpenAIUtility from './OpenAIUtilty.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
-import PersonalityCache from './PersonalityCache.js'
+import PersonalityCache from './PersonalityCache.js';
+import Call from './Call.js';
 
 // Miscellaneous object initialization
 const app = express();
@@ -42,9 +43,18 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
     console.log(req.query.Called);
+    //todo: can probably store the personality in call obj and then we don't have to keep querying personalityCache
     const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
-    const call = await database.getOrAddCall(callSid);
+    const objData = req.cookie.objData;
+    let call;
+    if(objData){
+        call = JSON.parse(objData);
+    }
+    else{
+        call = new Call();
+        const call_document = await call.getOrCreate(callSid);
+    }
     console.log({call});
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
@@ -69,6 +79,7 @@ app.get('/twilio-webhook', async (req, res) => {
         else{
             console.log("setting greeting to default");
             greeting = personality.response_default;
+            //todo: probably don't need all these tests now that call data is locally available with the Call obj
             if((!call || call === undefined) || (call && call !== undefined && call.userMessages.length === 0)){
                 console.log("call exists");
                 console.log({call});
@@ -86,6 +97,7 @@ app.get('/twilio-webhook', async (req, res) => {
         );
     }
     console.log(twiml.toString());
+    res.cookie('objData',JSON.stringify(call));
     res.send(twiml.toString());
 });
 
@@ -96,7 +108,9 @@ app.get('/enqueue-and-process', async (req, res) => {
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
         const callSid = req.query.CallSid;
-        await database.addUserMessage(callSid,userSpeech);
+        const objData = req.cookies.objData;
+        const call = JSON.parse(objData);
+        await call.addUserMessage(callSid,userSpeech);
 
         //enqueue call
         const twiml = new VoiceResponse();
@@ -104,7 +118,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         protocol = process.env.PROTOCOL || req.protocol;
         const absoluteUrl = protocol+'://'+req.get('host');
         console.log({absoluteUrl});
-        processCall(callSid,absoluteUrl,personality);
+        processCall(call,absoluteUrl,personality);
         console.log("enqueue-and-process twiml: ",twiml.toString())
         res.send(twiml.toString());
     }
@@ -126,12 +140,7 @@ app.post('/wait', function (req, res) {
 //todo: this should be refactored into getPromptResponse() and dequeue() and sayResponse() or something like that,
 //right now the function is doing too much
 //also it doesn't belong in index.js, we should just have endpoint handlers here
-async function processCall(callSid,absoluteUrl,personality){
-    const call = await database.getCall(callSid);
-    if (!call){
-        console.log("call not found");
-        return res.sendStatus(400);
-    }
+async function processCall(call,absoluteUrl,personality){
     console.log(call);
     const userMessages = call.userMessages;
     console.log({userMessages});
@@ -139,24 +148,25 @@ async function processCall(callSid,absoluteUrl,personality){
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(userMessages,personality);
-        await database.addAssistantMessage(callSid,result);
+        await call.addAssistantMessage(callSid,result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
-        const call_twilio = await client.calls(callSid).fetch();
+        //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
+        const call_twilio = await client.calls(call.callSid).fetch();
         if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
         }
-        await client.calls(callSid).update({
+        await client.calls(call.callSid).update({
             twiml:twiml
         });
     }
     catch(error){
         console.log({error});
         const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.",absoluteUrl);
-        const call_twilio = await client.calls(callSid).fetch();
+        const call_twilio = await client.calls(call.callSid).fetch();
         if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
         }
-        await client.calls(callSid).update({
+        await client.calls(call.callSid).update({
             twiml:twiml
         });
     }
