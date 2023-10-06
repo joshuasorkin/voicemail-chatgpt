@@ -54,7 +54,7 @@ app.get('/twilio-webhook', async (req, res) => {
     }
     else{
         call = new Call(database);
-        const call_document = await call.getOrCreate(callSid);
+        const call_document = await call.getOrCreate(database,callSid);
     }
     console.log({call});
     console.log("Entering GET twilio-webhook...");
@@ -111,7 +111,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         const callSid = req.query.CallSid;
         const objData = req.cookies.objData;
         const call = JSON.parse(objData);
-        await call.addUserMessage(callSid,userSpeech);
+        await call.addUserMessage(database,callSid,userSpeech);
 
         //enqueue call
         const twiml = new VoiceResponse();
@@ -149,7 +149,7 @@ async function processCall(call,absoluteUrl,personality){
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(userMessages,personality);
-        await call.addAssistantMessage(callSid,result);
+        await call.addAssistantMessage(database,callSid,result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
         const call_twilio = await client.calls(call.callSid).fetch();
