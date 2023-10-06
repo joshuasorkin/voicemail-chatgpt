@@ -11,7 +11,7 @@ class Call{
             callSid:callSid,
             userMessages:[]
         };
-        const result = await database.getOrCreateDocument("calls",{callSid:callSid},newCall);
+        const result = await this.database.getOrCreateDocument("calls",{callSid:callSid},newCall);
         this.callSid = callSid;
         return result;
     }
