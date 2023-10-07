@@ -42,7 +42,6 @@ class Database{
 
     async getDocument(collectionName,query){
         try{
-            console.log({collectionName},{query});
             const result = await this.database.collection(collectionName).findOne(query);
             return result;
         }
@@ -56,11 +55,9 @@ class Database{
     async getOrCreateDocument(collectionName,query,data){
         const result = await this.getDocument(collectionName,query);
         if(result && result !== undefined){
-            console.log("document found");
             return result;
         }
         else{
-            console.log("document not found, creating")
             await this.createDocument(collectionName,data);
             return await this.getDocument(collectionName,query);
         }
@@ -71,7 +68,6 @@ class Database{
     async createDocument(collectionName,data){
         try{
             const result = await this.database.collection(collectionName).insertOne(data);
-            console.log("result in Database.createDocument:",{result});
             return result;
         }
         catch(error){
@@ -85,8 +81,6 @@ class Database{
         filter[key_document]=value_document;
         //update query for pushing value to array
         const update = { $push: { key_update: value_update}};
-        console.log({filter});
-        console.log({update});
         const result = await this.database.collection(collectionName).updateOne(filter,update);
         return result;
     }

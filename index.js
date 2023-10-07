@@ -115,7 +115,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         const callData = JSON.parse(callData_stringified);
         const call = new Call();
         call.load(callData);
-        await call.addUserMessage(database,userSpeech);
+        await call.addUserMessage(userSpeech);
 
         //enqueue call
         const twiml = new VoiceResponse();
@@ -125,10 +125,14 @@ app.get('/enqueue-and-process', async (req, res) => {
         console.log({absoluteUrl});
         processCall(call,absoluteUrl,personality);
         console.log("enqueue-and-process twiml: ",twiml.toString())
+        const callExport = call.export();
+        res.cookie('callData',JSON.stringify(callExport));
         res.send(twiml.toString());
     }
     catch(error){
         console.log(error);
+        const callExport = call.export();
+        res.cookie('callData',JSON.stringify(callExport));
         res.send(`Error occurred during /enqueue-and-process: ${error}`);
     }
 
@@ -153,7 +157,7 @@ async function processCall(call,absoluteUrl,personality){
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(userMessages,personality);
-        await call.addAssistantMessage(database,result);
+        await call.addAssistantMessage(result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
         const call_twilio = await client.calls(call.callSid).fetch();
