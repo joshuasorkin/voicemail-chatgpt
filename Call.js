@@ -28,7 +28,6 @@ class Call{
             userMessages:[]
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
-        console.log("result in Call.getOrCreate:",{result});
         return result;
     }
 
@@ -66,27 +65,6 @@ class Call{
     async getUserMessages(){
         return this.userMessages;
     }
-
-    /*
-    **not needed until stream is implemented**
-    ******************************************
-    async getStreamSid(callSid){
-        const call = await this.getOrCreateCall(callSid);
-        if (call && call.streamSid===undefined){
-            return null;
-        }
-        else{
-            return call.streamSid;
-        }
-    }
-
-    async setStreamSid(callSid,streamSid){
-        const filter = {callSid: callSid};
-        const update = { $set: { streamSid: streamSid}};
-        const result = await this.calls.updateOne(filter,update);
-        return result;
-    }
-    */
 
 }
 
