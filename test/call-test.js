@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import Database from '../Database.js';
+import Call from '../Call.js';
 
 const database = new Database();
 
@@ -31,9 +32,11 @@ async function reset_test(){
 }
 async function getCall_test(){
 console.log(`checking for call ${callSid}...`);
-    const call = await database.getCall(callSid);
-    if (call){
-        console.log("call exists: ",call);
+    const call = new Call();
+    call.callSid = callSid;
+    const call_document = await call.get(database);
+    if (call_document){
+        console.log("call exists: ",call_document);
     }
     else{
         console.log("call does not exist");
@@ -41,31 +44,23 @@ console.log(`checking for call ${callSid}...`);
 }
 
 async function getOrAddCall_test(){
-    let call = await database.getCall(callSid_getOrAdd);
-    if (call){
-        console.log("call exists: ",call);
-    }
-    else{
-        console.log(`call ${callSid_getOrAdd} does not exist`);
-    }
-    call = await database.getOrAddCall(callSid_getOrAdd);
-    console.log(call);
-}
-
-async function addCall_test(){
-    const result = await database.addCall(callSid);
-    console.log(`Inserted call with doc ID ${result.insertedId}`);
+    const call = new Call();
+    call.callSid = callSid_getOrAdd;
+    const call_document = await call.getOrCreate(database);
+    console.log({call_document});
 }
 
 async function addUserMessage_test(){
-    const result = await database.addUserMessage(callSid,userMessage);
+    const call = new Call();
+    call.callSid = callSid;
+    const result = await call.addUserMessage(database,userMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
 }
 
 async function addAssistantMessage_test(){
-    const result = await database.addAssistantMessage(callSid,assistantMessage);
+    const result = await database.addAssistantMessage(database,assistantMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );

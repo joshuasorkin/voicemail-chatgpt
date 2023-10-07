@@ -1,7 +1,9 @@
 class Call{
-    constructor(){
+    constructor(database,collectionName = "calls"){
+        this.database = database;
         this.callSid = null;
         this.userMessages = [];
+        this.collectionName = collectionName;
     }
 
     //can't pass methods as a cookie
@@ -20,15 +22,17 @@ class Call{
     }
 
     //returns the document from the calls collection
-    //pass the database in as a parameter instead of making it a class property
-    //because we need to serialize the call as a cookie
-    //and the MongoDB database object has a circular structure
-    async getOrCreate(database){
+    async getOrCreate(){
         const newCall = {
             callSid:this.callSid,
             userMessages:[]
         };
-        const result = await database.getOrCreateDocument("calls",{callSid:this.callSid},newCall);
+        const result = await this.database.getOrCreateDocument("calls",{callSid:this.callSid},newCall);
+        return result;
+    }
+
+    async get(database){
+        const result = await database.getDocument("calls",{callSid:this.callSid});
         return result;
     }
 
