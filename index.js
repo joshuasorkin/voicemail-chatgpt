@@ -35,10 +35,6 @@ let protocol;
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-//todo: use session to cache call data (e.g. streams, messages) locally,
-//and asynchronously push data to database.  should reduce latency,
-//high availability of data in db not as important
-
 //todo: add twilio authentication to each of these endpoints (ref. vent-taskrouter)
 // GET endpoint for redirect after response with question
 app.get('/twilio-webhook', async (req, res) => {
@@ -47,14 +43,8 @@ app.get('/twilio-webhook', async (req, res) => {
     const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
     let call;
-    const callData_stringified = req.cookies.callData;
     call = new Call();
-    if(callData_stringified){
-        const callData = JSON.parse(callData_stringified);
-        call.load(callData);
-    }
-    else{
-        call.callSid = callSid;
+    call.callSid = callSid;
         const call_document = await call.getOrCreate(database);
     }
     console.log({call});
@@ -99,8 +89,6 @@ app.get('/twilio-webhook', async (req, res) => {
         );
     }
     console.log(twiml.toString());
-    const callExport = call.export();
-    res.cookie('callData',JSON.stringify(callExport));
     res.send(twiml.toString());
 });
 
@@ -125,14 +113,10 @@ app.get('/enqueue-and-process', async (req, res) => {
         console.log({absoluteUrl});
         processCall(call,absoluteUrl,personality);
         console.log("enqueue-and-process twiml: ",twiml.toString())
-        const callExport = call.export();
-        res.cookie('callData',JSON.stringify(callExport));
         res.send(twiml.toString());
     }
     catch(error){
         console.log(error);
-        const callExport = call.export();
-        res.cookie('callData',JSON.stringify(callExport));
         res.send(`Error occurred during /enqueue-and-process: ${error}`);
     }
 
