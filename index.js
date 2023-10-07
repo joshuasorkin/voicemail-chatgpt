@@ -48,13 +48,14 @@ app.get('/twilio-webhook', async (req, res) => {
     const callSid = req.query.CallSid;
     let call;
     const objData = req.cookies.objData;
+    call = new Call();
     if(objData){
-        
-        call = JSON.parse(objData);
+        callData = JSON.parse(objData);
+        call.loadData(callData);
     }
     else{
-        call = new Call(database);
-        const call_document = await call.getOrCreate(database,callSid);
+        call.callSid = callSid;
+        const call_document = await call.getOrCreate(database);
     }
     console.log({call});
     console.log("Entering GET twilio-webhook...");

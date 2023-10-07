@@ -16,20 +16,19 @@ class Call{
     //pass the database in as a parameter instead of making it a class property
     //because we need to serialize the call as a cookie
     //and the MongoDB database object has a circular structure
-    //
-    async getOrCreate(database,callSid){
+    async getOrCreate(database){
         const newCall = {
-            callSid:callSid,
+            callSid:this.callSid,
             userMessages:[]
         };
-        const result = await database.getOrCreateDocument("calls",{callSid:callSid},newCall);
+        const result = await database.getOrCreateDocument("calls",{callSid:this.callSid},newCall);
         this.callSid = callSid;
         return result;
     }
 
-    async addMessage(database,callSid,role,message){
+    async addMessage(database,role,message){
         this.userMessages.push({role:role,content:message});
-        const filter = {callSid: callSid};
+        const filter = {callSid: this.callSid};
         const update = { $push: { userMessages: {role:role,content:message}}};
         const result = await database.calls.updateOne(filter,update);
         return result;
@@ -37,13 +36,13 @@ class Call{
 
     //todo: the roles probably don't belong hardcoded in the Call class,
     //maybe OpenAIUtility.chatGPTGenerate() should produce an object with the role
-    async addUserMessage(database,callSid,message){
-        const result = await this.addMessage(database,callSid,'user',message);
+    async addUserMessage(database,message){
+        const result = await this.addMessage(database,'user',message);
         return result;
     }
 
-    async addAssistantMessage(database,callSid,message){
-        const result = await this.addMessage(database,callSid,'assistant',message);
+    async addAssistantMessage(database,message){
+        const result = await this.addMessage(database,'assistant',message);
         return result;
     }
 
