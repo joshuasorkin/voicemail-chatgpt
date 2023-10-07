@@ -72,35 +72,14 @@ async function getUserMessages_test(){
     console.log("userMessages: ",result);
 }
 
-/*
-async function getStreamSid_test(){
-    const result = await database.getStreamSid(callSid);
-    console.log("streamSid: ",result);
-}
-async function setStreamSid_test(){
-    const result = await database.setValue(callSid,"streamSid",streamSid);
-    console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
-}
-*/
-
 async function test(){
     await initialize();
     await reset_test();
     await getCall_test();
-    await addCall_test();
-    await getCall_test();
+    await getOrAddCall_test();
     await addUserMessage_test();
-    await getCall_test();
     await addAssistantMessage_test();
     await getUserMessages_test();
-    await getStreamSid_test();
-    await setStreamSid_test();
-    await getStreamSid_test();
-    await getValue_test();
-    await getOrAddCall_test();
-    await getAllPersonalities_test();
-    await getPersonalityNameFromPhoneNumber_test();
-    await getAllCallSids_test();
 
 }
 
