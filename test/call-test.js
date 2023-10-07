@@ -22,7 +22,7 @@ const test_database_name = 'test';
 const call = new Call(database,test_collection_name);
 
 async function initialize(){
-    console.log(`Initializing Database with '${test_collection_name}' collection....`);
+    console.log(`Initializing Database with '${test_database_name}' collection....`);
     await database.initialize(test_database_name);
     console.log("Database initialized");
 }
