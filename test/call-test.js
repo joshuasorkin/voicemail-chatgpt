@@ -16,16 +16,17 @@ const streamSid = "11235813";
 const userMessage = "white on white, translucent black capes";
 const assistantMessage = "back on the rack";
 const valueName = "streamSid";
+const test_collection_name = 'test';
 
 async function initialize(){
-    console.log("Initializing Database with 'test' collection....");
-    await database.initialize('test');
+    console.log(`Initializing Database with '${test_collection_name}' collection....`);
+    await database.initialize(test_collection_name);
     console.log("Database initialized");
 }
 
 async function reset_test(){
     console.log("resetting collection");
-    await database.resetCollection("test");
+    await database.resetCollection(test_collection_name);
     console.log("collection reset");
 }
 async function getCall_test(){
