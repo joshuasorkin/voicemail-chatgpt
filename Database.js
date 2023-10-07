@@ -81,9 +81,12 @@ class Database{
 
     async pushToDocumentArray(collectionName,key_document,value_document,key_update,value_update){
         //filter for selecting the document
-        const filter = {key_document: value_document};
+        const filter = {};
+        filter[key_document]=value_document;
         //update query for pushing value to array
         const update = { $push: { key_update: value_update}};
+        console.log({filter});
+        console.log({update});
         const result = await this.database.collection(collectionName).updateOne(filter,update);
         return result;
     }
