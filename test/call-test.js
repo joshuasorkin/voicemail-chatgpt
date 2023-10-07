@@ -1,7 +1,7 @@
 //note that these functions rely heavily on mongo implementation, so
 //todo: make test database-agnostic
 
-//todo: make these into unit tests that either return true (passed) or false (failed)
+//todo: rewrite using a unit test framework
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -81,18 +81,6 @@ async function setStreamSid_test(){
     console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
 }
 */
-
-async function getValue_test(){
-    const result = await database.getValue(callSid,valueName);
-    console.log(`${valueName}: ${result}`);
-}
-
-async function getAllCallSids_test(){
-    const result = await database.getAllCallSids();
-    result.forEach(callSid => {
-        console.log("callSid",callSid);
-    })
-}
 
 async function test(){
     await initialize();
