@@ -59,14 +59,14 @@ async function addUserMessage_test(){
 }
 
 async function addAssistantMessage_test(){
-    const result = await database.addAssistantMessage(assistantMessage);
+    const result = await call.addAssistantMessage(assistantMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
 }
 
 async function getUserMessages_test(){
-    const result = await database.getUserMessages();
+    const result = await call.getUserMessages();
     console.log("userMessages: ",result);
 }
 
