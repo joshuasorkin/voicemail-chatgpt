@@ -4,6 +4,14 @@ class Call{
         this.userMessages = [];
     }
 
+    //can't pass methods as a cookie
+    //so here's how we load the cookie data
+    //after we create a new Call for a given endpoint
+    loadData(data){
+        this.callSid = data.callSid;
+        this.userMessages = data.userMessages;
+    }
+
     //returns the document from the calls collection
     //pass the database in as a parameter instead of making it a class property
     //because we need to serialize the call as a cookie

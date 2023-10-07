@@ -110,6 +110,7 @@ app.get('/enqueue-and-process', async (req, res) => {
         console.log({userSpeech});
         const callSid = req.query.CallSid;
         const objData = req.cookies.objData;
+        console.log({objData});
         const call = JSON.parse(objData);
         await call.addUserMessage(database,callSid,userSpeech);
 
