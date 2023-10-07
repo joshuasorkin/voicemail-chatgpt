@@ -28,6 +28,7 @@ class Call{
             userMessages:[]
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
+        console.log("result in Call.getOrCreate:",{result});
         return result;
     }
 

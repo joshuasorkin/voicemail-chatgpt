@@ -41,17 +41,26 @@ class Database{
 
 
     async getDocument(collectionName,query){
-        const result = await this.database.collection(collectionName).findOne(query);
-        return result;
+        try{
+            console.log({collectionName},{query});
+            const result = await this.database.collection(collectionName).findOne(query);
+            return result;
+        }
+        catch(error){
+            console.error(error);
+            return null;
+        }
     }
 
     
     async getOrCreateDocument(collectionName,query,data){
         const result = await this.getDocument(collectionName,query);
         if(result && result !== undefined){
+            console.log("document found");
             return result;
         }
         else{
+            console.log("document not found, creating")
             await this.createDocument(collectionName,data);
             return await this.getDocument(collectionName,query);
         }
@@ -61,7 +70,8 @@ class Database{
     //of insertOne() so we don't have to call getDocument()
     async createDocument(collectionName,data){
         try{
-            const result = await this.database.collection(collectionName).insertOne({data:data});
+            const result = await this.database.collection(collectionName).insertOne(data);
+            console.log("result in Database.createDocument:",{result});
             return result;
         }
         catch(error){
