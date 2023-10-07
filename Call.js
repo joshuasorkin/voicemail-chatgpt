@@ -31,7 +31,7 @@ class Call{
         return result;
     }
 
-    async get(database){
+    async get(){
         const result = await this.database.getDocument(this.collectionName,{callSid:this.callSid});
         return result;
     }

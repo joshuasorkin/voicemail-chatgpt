@@ -80,7 +80,6 @@ async function test(){
     await addUserMessage_test();
     await addAssistantMessage_test();
     await getUserMessages_test();
-
 }
 
 test();
