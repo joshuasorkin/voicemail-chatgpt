@@ -12,6 +12,13 @@ class Call{
         this.userMessages = data.userMessages;
     }
 
+    export(){
+        return {
+            callSid:this.callSid,
+            userMessages:this.userMessages
+        }
+    }
+
     //returns the document from the calls collection
     //pass the database in as a parameter instead of making it a class property
     //because we need to serialize the call as a cookie
