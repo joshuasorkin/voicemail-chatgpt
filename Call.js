@@ -40,7 +40,7 @@ class Call{
     async addMessage(role,message){
         const newElement = {role:role,content:message};
         this.userMessages.push(newElement);
-        const result = this.database.pushToDocumentArray(
+        const result = await this.database.pushToDocumentArray(
                         this.collectionName,
                         "callSid",
                         this.callSid,
