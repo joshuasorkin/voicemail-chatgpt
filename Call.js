@@ -7,7 +7,7 @@ class Call{
     //can't pass methods as a cookie
     //so here's how we load the cookie data
     //after we create a new Call for a given endpoint
-    loadData(data){
+    load(data){
         this.callSid = data.callSid;
         this.userMessages = data.userMessages;
     }

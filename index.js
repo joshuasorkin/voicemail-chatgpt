@@ -47,11 +47,11 @@ app.get('/twilio-webhook', async (req, res) => {
     const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
     let call;
-    const objData = req.cookies.objData;
+    const callData_stringified = req.cookies.callData;
     call = new Call();
     if(objData){
-        callData = JSON.parse(objData);
-        call.loadData(callData);
+        const callData = JSON.parse(callData_stringified);
+        call.load(callData);
     }
     else{
         call.callSid = callSid;
@@ -99,7 +99,8 @@ app.get('/twilio-webhook', async (req, res) => {
         );
     }
     console.log(twiml.toString());
-    res.cookie('objData',JSON.stringify(call));
+    const callExport = call.export();
+    res.cookie('callData',JSON.stringify(callExport));
     res.send(twiml.toString());
 });
 
@@ -110,10 +111,11 @@ app.get('/enqueue-and-process', async (req, res) => {
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
         const callSid = req.query.CallSid;
-        const objData = req.cookies.objData;
-        console.log({objData});
-        const call = JSON.parse(objData);
-        await call.addUserMessage(database,callSid,userSpeech);
+        const callData_stringified = req.cookies.callData;
+        const callData = JSON.parse(callData_stringified);
+        const call = new Call();
+        call.load(callData);
+        await call.addUserMessage(database,userSpeech);
 
         //enqueue call
         const twiml = new VoiceResponse();
@@ -151,7 +153,7 @@ async function processCall(call,absoluteUrl,personality){
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(userMessages,personality);
-        await call.addAssistantMessage(database,callSid,result);
+        await call.addAssistantMessage(database,result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
         const call_twilio = await client.calls(call.callSid).fetch();
