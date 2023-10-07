@@ -12,7 +12,7 @@ import Call from '../Call.js';
 const database = new Database();
 
 const callSid = "123xyz";
-const callSid_getOrAdd = "2416256";
+const callSid_getOrCreate = "2416256";
 const streamSid = "11235813";
 const userMessage = "white on white, translucent black capes";
 const assistantMessage = "back on the rack";
@@ -45,13 +45,13 @@ console.log(`checking for call ${callSid}...`);
 }
 
 async function getOrCreate_test(){
-    call.callSid = callSid_getOrAdd;
+    call.callSid = callSid_getOrCreate;
     const call_document = await call.getOrCreate();
     console.log({call_document});
 }
 
 async function addUserMessage_test(){
-    call.callSid = callSid;
+    call.callSid = callSid_getOrCreate;
     const result = await call.addUserMessage(userMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
@@ -59,6 +59,7 @@ async function addUserMessage_test(){
 }
 
 async function addAssistantMessage_test(){
+    call.callSid = callSid_getOrCreate;
     const result = await call.addAssistantMessage(assistantMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
