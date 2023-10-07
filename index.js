@@ -49,7 +49,7 @@ app.get('/twilio-webhook', async (req, res) => {
     let call;
     const callData_stringified = req.cookies.callData;
     call = new Call();
-    if(objData){
+    if(callData_stringified){
         const callData = JSON.parse(callData_stringified);
         call.load(callData);
     }
