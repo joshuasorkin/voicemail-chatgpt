@@ -74,7 +74,7 @@ class Database{
         const filter = {key_document: value_document};
         //update query for pushing value to array
         const update = { $push: { key_update: value_update}};
-        const result = await this.database.collection(this.collectionName).updateOne(filter,update);
+        const result = await this.database.collection(collectionName).updateOne(filter,update);
     }
 
     async getValue(callSid,key){
