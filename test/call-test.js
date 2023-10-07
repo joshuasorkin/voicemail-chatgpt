@@ -32,7 +32,7 @@ async function reset_test(){
     await database.resetCollection(test_collection_name);
     console.log("collection reset");
 }
-async function getCall_test(){
+async function get_test(){
 console.log(`checking for call ${callSid}...`);
     call.callSid = callSid;
     const call_document = await call.get();
@@ -44,15 +44,13 @@ console.log(`checking for call ${callSid}...`);
     }
 }
 
-async function getOrAddCall_test(){
-    const call = new Call();
+async function getOrCreate_test(){
     call.callSid = callSid_getOrAdd;
     const call_document = await call.getOrCreate();
     console.log({call_document});
 }
 
 async function addUserMessage_test(){
-    const call = new Call();
     call.callSid = callSid;
     const result = await call.addUserMessage(userMessage);
     console.log(
@@ -75,8 +73,8 @@ async function getUserMessages_test(){
 async function test(){
     await initialize();
     await reset_test();
-    await getCall_test();
-    await getOrAddCall_test();
+    await get_test();
+    await getOrCreate_test();
     await addUserMessage_test();
     await addAssistantMessage_test();
     await getUserMessages_test();
