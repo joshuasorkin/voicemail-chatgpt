@@ -27,36 +27,37 @@ class Call{
             callSid:this.callSid,
             userMessages:[]
         };
-        const result = await this.database.getOrCreateDocument("calls",{callSid:this.callSid},newCall);
+        const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
         return result;
     }
 
     async get(database){
-        const result = await database.getDocument("calls",{callSid:this.callSid});
+        const result = await this.database.getDocument(this.collectionName,{callSid:this.callSid});
         return result;
     }
 
-    async addMessage(database,role,message){
+    async addMessage(role,message){
         this.userMessages.push({role:role,content:message});
         const filter = {callSid: this.callSid};
         const update = { $push: { userMessages: {role:role,content:message}}};
-        const result = await database.collection["calls"].updateOne(filter,update);
+        const result = await this.database.collection[this.collectionName].updateOne(filter,update);
         return result;
     }
 
     //todo: the roles probably don't belong hardcoded in the Call class,
     //maybe OpenAIUtility.chatGPTGenerate() should produce an object with the role
-    async addUserMessage(database,message){
-        const result = await this.addMessage(database,'user',message);
+    async addUserMessage(message){
+        const result = await this.addMessage('user',message);
         return result;
     }
 
-    async addAssistantMessage(database,message){
-        const result = await this.addMessage(database,'assistant',message);
+    async addAssistantMessage(message){
+        const result = await this.addMessage('assistant',message);
         return result;
     }
 
-    async getUserMessages(callSid){
+    //don't need this method anymore, can just use call.userMessages
+    async getUserMessages(){
         return this.userMessages;
     }
 
