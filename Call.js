@@ -37,10 +37,15 @@ class Call{
     }
 
     async addMessage(role,message){
-        this.userMessages.push({role:role,content:message});
-        const filter = {callSid: this.callSid};
-        const update = { $push: { userMessages: {role:role,content:message}}};
-        const result = await this.database.collection(this.collectionName).updateOne(filter,update);
+        const newElement = {role:role,content:message};
+        this.userMessages.push(newElement);
+        const result = this.database.pushToDocumentArray(
+                        this.collectionName,
+                        "callSid",
+                        this.callSid,
+                        "userMessages",
+                        newElement
+        );
         return result;
     }
 
