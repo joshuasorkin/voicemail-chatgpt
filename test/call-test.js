@@ -18,11 +18,12 @@ const userMessage = "white on white, translucent black capes";
 const assistantMessage = "back on the rack";
 const valueName = "streamSid";
 const test_collection_name = 'test';
+const test_database_name = 'test';
 const call = new Call(database,test_collection_name);
 
 async function initialize(){
     console.log(`Initializing Database with '${test_collection_name}' collection....`);
-    await database.initialize(test_collection_name);
+    await database.initialize(test_database_name);
     console.log("Database initialized");
 }
 
