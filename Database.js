@@ -46,6 +46,11 @@ class Database{
     }
 
     async getOrCreateDocument(collectionName,query,data){
+        return null;
+    }
+
+    /*
+    async getOrCreateDocument(collectionName,query,data){
         const result = await this.getDocument(collectionName,query);
         if(result && result !== undefined){
             return result;
@@ -55,6 +60,7 @@ class Database{
             return await this.getDocument(collectionName,query);
         }
     }
+    */
 
     //todo: result should be the actual document, not just the result
     //of insertOne() so we don't have to call getDocument()
