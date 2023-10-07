@@ -30,6 +30,14 @@ async function getPhoneList_from_count_test(){
     }
 }
 
+//need to rewrite, moved getAllCallSids to Report
+async function getAllCallSids_test(){
+    const result = await database.getAllCallSids();
+    result.forEach(callSid => {
+        console.log("callSid",callSid);
+    })
+}
+
 async function test(){
     await initialize();
     await getPhoneList_test();

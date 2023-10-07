@@ -38,7 +38,6 @@ async function getValue_test(){
 }
 
 
-
 async function getAllCallSids_test(){
     const result = await database.getAllCallSids();
     result.forEach(callSid => {
