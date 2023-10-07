@@ -18,6 +18,7 @@ const userMessage = "white on white, translucent black capes";
 const assistantMessage = "back on the rack";
 const valueName = "streamSid";
 const test_collection_name = 'test';
+const call = new Call(database,test_collection_name);
 
 async function initialize(){
     console.log(`Initializing Database with '${test_collection_name}' collection....`);
@@ -32,9 +33,8 @@ async function reset_test(){
 }
 async function getCall_test(){
 console.log(`checking for call ${callSid}...`);
-    const call = new Call();
     call.callSid = callSid;
-    const call_document = await call.get(database);
+    const call_document = await call.get();
     if (call_document){
         console.log("call exists: ",call_document);
     }
@@ -46,31 +46,32 @@ console.log(`checking for call ${callSid}...`);
 async function getOrAddCall_test(){
     const call = new Call();
     call.callSid = callSid_getOrAdd;
-    const call_document = await call.getOrCreate(database);
+    const call_document = await call.getOrCreate();
     console.log({call_document});
 }
 
 async function addUserMessage_test(){
     const call = new Call();
     call.callSid = callSid;
-    const result = await call.addUserMessage(database,userMessage);
+    const result = await call.addUserMessage(userMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
 }
 
 async function addAssistantMessage_test(){
-    const result = await database.addAssistantMessage(database,assistantMessage);
+    const result = await database.addAssistantMessage(assistantMessage);
     console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
 }
 
 async function getUserMessages_test(){
-    const result = await database.getUserMessages(callSid);
+    const result = await database.getUserMessages();
     console.log("userMessages: ",result);
 }
 
+/*
 async function getStreamSid_test(){
     const result = await database.getStreamSid(callSid);
     console.log("streamSid: ",result);
@@ -79,20 +80,11 @@ async function setStreamSid_test(){
     const result = await database.setValue(callSid,"streamSid",streamSid);
     console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
 }
+*/
 
 async function getValue_test(){
     const result = await database.getValue(callSid,valueName);
     console.log(`${valueName}: ${result}`);
-}
-
-async function getAllPersonalities_test(){
-    const result = await database.getAllPersonalities();
-    console.log(result["standard"]);
-}
-
-async function getPersonalityNameFromPhoneNumber_test(){
-    const result = await database.getPersonalityNameFromPhoneNumber("+15107564445");
-    console.log(result);
 }
 
 async function getAllCallSids_test(){
