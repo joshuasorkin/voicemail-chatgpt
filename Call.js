@@ -26,19 +26,21 @@ class Call{
         const newElement = {role:role,content:message};
         this.userMessages.push(newElement);
         if(!isTest){
-        const result = await this.database.pushToDocumentArray(
-                        this.collectionName,
-                        "callSid",
-                        this.callSid,
-                        "userMessages",
-                        newElement
-        );
+            const result = await this.database.pushToDocumentArray(
+                            this.collectionName,
+                            "callSid",
+                            this.callSid,
+                            "userMessages",
+                            newElement
+            );
         }
         return result;
     }
 
     //todo: the roles probably don't belong hardcoded in the Call class,
     //maybe OpenAIUtility.chatGPTGenerate() should produce an object with the role
+    //isTest is used for when we are testing TokenCounter so we can push to the local array
+    //without writing to the database
     async addUserMessage(message,isTest=false){
         const result = await this.addMessage('user',message,isTest);
         return result;

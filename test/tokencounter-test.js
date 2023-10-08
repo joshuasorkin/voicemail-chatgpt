@@ -14,12 +14,14 @@ function encode_test(){
 
 function test(){
     encode_test();
+    analyzeUserMessages_test();
 }
 
 function analyzeUserMessages_test(){
     const call = new Call();
-    call.addUserMessage(testString1);
-    call.addUserMessage(testString2);
-
+    call.addUserMessage(testString1,true);
+    call.addUserMessage(testString2,true);
+    const result = tokenCounter.analyzeUserMessages(call);
+    console.log({result});
 }
 test();
