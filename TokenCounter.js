@@ -16,7 +16,7 @@ class TokenCounter{
         const result = call.userMessages.reduce((accumulator,currentValue) => {
             const messageTokenCount = this.enc.encode(currentValue.content).length;
             return accumulator + messageTokenCount;
-        });
+        },initialValue);
         return result;
     }
 

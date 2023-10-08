@@ -14,14 +14,14 @@ function encode_test(){
 
 function test(){
     encode_test();
-    analyzeUserMessages_test();
+    countFromUserMessages_test();
 }
 
-function analyzeUserMessages_test(){
+function countFromUserMessages_test(){
     const call = new Call();
     call.addUserMessage(testString1,true);
     call.addUserMessage(testString2,true);
-    const result = tokenCounter.analyzeUserMessages(call);
+    const result = tokenCounter.countFromUserMessages(call);
     console.log({result});
 }
 test();
