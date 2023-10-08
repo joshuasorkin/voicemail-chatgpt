@@ -26,6 +26,11 @@ class OpenAIUtility {
             if (startIndex >= 0){
                 messages = messages_preTokenCounter.slice(startIndex);
             }
+            else{
+                //will need to handle this differently since we can't get below token count
+                //by deleting messages
+                messages = messages_preTokenCounter;
+            }
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo'
