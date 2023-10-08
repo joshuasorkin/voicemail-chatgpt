@@ -45,9 +45,7 @@ app.get('/twilio-webhook', async (req, res) => {
     let call;
     call = new Call();
     call.callSid = callSid;
-        const call_document = await call.getOrCreate(database);
-    }
-    console.log({call});
+    const call_document = await call.getOrCreate(database);
     console.log("Entering GET twilio-webhook...");
     const speechResult = req.query.SpeechResult;
     console.log({speechResult});
@@ -99,10 +97,9 @@ app.get('/enqueue-and-process', async (req, res) => {
         const userSpeech = req.query.SpeechResult;
         console.log({userSpeech});
         const callSid = req.query.CallSid;
-        const callData_stringified = req.cookies.callData;
-        const callData = JSON.parse(callData_stringified);
-        const call = new Call();
-        call.load(callData);
+        const call = new Call(database);
+        call.callSid = callSid;
+        await call.getOrCreate();
         await call.addUserMessage(userSpeech);
 
         //enqueue call

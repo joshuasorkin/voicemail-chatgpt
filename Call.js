@@ -1,24 +1,9 @@
 class Call{
-    constructor(database,collectionName = "calls"){
+    constructor(database,callSid,collectionName = "calls"){
         this.database = database;
-        this.callSid = null;
+        this.callSid = callSid;
         this.userMessages = [];
         this.collectionName = collectionName;
-    }
-
-    //can't pass methods as a cookie
-    //so here's how we load the cookie data
-    //after we create a new Call for a given endpoint
-    load(data){
-        this.callSid = data.callSid;
-        this.userMessages = data.userMessages;
-    }
-
-    export(){
-        return {
-            callSid:this.callSid,
-            userMessages:this.userMessages
-        }
     }
 
     //returns the document from the calls collection
@@ -28,6 +13,7 @@ class Call{
             userMessages:[]
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
+        this.userMessages = result.userMessages;
         return result;
     }
 
