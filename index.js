@@ -8,7 +8,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import twilio from 'twilio';
 import OpenAI from 'openai';
-import cookieParser from 'cookie-parser';
 
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
@@ -42,8 +41,7 @@ app.get('/twilio-webhook', async (req, res) => {
     //todo: can probably store the personality in call obj and then we don't have to keep querying personalityCache
     const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
-    let call;
-    call = new Call(database);
+    const call = new Call(database);
     call.callSid = callSid;
     const call_document = await call.getOrCreate(database);
     console.log("Entering GET twilio-webhook...");

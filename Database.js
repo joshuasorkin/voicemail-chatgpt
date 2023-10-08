@@ -11,7 +11,7 @@ import { MongoClient } from 'mongodb';
 
 class Database{
 
-    async initialize(dbName = "voice-chatGPT"){
+    async initialize(dbName = process.env.MONGO_DATABASE_NAME){
         try {
             this.client = new MongoClient(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
             await this.client.connect();
