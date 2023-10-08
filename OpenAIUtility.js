@@ -18,22 +18,24 @@ class OpenAIUtility {
         try{
             const tokensFromPersonality = personality.tokenCount;
             const startIndex = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
-
-            const messages_preTokenCounter = personality.messages.slice();
+            const messages = personality.messages.slice();
+            //start from the index where we will have enough tokens to submit the message
+            if (startIndex >= 0){
+                for (let index=startIndex;index<userMessages.length;index++){
+                    messages.push(userMessages[index]);
+                }
+            }
+            else{
+                //we can't get below token count by omitting messages,
+                //so don't submit to chatGPT to avoid token-limit-exceeded error,
+                //instead return response alerting user that max has been reached
+                //and they can call back to start with refreshed memory.
+                return personality.response_out_of_memory;
+            }
             userMessages.forEach(message => {
                 messages_preTokenCounter.push(message);
             });
-            const startIndex = this.tokenCounter.findDeletionCutoff(messages_preTokenCounter);
-            //do we need to drop messages before our starting index?
-            let messages;
-            if (startIndex >= 0){
-                messages = messages_preTokenCounter.slice(startIndex);
-            }
-            else{
-                //will need to handle this differently since we can't get below token count
-                //by deleting messages
-                messages = messages_preTokenCounter;
-            }
+            
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo'
