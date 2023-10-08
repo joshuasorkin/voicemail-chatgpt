@@ -19,6 +19,12 @@ class PersonalityCache {
 
     async getAllPersonalities(){
         const name_personality_dictionary = await this.database.getCollectionAsDictionary('personality','name');
+        //iterate through personalities getting token count
+        for (var name in name_personality_dictionary){
+            const messages = name_personality_dictionary[name].messages;
+            const tokenCount = this.TokenCounter.countFromUserMessages(messages);
+            name_personality_dictionary[name].tokenCount = tokenCount;
+        }
         return name_personality_dictionary;
     }
 
