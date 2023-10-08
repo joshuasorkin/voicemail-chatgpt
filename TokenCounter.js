@@ -31,9 +31,9 @@ class TokenCounter{
         let index = 0;
         //iterate while the remaining token count is greater than model's max
         //and we haven't reached the end of the messages array
-        while (tokenCount_remaining > process.env.OPENAI_MAX_TOKENS && index < call.userMessages.length){
+        while (tokenCount_remaining > process.env.OPENAI_MAX_TOKENS && index < userMessages.length){
             //could save this step if we feed in a pre-processed array
-            const tokenCount_message = this.encode(call.userMessages[index].content).length;
+            const tokenCount_message = this.encode(userMessages[index].content).length;
             console.log("tokenCount_remaining:",{tokenCount_remaining});
             console.log(`token count for message ${index}`,{tokenCount_message});
             tokenCount_remaining -= tokenCount_message;
@@ -43,7 +43,7 @@ class TokenCounter{
         
         //did we find an index of the array at which we were able to delete enough
         //tokens to fall below the maximum?
-        if (index < call.userMessages.length){
+        if (index < userMessages.length){
             //yes: return this index, we will only send messages from this index forward
             return index;
         }
