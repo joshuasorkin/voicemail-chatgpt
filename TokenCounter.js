@@ -41,7 +41,7 @@ class TokenCounter{
         //did we find an index of the array at which we were able to delete enough
         //tokens to fall below the maximum?
         if (index < call.userMessages.length){
-            //yes: return this index, we will delete all messages before it
+            //yes: return this index, we will only send messages from this index forward
             return index;
         }
         else{
