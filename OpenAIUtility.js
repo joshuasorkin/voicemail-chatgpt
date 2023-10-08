@@ -19,7 +19,12 @@ class OpenAIUtility {
             const messages = personality.messages.slice();
             userMessages.forEach(message => {
                 messages.push(message);
-            })
+            });
+            const startIndex = tokenCounter.findDeletionCutoff(messages);
+            //do we need to drop messages before our starting index?
+            if (startIndex > 0){
+                messages = messages.slice(startIndex);
+            }
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo'
