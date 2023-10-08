@@ -13,6 +13,9 @@ class TokenCounter{
     analyzeUserMessages(call){
         const analysis = [];
         call.userMessages.forEach(msg => {
+            console.log({msg});
+            const encode = this.enc.encode(msg.content);
+            console.log({encode});
             analysis.push(this.enc.encode(msg.content).length);
 
         })
