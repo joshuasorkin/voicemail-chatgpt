@@ -1,7 +1,7 @@
 //include methods addMessage_user() and addMessage_chatGPT()
 
 import {OpenAI} from 'openai';
-
+import TokenCounter from './TokenCounter.js';
 
 
 class OpenAIUtility {
@@ -9,6 +9,8 @@ class OpenAIUtility {
         this.openai = new OpenAI({
             apiKey:process.env.OPENAI_API_KEY
         });
+        this.tokenCounter = new TokenCounter();
+
     }
 
     

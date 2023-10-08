@@ -18,6 +18,7 @@ import Database from './Database.js';
 import PersonalityCache from './PersonalityCache.js';
 import Call from './Call.js';
 
+
 // Miscellaneous object initialization
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
