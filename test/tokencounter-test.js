@@ -9,12 +9,13 @@ const tokenCounter = new TokenCounter();
 
 function encode_test(){
     const result = tokenCounter.encode(testString);
-    console.log({result});
+    console.log("encode:",{result});
 }
 
 function test(){
     encode_test();
     countFromUserMessages_test();
+    findDeletionCutoff_test();
 }
 
 function countFromUserMessages_test(){
@@ -22,6 +23,15 @@ function countFromUserMessages_test(){
     call.addUserMessage(testString1,true);
     call.addUserMessage(testString2,true);
     const result = tokenCounter.countFromUserMessages(call);
-    console.log({result});
+    console.log("countFromUserMessages:",{result});
+}
+
+function findDeletionCutoff_test(){
+    const call = new Call();
+    for(let x=0;x<100;x++){
+        call.addUserMessage(testString);
+    }
+    const result = tokenCounter.findDeletionCutoff(call);
+    console.log("findDeletionCutoff:",{result});
 }
 test();
