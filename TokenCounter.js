@@ -6,7 +6,7 @@ class TokenCounter{
         this.enc = get_encoding('cl100k_base');
     }
     encode(str){
-        return enc.encode(str);
+        return this.enc.encode(str);
     }
 }
 
