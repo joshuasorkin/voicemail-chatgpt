@@ -20,7 +20,7 @@ class OpenAIUtility {
             userMessages.forEach(message => {
                 messages.push(message);
             });
-            const startIndex = tokenCounter.findDeletionCutoff(messages);
+            const startIndex = this.tokenCounter.findDeletionCutoff(messages);
             //do we need to drop messages before our starting index?
             if (startIndex > 0){
                 messages = messages.slice(startIndex);
