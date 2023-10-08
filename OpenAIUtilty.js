@@ -17,6 +17,7 @@ class OpenAIUtility {
             userMessages.forEach(message => {
                 messages.push(message);
             })
+            console.log("messages submitted to chatgpt:",{messages});
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo'
