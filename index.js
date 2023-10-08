@@ -12,7 +12,7 @@ import OpenAI from 'openai';
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
 import TwimlBuilder from './twimlBuilder.js';
-import OpenAIUtility from './OpenAIUtilty.js';
+import OpenAIUtility from './OpenAIUtility.js';
 import StringAnalyzer from './StringAnalyzer.js';
 import Database from './Database.js';
 import PersonalityCache from './PersonalityCache.js';
