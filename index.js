@@ -43,7 +43,7 @@ app.get('/twilio-webhook', async (req, res) => {
     const personality = personalityCache.getPersonality(req.query.Called);
     const callSid = req.query.CallSid;
     let call;
-    call = new Call();
+    call = new Call(database);
     call.callSid = callSid;
     const call_document = await call.getOrCreate(database);
     console.log("Entering GET twilio-webhook...");
