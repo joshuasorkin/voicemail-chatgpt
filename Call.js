@@ -22,9 +22,10 @@ class Call{
         return result;
     }
 
-    async addMessage(role,message){
+    async addMessage(role,message,isTest){
         const newElement = {role:role,content:message};
         this.userMessages.push(newElement);
+        if(!isTest){
         const result = await this.database.pushToDocumentArray(
                         this.collectionName,
                         "callSid",
@@ -32,13 +33,14 @@ class Call{
                         "userMessages",
                         newElement
         );
+        }
         return result;
     }
 
     //todo: the roles probably don't belong hardcoded in the Call class,
     //maybe OpenAIUtility.chatGPTGenerate() should produce an object with the role
-    async addUserMessage(message){
-        const result = await this.addMessage('user',message);
+    async addUserMessage(message,isTest=false){
+        const result = await this.addMessage('user',message,isTest);
         return result;
     }
 
