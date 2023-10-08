@@ -12,7 +12,7 @@ async function main() {
     await client.connect();
     console.log('Connected to MongoDB');
 
-    const db = client.db();
+    const db = client.db(process.env.MONGO_DATABASE_NAME);
     const callsCollection = db.collection('calls');
 
     // Get all documents, sort by _id in descending order
