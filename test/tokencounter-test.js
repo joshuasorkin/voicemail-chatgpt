@@ -1,5 +1,7 @@
 import TokenCounter from '../TokenCounter.js';
 import Call from '../Call.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const testString1 = "For a number of years now, work has been proceeding in order to bring perfection ";
 const testString2 = "to the crudely conceived idea of a transmission that would not only supply inverse reactive current for use in unilateral phase detractors, but would also be capable of automatically synchronizing cardinal grammeters."
