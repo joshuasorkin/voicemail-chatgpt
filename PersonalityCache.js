@@ -3,10 +3,13 @@
 
 //holds the data related to looking up a personality via phone number
 //so that it is available locally rather than via frequent db lookup
+import TokenCounter from './TokenCounter.js';
+
 class PersonalityCache {
     constructor(){
         this.personalities = null;
         this.phone_personality = null;
+        this.TokenCounter = new TokenCounter();
     }
     async load(database){
         this.database = database;
