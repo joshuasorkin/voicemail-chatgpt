@@ -49,6 +49,8 @@ app.get('/twilio-webhook', async (req, res) => {
     console.log({speechResult});
     const twiml = new twilio.twiml.VoiceResponse();
     if (speechResult && speechResult !== undefined){
+        //in the long run, it is unsafe to include the speechResult in plaintext
+        //eventually need to move to end-to-end encryption
         const url = `/enqueue-and-process?SpeechResult=${encodeURIComponent(speechResult)}`;      
         twiml.redirect({method:'GET'},url);
     }
