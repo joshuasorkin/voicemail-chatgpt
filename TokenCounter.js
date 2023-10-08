@@ -34,7 +34,10 @@ class TokenCounter{
         while (tokenCount_remaining > process.env.OPENAI_MAX_TOKENS && index < call.userMessages.length){
             //could save this step if we feed in a pre-processed array
             const tokenCount_message = this.encode(call.userMessages[index].content).length;
+            console.log("tokenCount_remaining:",{tokenCount_remaining});
+            console.log(`token count for message ${index}`,{tokenCount_message});
             tokenCount_remaining -= tokenCount_message;
+            console.log("tokenCount_remaining after deletion:",{tokenCount_remaining});
             index++;
         }
         

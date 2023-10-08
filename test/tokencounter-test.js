@@ -31,6 +31,8 @@ function findDeletionCutoff_test(){
     for(let x=0;x<100;x++){
         call.addUserMessage(testString,true);
     }
+    const count = tokenCounter.countFromUserMessages(call);
+    console.log("total token count for testing findDeletionCutoff:",{count});
     const result = tokenCounter.findDeletionCutoff(call);
     console.log("findDeletionCutoff:",{result});
 }
