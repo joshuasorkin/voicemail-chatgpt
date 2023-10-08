@@ -10,15 +10,21 @@ class TokenCounter{
         return this.enc.encode(str);
     }
 
-    analyzeUserMessages(call){
+    countFromUserMessages(call){
         const analysis = [];
-        call.userMessages.forEach(msg => {
-            console.log({msg});
-            const encode = this.enc.encode(msg.content);
-            console.log({encode});
-            analysis.push(this.enc.encode(msg.content).length);
+        const initialValue = 0;
+        const result = call.userMessages.reduce((accumulator,currentValue) => {
+            const messageTokenCount = this.enc.encode(currentValue.content).length;
+            return accumulator + messageTokenCount;
+        });
+        return result;
+    }
 
-        })
+    //if the call's current token count is > OPENAI_MAX_TOKENS,
+    //find how many messages need to be deleted from the beginning of userMessages
+    //to lower the token count below the maximum
+    findDeletionCutoff(call){
+
     }
 }
 
