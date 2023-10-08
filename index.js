@@ -72,9 +72,9 @@ app.get('/twilio-webhook', async (req, res) => {
             //todo: probably don't need all these tests now that call data is locally available with the Call obj
             if((!call || call === undefined) || (call && call !== undefined && call.userMessages.length === 0)){
                 console.log("call exists");
-                console.log({call});
                 console.log("setting greeting to initial")
                 greeting = personality.response_initial;
+                console.log({greeting});
             }
         }
         twimlBuilder.sayReading(gather,greeting);
