@@ -10,24 +10,24 @@ class TokenCounter{
         return this.enc.encode(str);
     }
 
-    countFromUserMessages(call){
+    countFromUserMessages(userMessages){
         const analysis = [];
         const initialValue = 0;
-        const result = call.userMessages.reduce((accumulator,currentValue) => {
+        const result = userMessages.reduce((accumulator,currentValue) => {
             const messageTokenCount = this.enc.encode(currentValue.content).length;
             return accumulator + messageTokenCount;
         },initialValue);
         return result;
     }
 
-    exceedsMaximum(call){
-        return this.countFromUserMessages(call) > process.env.OPENAI_MAX_TOKENS;
+    exceedsMaximum(userMessages){
+        return this.countFromUserMessages(userMessages) > process.env.OPENAI_MAX_TOKENS;
     }
     //if the call's current token count is > OPENAI_MAX_TOKENS,
     //find how many messages need to be deleted from the beginning of userMessages
     //to lower the token count below the maximum
-    findDeletionCutoff(call){
-        let tokenCount_remaining = this.countFromUserMessages(call);
+    findDeletionCutoff(userMessages){
+        let tokenCount_remaining = this.countFromUserMessages(userMessages);
         let index = 0;
         //iterate while the remaining token count is greater than model's max
         //and we haven't reached the end of the messages array
