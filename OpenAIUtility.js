@@ -16,6 +16,9 @@ class OpenAIUtility {
     
     async chatGPTGenerate(userMessages,personality) {
         try{
+            const tokensFromPersonality = personality.tokenCount;
+            const startIndex = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
+
             const messages_preTokenCounter = personality.messages.slice();
             userMessages.forEach(message => {
                 messages_preTokenCounter.push(message);

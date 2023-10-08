@@ -23,11 +23,14 @@ class TokenCounter{
     exceedsMaximum(userMessages){
         return this.countFromUserMessages(userMessages) > process.env.OPENAI_MAX_TOKENS;
     }
+
     //if the call's current token count is > OPENAI_MAX_TOKENS,
     //find how many messages need to be deleted from the beginning of userMessages
     //to lower the token count below the maximum
-    findDeletionCutoff(userMessages){
-        let tokenCount_remaining = this.countFromUserMessages(userMessages);
+    //we use tokensFromPersonality to account for tokens used up by prepending the
+    //personality messages
+    findDeletionCutoff(userMessages,tokensFromPersonality = 0){
+        let tokenCount_remaining = this.countFromUserMessages(userMessages)-tokensFromPersonality;
         let index = 0;
         //iterate while the remaining token count is greater than model's max
         //and we haven't reached the end of the messages array

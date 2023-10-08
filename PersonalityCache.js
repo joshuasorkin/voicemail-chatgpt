@@ -25,7 +25,6 @@ class PersonalityCache {
             const tokenCount = this.TokenCounter.countFromUserMessages(messages);
             name_personality_dictionary[name].tokenCount = tokenCount;
         }
-        console.log({name_personality_dictionary});
         return name_personality_dictionary;
     }
 
