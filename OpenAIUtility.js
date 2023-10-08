@@ -16,14 +16,15 @@ class OpenAIUtility {
     
     async chatGPTGenerate(userMessages,personality) {
         try{
-            const messages = personality.messages.slice();
+            const messages_preTokenCounter = personality.messages.slice();
             userMessages.forEach(message => {
-                messages.push(message);
+                messages_preTokenCounter.push(message);
             });
-            const startIndex = this.tokenCounter.findDeletionCutoff(messages);
+            const startIndex = this.tokenCounter.findDeletionCutoff(messages_preTokenCounter);
             //do we need to drop messages before our starting index?
-            if (startIndex > 0){
-                messages = messages.slice(startIndex);
+            let messages;
+            if (startIndex >= 0){
+                messages = messages_preTokenCounter.slice(startIndex);
             }
             const completion = await this.openai.chat.completions.create({
             messages: messages,
