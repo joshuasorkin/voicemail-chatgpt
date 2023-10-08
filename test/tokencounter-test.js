@@ -24,7 +24,7 @@ function countFromUserMessages_test(){
     const call = new Call();
     call.addUserMessage(testString1,true);
     call.addUserMessage(testString2,true);
-    const result = tokenCounter.countFromUserMessages(call);
+    const result = tokenCounter.countFromUserMessages(call.userMessages);
     console.log("countFromUserMessages:",{result});
 }
 
@@ -33,9 +33,9 @@ function findDeletionCutoff_test(){
     for(let x=0;x<100;x++){
         call.addUserMessage(testString,true);
     }
-    const count = tokenCounter.countFromUserMessages(call);
+    const count = tokenCounter.countFromUserMessages(call.userMessages);
     console.log("total token count for testing findDeletionCutoff:",{count});
-    const result = tokenCounter.findDeletionCutoff(call);
+    const result = tokenCounter.findDeletionCutoff(call.userMessages);
     console.log("findDeletionCutoff:",{result});
 }
 test();
