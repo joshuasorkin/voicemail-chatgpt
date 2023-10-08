@@ -135,3 +135,6 @@ google-credentials.*
 # personality files
 /private_personality
 personality-load.js
+
+# mongodb data
+mongodb-output.json
