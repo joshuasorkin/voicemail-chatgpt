@@ -20,7 +20,6 @@ import Call from './Call.js';
 
 // Miscellaneous object initialization
 const app = express();
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 const twimlBuilder = new TwimlBuilder();
 const stringAnalyzer = new StringAnalyzer();
