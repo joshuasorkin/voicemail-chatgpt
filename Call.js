@@ -33,8 +33,12 @@ class Call{
                             "userMessages",
                             newElement
             );
+            return result;
         }
-        return result;
+        else{
+            return null;
+        }
+        
     }
 
     //todo: the roles probably don't belong hardcoded in the Call class,
