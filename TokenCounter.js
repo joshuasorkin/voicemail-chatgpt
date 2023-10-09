@@ -22,10 +22,6 @@ class TokenCounter{
         return result;
     }
 
-    exceedsMaximum(userMessages){
-        return this.countFromUserMessages(userMessages) > process.env.OPENAI_MAX_TOKENS;
-    }
-
     //if the call's current token count is > OPENAI_MAX_TOKENS,
     //find how many messages need to be deleted from the beginning of userMessages
     //to lower the token count below the maximum
