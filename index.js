@@ -132,7 +132,6 @@ app.post('/wait', function (req, res) {
 //right now the function is doing too much
 //also it doesn't belong in index.js, we should just have endpoint handlers here
 async function processCall(call,absoluteUrl,personality){
-    console.log(call);
     const userMessages = call.userMessages;
     console.log({userMessages});
     //todo: move end of these try catch blocks into a finally block
