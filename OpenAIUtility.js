@@ -41,8 +41,7 @@ class OpenAIUtility {
             model: 'gpt-3.5-turbo'
             });
             console.log(`and the response has returned from OpenAI`);
-            const choice = completion.choices[0];
-            console.log({choice});
+            console.log({completion});
             const response = completion.choices[0].message.content;
             return response;
         }
