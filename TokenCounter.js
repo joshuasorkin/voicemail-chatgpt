@@ -32,7 +32,7 @@ class TokenCounter{
     //we use tokensFromPersonality to account for tokens used up by prepending the
     //personality messages
     findDeletionCutoff(userMessages,tokensFromPersonality = 0){
-        let tokenCount_remaining = this.countFromUserMessages(userMessages)-tokensFromPersonality;
+        let tokenCount_remaining = this.countFromUserMessages(userMessages)+tokensFromPersonality;
         console.log({tokensFromPersonality},{tokenCount_remaining});
         let index = 0;
         //iterate while the remaining token count is greater than model's max
