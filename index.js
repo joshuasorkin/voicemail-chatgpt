@@ -40,6 +40,7 @@ app.get('/twilio-webhook', async (req, res) => {
     console.log(req.query.Called);
     //todo: can probably store the personality in call obj and then we don't have to keep querying personalityCache
     const personality = personalityCache.getPersonality(req.query.Called);
+    console.log({personality});
     const callSid = req.query.CallSid;
     const call = new Call(database);
     call.callSid = callSid;

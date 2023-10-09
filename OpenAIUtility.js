@@ -33,7 +33,7 @@ class OpenAIUtility {
                 return personality.response_out_of_memory;
             }
             userMessages.forEach(message => {
-                messages_preTokenCounter.push(message);
+                messages.push(message);
             });
             
             const completion = await this.openai.chat.completions.create({
