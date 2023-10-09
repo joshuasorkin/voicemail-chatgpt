@@ -4,7 +4,7 @@
 //holds the data related to looking up a personality via phone number
 //so that it is available locally rather than via frequent db lookup
 import TokenCounter from './TokenCounter.js';
-
+import OpenAIUtility from './OpenAIUtility.js';
 class PersonalityCache {
     constructor(){
         this.personalities = null;
@@ -15,6 +15,7 @@ class PersonalityCache {
         this.database = database;
         this.personalities = await this.getAllPersonalities();
         this.phone_personality = await this.getPhone_Personality();
+        this.OpenAIUtility = new OpenAIUtility();
     }
 
     async getAllPersonalities(){
@@ -24,7 +25,11 @@ class PersonalityCache {
             const messages = name_personality_dictionary[name].messages;
             const tokenCount = this.TokenCounter.countFromUserMessages(messages);
             name_personality_dictionary[name].tokenCount = tokenCount;
+            //get token count from OpenAI
+            const tokenCount_OpenAI = await this.OpenAIUtility.chatGPTGenerate_personalityTokenCheck(messages);
+            name_personality_dictionary[name].tokenCount_OpenAI = tokenCount_OpenAI;
         }
+        console.log({name_personality_dictionary});
         return name_personality_dictionary;
     }
 

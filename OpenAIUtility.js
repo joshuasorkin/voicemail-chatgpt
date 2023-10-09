@@ -14,8 +14,22 @@ class OpenAIUtility {
     }
 
     
-    async chatGPTGenerate(userMessages,personality) {
+    async chatGPTGenerate_personalityTokenCheck(personalityMessages){
         try{
+            const completion = await this.openai.chat.completions.create({
+                messages: personalityMessages,
+                model: 'gpt-3.5-turbo'
+            });
+            return completion.usage.prompt_tokens;
+        }
+        catch(exception){
+            throw exception;
+        }
+    }
+
+    async chatGPTGenerate(call,personality) {
+        try{
+            const userMessages = call.userMessages;
             const tokensFromPersonality = personality.tokenCount;
             const startIndex = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
             const messages = personality.messages.slice();
