@@ -14,6 +14,8 @@ class TokenCounter{
         const analysis = [];
         const initialValue = 0;
         const result = userMessages.reduce((accumulator,currentValue) => {
+            console.log("currentValue.content:",currentValue.content);
+            console.log({accumulator});
             const messageTokenCount = this.enc.encode(currentValue.content).length;
             return accumulator + messageTokenCount;
         },initialValue);
@@ -31,6 +33,7 @@ class TokenCounter{
     //personality messages
     findDeletionCutoff(userMessages,tokensFromPersonality = 0){
         let tokenCount_remaining = this.countFromUserMessages(userMessages)-tokensFromPersonality;
+        console.log({tokensFromPersonality},{tokenCount_remaining});
         let index = 0;
         //iterate while the remaining token count is greater than model's max
         //and we haven't reached the end of the messages array
