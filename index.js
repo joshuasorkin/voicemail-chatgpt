@@ -137,7 +137,7 @@ async function processCall(call,absoluteUrl,personality){
     //todo: move end of these try catch blocks into a finally block
     try {
         //generate response to user's prompt
-        const result = await openAIUtility.chatGPTGenerate(userMessages,personality);
+        const result = await openAIUtility.chatGPTGenerate(call,personality);
         await call.addAssistantMessage(result);
         const twiml = twiml_sayRedirect(result,absoluteUrl);
         //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
