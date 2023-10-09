@@ -26,10 +26,9 @@ class PersonalityCache {
             const tokenCount = this.TokenCounter.countFromUserMessages(messages);
             name_personality_dictionary[name].tokenCount = tokenCount;
             //get token count from OpenAI
-            const tokenCount_OpenAI = await this.OpenAIUtility.chatGPTGenerate_personalityTokenCheck(messages);
-            name_personality_dictionary[name].tokenCount_OpenAI = tokenCount_OpenAI;
+            //const tokenCount_OpenAI = await this.OpenAIUtility.chatGPTGenerate_personalityTokenCheck(messages);
+            //name_personality_dictionary[name].tokenCount_OpenAI = tokenCount_OpenAI;
         }
-        console.log({name_personality_dictionary});
         return name_personality_dictionary;
     }
 
