@@ -10,12 +10,12 @@ class PersonalityCache {
         this.personalities = null;
         this.phone_personality = null;
         this.TokenCounter = new TokenCounter();
+        this.OpenAIUtility = new OpenAIUtility();
     }
     async load(database){
         this.database = database;
         this.personalities = await this.getAllPersonalities();
         this.phone_personality = await this.getPhone_Personality();
-        this.OpenAIUtility = new OpenAIUtility();
     }
 
     async getAllPersonalities(){
