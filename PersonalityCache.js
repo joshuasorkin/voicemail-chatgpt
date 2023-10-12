@@ -30,6 +30,7 @@ class PersonalityCache {
     async getAllPersonalities(){
         const name_personality_dictionary = await this.database.getCollectionAsDictionary('personality','name');
         //iterate through personalities getting token count
+        //disabling this for now until we figure out tiktoken/OpenAI token discrepancy issue
         for (var name in name_personality_dictionary){
             //this.getTokenCount(name_personality_dictionary,name);
         }

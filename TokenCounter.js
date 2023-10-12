@@ -27,6 +27,8 @@ class TokenCounter{
     //to lower the token count below the maximum
     //we use tokensFromPersonality to account for tokens used up by prepending the
     //personality messages
+    //todo: get token count from OpenAI, track cumulative tokens vs incremental tokens,
+    //todo: use them here
     findDeletionCutoff(userMessages,tokensFromPersonality = 0){
         let tokenCount_remaining = this.countFromUserMessages(userMessages)+tokensFromPersonality;
         console.log({tokensFromPersonality},{tokenCount_remaining});

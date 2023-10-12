@@ -30,7 +30,7 @@ class OpenAIUtility {
     async chatGPTGenerate(call,personality) {
         try{
             const userMessages = call.userMessages;
-            const tokensFromPersonality = personality.tokenCount;
+            const tokensFromPersonality = personality.tokenCount_OpenAI;
             const startIndex = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
             const messages = personality.messages.slice();
             //start from the index where we will have enough tokens to submit the message
@@ -55,8 +55,10 @@ class OpenAIUtility {
             model: 'gpt-3.5-turbo'
             });
             console.log(`and the response has returned from OpenAI`);
-            console.log({completion});
+            const prompt_tokens = completion.usage.prompt_tokens;
+            const completion_tokens = completion.usage.completion_tokens;
             const response = completion.choices[0].message.content;
+            console.log({prompt_tokens},{response},{completion_tokens});
             return response;
         }
         catch(error){
