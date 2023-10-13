@@ -8,9 +8,12 @@ class Call{
 
     //returns the document from the calls collection
     async getOrCreate(){
+        //should each userMessages entry include an ID, so that we can update the message with a tokens_OpenAI value once we learn
+        //that value?
         const newCall = {
             callSid:this.callSid,
-            userMessages:[]
+            userMessages:[],
+            prompt_tokens
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
         this.userMessages = result.userMessages;
