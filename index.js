@@ -40,9 +40,6 @@ function initializeLogFile(){
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
 
-    // Now you can use __dirname in your ESM module
-    console.log(__dirname);
-
     // Specify the path to the text file where you want to log the output
     const logFilePath = path.join(__dirname, 'output.log');
 
