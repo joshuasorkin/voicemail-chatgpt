@@ -1,8 +1,10 @@
+//set up timestamp logging to console log
+import { DateTime } from 'luxon';
 var log = console.log;
 console.log = function(){
     var args = Array.from(arguments);
-    LOG_PREFIX = new Date().toISOString();
-    args.unshift(LOG_PREFIX + ": ");
+    var timestamp = DateTime.now().setZone('America/Los Angeles').toString();
+    args.unshift(timestamp + ": ");
     log.apply(console,args);
 }
 

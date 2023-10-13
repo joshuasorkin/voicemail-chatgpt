@@ -21,6 +21,7 @@
     "firebase-admin": "^11.10.1",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
+    "luxon": "^3.4.3",
     "mongodb": "4.0",
     "node-postgres": "^0.6.2",
     "openai": "^4.3.0",
