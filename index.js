@@ -1,7 +1,7 @@
-var LOG_PREFIX = new Date().getDate() + '.' + new Date().getMonth() + '.' + new Date().getFullYear() + ' / ' + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds();
 var log = console.log;
 console.log = function(){
     var args = Array.from(arguments);
+    LOG_PREFIX = new Date().toISOString();
     args.unshift(LOG_PREFIX + ": ");
     log.apply(console,args);
 }
