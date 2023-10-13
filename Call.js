@@ -13,7 +13,6 @@ class Call{
         const newCall = {
             callSid:this.callSid,
             userMessages:[],
-            prompt_tokens
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
         this.userMessages = result.userMessages;
