@@ -11,6 +11,8 @@ import OpenAI from 'openai';
 import fs from 'fs';
 import path from 'path';
 import util from 'util';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 //local file imports
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse.js';
@@ -34,18 +36,27 @@ const personalityCache = new PersonalityCache();
 await personalityCache.load(database);
 let protocol;
 
-// Specify the path to the text file where you want to log the output
-const logFilePath = path.join(__dirname, 'output.log');
+function initializeLogFile(){
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
 
-// Create a writable stream to the log file
-const logStream = fs.createWriteStream(logFilePath, { flags: 'a' }); // 'a' stands for append mode
+    // Now you can use __dirname in your ESM module
+    console.log(__dirname);
 
-// Redirect stdout to the log file
-process.stdout.write = logStream.write.bind(logStream);
+    // Specify the path to the text file where you want to log the output
+    const logFilePath = path.join(__dirname, 'output.log');
 
-// Optionally, you can also redirect stderr to the log file
-process.stderr.write = logStream.write.bind(logStream);
+    // Create a writable stream to the log file
+    const logStream = fs.createWriteStream(logFilePath, { flags: 'a' }); // 'a' stands for append mode
 
+    // Redirect stdout to the log file
+    process.stdout.write = logStream.write.bind(logStream);
+
+    // Optionally, you can also redirect stderr to the log file
+    process.stderr.write = logStream.write.bind(logStream);
+}
+
+initializeLogFile();
 
 // Twilio configuration
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
