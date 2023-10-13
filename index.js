@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 var log = console.log;
 console.log = function(){
     var args = Array.from(arguments);
-    var timestamp = DateTime.now().setZone('America/Los Angeles').toString();
+    var timestamp = DateTime.now().setZone('America/Los_Angeles').toString();
     args.unshift(timestamp + ": ");
     log.apply(console,args);
 }
