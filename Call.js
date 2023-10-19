@@ -33,7 +33,8 @@ class Call{
         //calculate the token count of user's most recent prompt as:
         //prompt_tokens_mostRecent = prompt_tokens - prompt_tokens_total
         const prompt_tokens_mostRecent = prompt_tokens - this.prompt_tokens_total;
-        //update local message array
+        //update prompt_tokens in local array and db
+        console.log("updating local message array, most recent user message has prompt_tokens:",prompt_tokens_mostRecent);
         await this.updateMessageTokenCount(prompt_tokens_mostRecent);
         //then we update prompt_tokens_total with the latest count as:
         //prompt_tokens_total = prompt_tokens + completion_tokens
@@ -45,6 +46,7 @@ class Call{
     async updateMessageTokenCount(token_count){
         const currentMessageIndex = this.userMessages.length-1;
         this.userMessages[currentMessageIndex].token_count = token_count;
+        console.log(`updating database, userMessages[${currentMessageIndex}]:`,this.userMessages[currentMessageIndex]);
         const result = await this.database.updateArray(
             this.collectionName,
             'callSid',
