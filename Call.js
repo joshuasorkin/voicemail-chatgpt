@@ -78,6 +78,7 @@ class Call{
                             "userMessages",
                             newElement
             );
+            console.log("addMessage result:",{result});
             return result;
         }
         else{
@@ -95,7 +96,7 @@ class Call{
         return result;
     }
 
-    async addAssistantMessage(message,token_count = null){
+    async addAssistantMessage(message,isTest=false,token_count = null){
         const result = await this.addMessage('assistant',message,token_count = token_count);
         return result;
     }

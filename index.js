@@ -148,6 +148,7 @@ async function processCall(call,absoluteUrl,personality){
     try {
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(call,personality);
+        console.log("result from chatGPTGenerate:",{result});
         await call.updatePrompt_tokens(result.prompt_tokens,result.completion_tokens);
         await call.addAssistantMessage(result.response,result.completion_tokens);
         const twiml = twiml_sayRedirect(result.response,absoluteUrl);
