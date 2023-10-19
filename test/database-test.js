@@ -74,6 +74,7 @@ async function test(){
     await reset_test();
     await getCollectionAsDictionary_test();
     await pushToDocumentArray_test();
+    await updateArray_test();
 }
 
 test();

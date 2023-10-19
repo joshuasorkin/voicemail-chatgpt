@@ -25,6 +25,18 @@ class Call{
         return result;
     }
 
+    async updateMessageTokenCount(token_count){
+        const currentMessageIndex = this.userMessages.length-1;
+        this.userMessages[currentMessageIndex].token_count = token_count;
+        const result = await this.database.updateArray(
+            this.collectionName,
+            'callSid',
+            this.callSid,
+            'userMessages',
+            currentMessageIndex,
+            this.userMessages[currentMessageIndex]);
+    }
+
     async addMessage(role,message,isTest){
         const newElement = {role:role,content:message};
         this.userMessages.push(newElement);
