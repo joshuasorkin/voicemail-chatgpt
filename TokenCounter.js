@@ -23,6 +23,7 @@ class TokenCounter{
             const messageTokenCount = currentValue.token_count;
             return accumulator + messageTokenCount;
         },initialValue);
+        console.log("reduce result:",result);
         return result;
     }
 
