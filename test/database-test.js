@@ -20,6 +20,9 @@ const dictDoc2 = {
     field: "find me out this labyrinth place"
 }
 
+const arrayAdd1 = 'a123';
+const arrayAdd2 = 'b455';
+
 async function initialize(){
     console.log("Initializing Database with 'test' collection....");
     await database.initialize('test');
@@ -52,10 +55,17 @@ async function getCollectionAsDictionary_test(){
     console.log(result);
 }
 
+async function pushToDocumentArray_test(){
+    await database.pushToDocumentArray('dictionaryTest','name',dictDoc1.name,'valueArray',arrayAdd1);
+    const result = await database.getDocument('dictionaryTest',{name:dictDoc1.name});
+    console.log(result);
+}
+
 async function test(){
     await initialize();
     await reset_test();
     await getCollectionAsDictionary_test();
+    await pushToDocumentArray_test();
 }
 
 test();
