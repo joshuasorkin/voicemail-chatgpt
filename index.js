@@ -151,7 +151,7 @@ async function processCall(call,absoluteUrl,personality){
         console.log("result from chatGPTGenerate:",{result});
         await call.updatePrompt_tokens(result.prompt_tokens,result.completion_tokens);
         console.log("adding assistant message...");
-        await call.addAssistantMessage(result.response,result.completion_tokens);
+        await call.addAssistantMessage(result.response,token_count=result.completion_tokens);
         const twiml = twiml_sayRedirect(result.response,absoluteUrl);
         //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
         const call_twilio = await client.calls(call.callSid).fetch();
