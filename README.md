@@ -40,3 +40,10 @@ When the server is running, users can talk to ChatGPT as follows:
 10. Repeat steps 4-9, until user hangs up.
 
 During each call, the conversation history is re-submitted to ChatGPT each time the user speaks their next prompt, so a single phone call is equivalent to a single "New Chat".
+
+# package.json
+Regarding the `start` script:
+
+`"start": "cross-env NODE_ENV=development node index.js | tee -a output.log"`
+
+This directs console.log() output to both the console and the file `output.log`.

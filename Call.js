@@ -34,6 +34,8 @@ class Call{
         //based on the prompt_tokens value returned by chatGPT,
         //calculate the token count of user's most recent prompt as:
         //prompt_tokens_mostRecent = prompt_tokens - prompt_tokens_total
+        console.log("updatePrompt_tokens:");
+        console.log("prompt_tokens calculated by openAI",prompt_tokens,"prompt_tokens_total:",this.prompt_tokens_total);
         const prompt_tokens_mostRecent = prompt_tokens - this.prompt_tokens_total;
         //update prompt_tokens in local array and db
         console.log("updating local message array, most recent user message has prompt_tokens:",prompt_tokens_mostRecent);
