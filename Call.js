@@ -69,6 +69,7 @@ class Call{
         if (token_count){
             newElement.token_count = token_count;
         }
+        console.log({newElement});
         this.userMessages.push(newElement);
         if(!isTest){
             const result = await this.database.pushToDocumentArray(
@@ -78,7 +79,6 @@ class Call{
                             "userMessages",
                             newElement
             );
-            console.log("addMessage result:",{result});
             return result;
         }
         else{
