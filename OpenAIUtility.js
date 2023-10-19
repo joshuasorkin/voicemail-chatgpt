@@ -36,7 +36,11 @@ class OpenAIUtility {
             //start from the index where we will have enough tokens to submit the message
             if (startIndex >= 0){
                 for (let index=startIndex;index<userMessages.length;index++){
-                    messages.push(userMessages[index]);
+                    const message = userMessages[index];
+                    messages.push({
+                        role:message.role,
+                        content:message.content
+                    });
                 }
             }
             else{
@@ -46,9 +50,11 @@ class OpenAIUtility {
                 //and they can call back to start with refreshed memory.
                 return personality.response_out_of_memory;
             }
+            /*
             userMessages.forEach(message => {
                 messages.push(message);
             });
+            */
             
             const completion = await this.openai.chat.completions.create({
             messages: messages,
