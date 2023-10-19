@@ -22,6 +22,7 @@ const dictDoc2 = {
 
 const arrayAdd1 = 'a123';
 const arrayAdd2 = 'b455';
+const arrayUpdate1 = 'ur2'
 
 async function initialize(){
     console.log("Initializing Database with 'test' collection....");
@@ -31,7 +32,7 @@ async function initialize(){
 
 async function reset_test(){
     console.log("resetting collection");
-    await database.resetCollection("test");
+    await database.resetCollection("dictionaryTest");
     console.log("collection reset");
 }
 
@@ -57,6 +58,13 @@ async function getCollectionAsDictionary_test(){
 
 async function pushToDocumentArray_test(){
     await database.pushToDocumentArray('dictionaryTest','name',dictDoc1.name,'valueArray',arrayAdd1);
+    await database.pushToDocumentArray('dictionaryTest','name',dictDoc1.name,'valueArray',arrayAdd2);
+    const result = await database.getDocument('dictionaryTest',{name:dictDoc1.name});
+    console.log(result);
+}
+
+async function updateArray_test(){
+    await database.updateArray('dictionaryTest','name',dictDoc1.name,'valueArray',0,arrayUpdate1);
     const result = await database.getDocument('dictionaryTest',{name:dictDoc1.name});
     console.log(result);
 }

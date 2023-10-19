@@ -29,6 +29,7 @@ class Database{
     async resetCollection(collectionName){
         const database = this.database;
         const collections = await this.database.listCollections().toArray();
+        console.log({collections});
         const collectionExists = collections.some(collection => collection.name === collectionName);
         
         if (collectionExists) {
@@ -84,6 +85,16 @@ class Database{
         update.$push[key_update] = value_update;
         const result = await this.database.collection(collectionName).updateOne(filter,update);
         return result;
+    }
+
+    async updateArray(collectionName,key_document,value_document,key_array,index,newValue){
+        const filter = {};
+        filter[key_document] = value_document;
+        const updateObj = {};
+        updateObj[key_array+'.'+index] = newValue;
+        const result = await this.database.collection(collectionName).updateOne(
+            filter,
+            {$set: updateObj});
     }
 
     async getValue(callSid,key){
