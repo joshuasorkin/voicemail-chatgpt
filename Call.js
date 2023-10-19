@@ -55,7 +55,7 @@ class Call{
     }
 
     async updatePrompt_tokens_total(token_count){
-        await this.database.setValue(this.collectionName,'callSid',this.callSid,'prompt_tokens_total',tokenCount);
+        await this.database.setValue(this.collectionName,'callSid',this.callSid,'prompt_tokens_total',token_count);
     }
 
     async addMessage(role,message,isTest,token_count = null){
