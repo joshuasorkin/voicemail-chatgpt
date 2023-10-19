@@ -107,13 +107,13 @@ class Database{
         }
     }
 
-    async setValue(key_document, value_document, key, value) {
+    async setValue(collectionName,key_document, value_document, key, value) {
         const filter = {};
         filter[key_document] = value_document;
         const update = { $set: {} }; // Initialize an empty update object
         // Dynamically set the key in the update object based on the 'key' parameter
         update.$set[key] = value;      
-        const result = await this.calls.updateOne(filter, update);
+        const result = await this.database.collection(collectionName).updateOne(filter, update);
         return result;
     }
 
