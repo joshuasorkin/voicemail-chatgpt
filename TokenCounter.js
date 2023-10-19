@@ -11,11 +11,13 @@ class TokenCounter{
     }
 
     countFromUserMessages(userMessages){
+        console.log("entering countFromUserMessages...");
         const analysis = [];
         const initialValue = 0;
         const result = userMessages.reduce((accumulator,currentValue) => {
-            console.log("currentValue.content:",currentValue.content);
-            console.log("currentValue.token_count:",currentValue.token_count);
+            console.log({currentValue});
+            //console.log("currentValue.content:",currentValue.content);
+            //console.log("currentValue.token_count:",currentValue.token_count);
             console.log({accumulator});
             //const messageTokenCount = this.enc.encode(currentValue.content).length;
             const messageTokenCount = currentValue.token_count;
