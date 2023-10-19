@@ -63,13 +63,13 @@ class Call{
     //maybe OpenAIUtility.chatGPTGenerate() should produce an object with the role
     //isTest is used for when we are testing TokenCounter so we can push to the local array
     //without writing to the database
-    async addUserMessage(message,isTest=false){
-        const result = await this.addMessage('user',message,isTest);
+    async addUserMessage(message,isTest=false,token_count = null){
+        const result = await this.addMessage('user',message,isTest,token_count);
         return result;
     }
 
-    async addAssistantMessage(message){
-        const result = await this.addMessage('assistant',message);
+    async addAssistantMessage(message,token_count = null){
+        const result = await this.addMessage('assistant',message,token_count = token_count);
         return result;
     }
 

@@ -59,7 +59,11 @@ class OpenAIUtility {
             const completion_tokens = completion.usage.completion_tokens;
             const response = completion.choices[0].message.content;
             console.log({prompt_tokens},{response},{completion_tokens});
-            return response;
+            return {
+                prompt_tokens:prompt_tokens,
+                response:response,
+                completion_tokens:completion_tokens
+            };
         }
         catch(error){
             console.log(error);
