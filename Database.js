@@ -107,8 +107,9 @@ class Database{
         }
     }
 
-    async setValue(callSid, key, value) {
-        const filter = { callSid: callSid };
+    async setValue(key_document, value_document, key, value) {
+        const filter = {};
+        filter[key_document] = value_document;
         const update = { $set: {} }; // Initialize an empty update object
         // Dynamically set the key in the update object based on the 'key' parameter
         update.$set[key] = value;      

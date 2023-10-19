@@ -26,13 +26,19 @@ class Call{
         return result;
     }
 
-    //based on the prompt_tokens value returned by chatGPT,
-    //calculate the token count of user's most recent prompt as:
-    //prompt_tokens_mostRecent = prompt_tokens - prompt_tokens_total
+    
     //then we update prompt_tokens_total with the latest count as:
     //prompt_tokens_total = prompt_tokens + completion_tokens
     //then make the database update
     async updatePrompt_tokens(prompt_tokens,completion_tokens){
+        //based on the prompt_tokens value returned by chatGPT,
+        //calculate the token count of user's most recent prompt as:
+        //prompt_tokens_mostRecent = prompt_tokens - prompt_tokens_total
+        const prompt_tokens_mostRecent = prompt_tokens - this.prompt_tokens_total;
+        //update local message array
+        await this.updateMessageTokenCount(prompt_tokens_mostRecent);
+        this.prompt_tokens_total = prompt_tokens + completion_tokens;
+        await 
 
     }
 
@@ -46,6 +52,10 @@ class Call{
             'userMessages',
             currentMessageIndex,
             this.userMessages[currentMessageIndex]);
+    }
+
+    async updatePrompt_tokens_total(token_count){
+        
     }
 
     async addMessage(role,message,isTest,token_count = null){
