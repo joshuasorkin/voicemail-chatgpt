@@ -37,8 +37,11 @@ class Call{
             this.userMessages[currentMessageIndex]);
     }
 
-    async addMessage(role,message,isTest){
+    async addMessage(role,message,isTest,token_count = null){
         const newElement = {role:role,content:message};
+        if (token_count){
+            newElement.token_count = token_count;
+        }
         this.userMessages.push(newElement);
         if(!isTest){
             const result = await this.database.pushToDocumentArray(
