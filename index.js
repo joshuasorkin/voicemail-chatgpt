@@ -149,7 +149,7 @@ async function processCall(call,absoluteUrl,personality){
         //generate response to user's prompt
         const result = await openAIUtility.chatGPTGenerate(call,personality);
         await call.addAssistantMessage(result.response,result.completion_tokens);
-        const twiml = twiml_sayRedirect(result,absoluteUrl);
+        const twiml = twiml_sayRedirect(result.response,absoluteUrl);
         //todo: should we refactor client.calls(call.callSid) since we use it multiple times?
         const call_twilio = await client.calls(call.callSid).fetch();
         if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){
@@ -176,6 +176,7 @@ async function processCall(call,absoluteUrl,personality){
 function twiml_sayRedirect(result,absoluteUrl){
     const twiml = new twilio.twiml.VoiceResponse();
     const question = stringAnalyzer.getFinalQuestion(result);
+    //if we found a question at the end of chatGPT's response, send it as a GET parameter
     const url = absoluteUrl+`/twilio-webhook${question ? `?question=${encodeURIComponent(question)}` : ''}`;
     const gather = twiml.gather({
         input:'dtmf speech',

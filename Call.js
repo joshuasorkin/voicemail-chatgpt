@@ -13,7 +13,8 @@ class Call{
         const newCall = {
             callSid:this.callSid,
             userMessages:[],
-            prompt_tokens:null
+            prompt_tokens_initial:null,
+            prompt_tokens_total:null
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
         this.userMessages = result.userMessages;
@@ -23,6 +24,16 @@ class Call{
     async get(){
         const result = await this.database.getDocument(this.collectionName,{callSid:this.callSid});
         return result;
+    }
+
+    //based on the prompt_tokens value returned by chatGPT,
+    //calculate the token count of user's most recent prompt as:
+    //prompt_tokens_mostRecent = prompt_tokens - prompt_tokens_total
+    //then we update prompt_tokens_total with the latest count as:
+    //prompt_tokens_total = prompt_tokens + completion_tokens
+    //then make the database update
+    async updatePrompt_tokens(prompt_tokens,completion_tokens){
+
     }
 
     async updateMessageTokenCount(token_count){
