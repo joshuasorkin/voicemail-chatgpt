@@ -4,6 +4,7 @@ class Call{
         this.callSid = callSid;
         this.userMessages = [];
         this.collectionName = collectionName;
+        this.prompt_tokens_total = 0;
     }
 
     //returns the document from the calls collection
@@ -18,6 +19,7 @@ class Call{
         };
         const result = await this.database.getOrCreateDocument(this.collectionName,{callSid:this.callSid},newCall);
         this.userMessages = result.userMessages;
+        this.prompt_tokens_total = result.prompt_tokens_total;
         return result;
     }
 
