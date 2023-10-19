@@ -20,7 +20,7 @@ class TokenCounter{
             //console.log("currentValue.token_count:",currentValue.token_count);
             console.log({accumulator});
             //const messageTokenCount = this.enc.encode(currentValue.content).length;
-            const messageTokenCount = currentValue.token_count;
+            const messageTokenCount = currentValue.token_count ? currentValue.token_count : 0
             return accumulator + messageTokenCount;
         },initialValue);
         console.log("reduce result:",result);
