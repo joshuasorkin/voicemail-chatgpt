@@ -66,6 +66,7 @@ class Call{
 
     async addMessage(role,message,isTest,token_count = null){
         const newElement = {role:role,content:message};
+        console.log("token count inside newElement:",{token_count});
         if (token_count){
             newElement.token_count = token_count;
         }
@@ -97,7 +98,8 @@ class Call{
     }
 
     async addAssistantMessage(message,isTest=false,token_count = null){
-        const result = await this.addMessage('assistant',message,token_count = token_count);
+        console.log("addAssistantMessage token_count:",{token_count});
+        const result = await this.addMessage('assistant',message,false,token_count = token_count);
         return result;
     }
 
