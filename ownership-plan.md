@@ -25,6 +25,7 @@ When POSTed with a subscriber's private key and conversation ID, `/conversation/
    - URI for audio
    - URI for text
    - Delete button
+   - Call name field (defaults to whatever ChatGPT names the final conversation, if possible)
  - `/donation` page:
    - description of current costs of running service
      - app deployment hosting
