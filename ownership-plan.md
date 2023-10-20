@@ -6,22 +6,22 @@ For maximum security and trust, it would make sense to eventually migrate the pl
 
 When POSTed with an owner's private key and conversation ID, `/conversation` returns:
 - audio recording 
- - URI
+  - URI
 - text
- - URI
+  - URI
 - list of owners (must reach consensus for access sale).  Default is the caller (and ultimately the receiver when Vent/Ventsure integration occurs)
 - list of subscribers
 
 When POSTed with a subscriber's private key and conversation ID, `/conversation/[conversationId]` returns:
 - audio recording
- - URI
+  - URI
 - text
- - URI
+  - URI
  
  But initially, to implement this for MVP, let's just create a basic web client:
  - React app
  - Firebase authentication, including 2FA using text message sent to the user's phone number
  - Once the user is logged in, they can access a `/calls` page which lists each of their calls with:
-  - URI for audio
-  - URI for text
-  - Delete button
+   - URI for audio
+   - URI for text
+   - Delete button
