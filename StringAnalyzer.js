@@ -5,6 +5,7 @@ class StringAnalyzer{
     splitStringIntoFragments(inputString, N) {
         const fragments = [];
         for (let i = 0; i < inputString.length; i += N) {
+            console.log("splitStringIntoFragments index:",i)
             fragments.push(inputString.slice(i, i + N));
         }
         return fragments;
