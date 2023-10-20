@@ -25,3 +25,9 @@ When POSTed with a subscriber's private key and conversation ID, `/conversation/
    - URI for audio
    - URI for text
    - Delete button
+ - `/donation` page:
+   - description of current costs of running service
+   - current actual expenditures
+   - current actual donations
+   - donation button (paypal/venmo? need to make separate account)
+   - donation QR code
