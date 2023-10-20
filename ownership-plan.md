@@ -18,5 +18,10 @@ When POSTed with a subscriber's private key and conversation ID, `/conversation/
 - text
  - URI
  
-`/conversation` verbs:
-- 
+ But initially, to implement this for MVP, let's just create a basic web client:
+ - React app
+ - Firebase authentication, including 2FA using text message sent to the user's phone number
+ - Once the user is logged in, they can access a `/calls` page which lists each of their calls with:
+  - URI for audio
+  - URI for text
+  - Delete button
