@@ -27,6 +27,11 @@ When POSTed with a subscriber's private key and conversation ID, `/conversation/
    - Delete button
  - `/donation` page:
    - description of current costs of running service
+     - app deployment hosting
+     - speech-to-text
+     - text generation
+     - text-to-speech
+     - call duration
    - current actual expenditures
    - current actual donations
    - donation button (paypal/venmo? need to make separate account)
