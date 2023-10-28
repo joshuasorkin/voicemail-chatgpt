@@ -61,7 +61,7 @@ class OpenAIUtility {
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo',
-            max_tokens:deletionCutoff.max_tokens
+            max_tokens:deletionCutoff.response_max_tokens
             });
             console.log(`and the response has returned from OpenAI`);
             const prompt_tokens = completion.usage.prompt_tokens;
