@@ -34,17 +34,21 @@ class TokenCounter{
     //todo: use them here
     findDeletionCutoff(userMessages,tokensFromPersonality = 0){
         let tokenCount_remaining = this.countFromUserMessages(userMessages)+tokensFromPersonality;
+        let response_max_tokens = (process.env.OPENAI_MAX_TOKENS - tokenCount_remaining);
         console.log({tokensFromPersonality},{tokenCount_remaining});
         let index = 0;
         //iterate while the remaining token count is greater than model's max
         //and we haven't reached the end of the messages array
-        while (tokenCount_remaining > process.env.OPENAI_MAX_TOKENS && index < userMessages.length){
+        //todo: make these boolean checks into functions to improve readability
+        while ((tokenCount_remaining > process.env.OPENAI_MAX_TOKENS || response_max_tokens <= 0) && index < userMessages.length) {
             //could save this step if we feed in a pre-processed array
             const tokenCount_message = this.encode(userMessages[index].content).length;
             console.log("tokenCount_remaining:",{tokenCount_remaining});
             console.log(`token count for message ${index}`,{tokenCount_message});
             tokenCount_remaining -= tokenCount_message;
+            response_max_tokens = (process.env.OPENAI_MAX_TOKENS - tokenCount_remaining);
             console.log("tokenCount_remaining after deletion:",{tokenCount_remaining});
+            console.log("response_max_tokens after deletion:",{response_max_tokens});
             index++;
         }
         
@@ -55,7 +59,7 @@ class TokenCounter{
             //and we will also provide the maximum response length
             //so that OpenAI won't inadvertently return a response
             //in which prompt_tokens + response_tokens > OPENAI_max_tokens
-            const response_max_tokens = (process.env.OPENAI_MAX_TOKENS - tokenCount_remaining) - tokensFromPersonality;
+            //const response_max_tokens = (process.env.OPENAI_MAX_TOKENS - tokenCount_remaining) - tokensFromPersonality;
             return {
                 index:index,
                 response_max_tokens:response_max_tokens
