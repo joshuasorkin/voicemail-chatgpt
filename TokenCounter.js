@@ -66,6 +66,7 @@ class TokenCounter{
             return {
                 index:-1,
                 response_max_tokens:null
+            }
         }
     }
 }
