@@ -17,8 +17,8 @@ class TokenCounter{
         const result = userMessages.reduce((accumulator,currentValue) => {
             console.log({currentValue});
             console.log({accumulator});
-            //const messageTokenCount = this.enc.encode(currentValue.content).length;
-            const messageTokenCount = currentValue.token_count ? currentValue.token_count : 0
+            //use OpenAI-provided token count if available, otherwise use tiktoken
+            const messageTokenCount = currentValue.token_count ? currentValue.token_count : this.enc.encode(currentValue.content).length;
             return accumulator + messageTokenCount;
         },initialValue);
         console.log("reduce result:",result);
@@ -37,12 +37,20 @@ class TokenCounter{
         let response_max_tokens = (process.env.OPENAI_MAX_TOKENS - tokenCount_remaining);
         console.log({tokensFromPersonality},{tokenCount_remaining});
         let index = 0;
-        //iterate while the remaining token count is greater than model's max
-        //and we haven't reached the end of the messages array
+        //iterate through message array while (the remaining token count is greater than model's max)
+        //or (our available response tokens are < 0) and we haven't reached the end of the array
         //todo: make these boolean checks into functions to improve readability
         while ((tokenCount_remaining > process.env.OPENAI_MAX_TOKENS || response_max_tokens <= 0) && index < userMessages.length) {
-            //could save this step if we feed in a pre-processed array
-            const tokenCount_message = this.encode(userMessages[index].content).length;
+            let tokenCount_message;
+            //check if we have an OpenAI-provided token count for this message
+            if (userMessages[index].token_count){
+                //if it exists, use this count to calculate whether to advance our cutoff index
+                tokenCount_message = userMessages[index].token_count;
+            }
+            else{
+                //if not, estimate using tiktoken
+                tokenCount_message = this.encode(userMessages[index].content).length;
+            }
             console.log("tokenCount_remaining:",{tokenCount_remaining});
             console.log(`token count for message ${index}`,{tokenCount_message});
             tokenCount_remaining -= tokenCount_message;
