@@ -55,7 +55,7 @@ class TokenCounter{
             //and we will also provide the maximum response length
             //so that OpenAI won't inadvertently return a response
             //in which prompt_tokens + response_tokens > OPENAI_max_tokens
-            const response_max_tokens = process.env.OPENAI_MAX_TOKENS - tokenCount_remaining - tokensFromPersonality;
+            const response_max_tokens = (process.env.OPENAI_MAX_TOKENS - tokenCount_remaining) - tokensFromPersonality;
             return {
                 index:index,
                 response_max_tokens:response_max_tokens
