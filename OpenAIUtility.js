@@ -31,7 +31,8 @@ class OpenAIUtility {
         try{
             const userMessages = call.userMessages;
             const tokensFromPersonality = personality.tokenCount_OpenAI;
-            const startIndex = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
+            const deletionCutoff = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
+            const startIndex = deletionCutoff.startIndex;
             const messages = personality.messages.slice();
             //start from the index where we will have enough tokens to submit the message
             if (startIndex >= 0){
@@ -59,7 +60,8 @@ class OpenAIUtility {
             
             const completion = await this.openai.chat.completions.create({
             messages: messages,
-            model: 'gpt-3.5-turbo'
+            model: 'gpt-3.5-turbo',
+            max_tokens:deletionCutoff.max_tokens
             });
             console.log(`and the response has returned from OpenAI`);
             const prompt_tokens = completion.usage.prompt_tokens;

@@ -52,11 +52,20 @@ class TokenCounter{
         //tokens to fall below the maximum?
         if (index < userMessages.length){
             //yes: return this index, we will only send messages from this index forward
-            return index;
+            //and we will also provide the maximum response length
+            //so that OpenAI won't inadvertently return a response
+            //in which prompt_tokens + response_tokens > OPENAI_max_tokens
+            const response_max_tokens = process.env.OPENAI_MAX_TOKENS - tokenCount_remaining;
+            return {
+                index:index,
+                response_max_tokens:response_max_tokens
+            }
         }
         else{
             //no: we can't use deletion
-            return -1;
+            return {
+                index:-1,
+                response_max_tokens:null
         }
     }
 }
