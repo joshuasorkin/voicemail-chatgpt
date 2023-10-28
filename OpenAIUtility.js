@@ -32,6 +32,7 @@ class OpenAIUtility {
             const userMessages = call.userMessages;
             const tokensFromPersonality = personality.tokenCount_OpenAI;
             const deletionCutoff = this.tokenCounter.findDeletionCutoff(userMessages,tokensFromPersonality);
+            console.log({deletionCutoff});
             const startIndex = deletionCutoff.startIndex;
             const messages = personality.messages.slice();
             //start from the index where we will have enough tokens to submit the message
