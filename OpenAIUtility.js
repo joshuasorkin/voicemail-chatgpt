@@ -41,11 +41,12 @@ class OpenAIUtility {
     async createWithTimeoutMaxRetries(messages,max_tokens) {
         let retries = 0;
         const maxRetries = 3;
+        let timeout;
         //this runs the ChatGPT generate and retries it if the request takes
         //too long to return
         async function createWithTimeoutRetry(messages,max_tokens) {
             try {
-                const result = await Promise.race([this.chatGPTCreate(messages,max_tokens), timeoutPromise()]);
+                const result = await Promise.race([this.chatGPTCreate(messages,max_tokens), this.timeoutPromise(this.maxTime)]);
                 clearTimeout(timeout);
                 return result;
             } catch (error) {
@@ -62,11 +63,12 @@ class OpenAIUtility {
         return createWithTimeoutRetry(messages,max_tokens);
     }
     
-    timeoutPromise() {
+    timeoutPromise(ms) {
         return new Promise((_, reject) => {
-            setTimeout(() => {
+            timeout = setTimeout(() => {
+                clearTimeout(timeout); // Clear the timeout if it hasn't already been cleared
                 reject(new Error('Request timed out'));
-            }, this.maxTime);
+            }, ms);
         });
     }
     
