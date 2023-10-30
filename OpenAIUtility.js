@@ -12,7 +12,6 @@ class OpenAIUtility {
         this.tokenCounter = new TokenCounter();
         this.maxTime = 30000;
         this.model = 'gpt-3.5-turbo';
-        this.maxRetries = 3;
     }
 
     
@@ -41,7 +40,7 @@ class OpenAIUtility {
 
     async createWithTimeoutMaxRetries(messages,max_tokens) {
         let retries = 0;
-    
+        const maxRetries = 3;
         //this runs the ChatGPT generate and retries it if the request takes
         //too long to return
         async function createWithTimeoutRetry(messages,max_tokens) {
@@ -51,7 +50,7 @@ class OpenAIUtility {
                 return result;
             } catch (error) {
                 console.log("OpenAI request timed out, retrying...")
-                if (retries < this.maxRetries) {
+                if (retries < maxRetries) {
                     retries++;
                     return createWithTimeoutRetry(messages,max_tokens); // Retry the request
                 } else {
@@ -105,11 +104,7 @@ class OpenAIUtility {
             });
             */
             console.log("Now submitting prompt to OpenAI...");
-            const completion = await this.openai.chat.completions.create({
-            messages: messages,
-            model: 'gpt-3.5-turbo',
-            max_tokens:deletionCutoff.response_max_tokens
-            });
+            const completion = await this.createWithTimeoutMaxRetries(messages,deletionCutoff.response_max_tokens);
             console.log(`and the response has returned from OpenAI`);
             const prompt_tokens = completion.usage.prompt_tokens;
             const completion_tokens = completion.usage.completion_tokens;
