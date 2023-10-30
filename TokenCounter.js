@@ -25,8 +25,13 @@ class TokenCounter{
         return result;
     }
 
-    totalPromptTokensExceedsMaxTokens(tokenCount_remaining){
-        return tokenCount_remaining + process.env.RESPONSE_MIN_TOKENS > process.env.OPENAI_MAX_TOKENS;
+    totalTokensExceedsMaxTokens(tokenCount_remaining){
+        //predict the total (prompt + response) tokens that OpenAI will calculate, using
+        //the RESPONSE_MIN_TOKENS to give a conservative estimate of the response tokens
+        //RESPONSE_MIN_TOKENS should be set based on the response length specified in the initial system prompts
+        const projectedTotalTokens = tokenCount_remaining + process.env.RESPONSE_MIN_TOKENS;
+        console.log({projectedTotalTokens});
+        return projectedTotalTokens > process.env.OPENAI_MAX_TOKENS;
     }
 
     noResponseTokensAvailable(response_max_tokens){
@@ -48,7 +53,7 @@ class TokenCounter{
         //or (our available response tokens are < 0) and we haven't reached the end of the array
         //note that we add RESPONSE_MIN_TOKENS because we want to only exit this loop once
         //we've discarded enough messages to free up enough tokens for a standard full-length answer
-        while ((this.totalPromptTokensExceedsMaxTokens(tokenCount_remaining) || this.noResponseTokensAvailable(response_max_tokens)) && index < userMessages.length) {
+        while ((this.totalTokensExceedsMaxTokens(tokenCount_remaining) || this.noResponseTokensAvailable(response_max_tokens)) && index < userMessages.length) {
             let tokenCount_message;
             //check if we have an OpenAI-provided token count for this message
             if (userMessages[index].token_count){
