@@ -28,50 +28,44 @@ class OpenAIUtility {
         }
     }
 
-    //runs ChatGPT completion
-    async chatGPTCreate(messages,max_tokens){
-        const completion = await this.openai.chat.completions.create({
-            messages: messages,
-            model: this.model,
-            max_tokens:max_tokens
-        });
-        return completion;
-    }
-
-    async createWithTimeoutMaxRetries(messages,max_tokens) {
-        let retries = 0;
+    async chatGPTCreate(messages, maxTokens) {
         const maxRetries = 3;
-        //this runs the ChatGPT generate and retries it if the request takes
-        //too long to return
-        async function createWithTimeoutRetry(messages,max_tokens) {
-            let timeout;
+        const timeout = 30000; // 30 seconds
+        let retries = 0;
+    
+        while (retries < maxRetries) {
             try {
-                const result = await Promise.race([this.chatGPTCreate(messages,max_tokens), 
-                                                    this.timeoutPromise(this.maxTime,timeout)]);
-                clearTimeout(timeout);
-                return result;
+                const completionPromise = this.openai.chat.completions.create({
+                    messages: messages,
+                    model: this.model,
+                    max_tokens: maxTokens
+                });
+    
+                const completion = await Promise.race([
+                    completionPromise,
+                    new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error('Request timed out')), timeout)
+                    )
+                ]);
+    
+                return completion;
             } catch (error) {
-                console.log("OpenAI request timed out, retrying...")
-                if (retries < maxRetries) {
+                if (error.message === 'Request timed out') {
+                    // Retry if the request timed out
                     retries++;
-                    return createWithTimeoutRetry(messages,max_tokens); // Retry the request
+                    console.log(`Retry attempt ${retries} after timeout.`);
                 } else {
-                    throw new Error('Max retries reached, request failed.');
+                    // If it's not a timeout issue, propagate the error
+                    throw error;
                 }
             }
         }
     
-        return createWithTimeoutRetry(messages,max_tokens);
+        // If all retries fail, throw an error or handle it as needed
+        throw new Error(`Failed after ${maxRetries} retries.`);
     }
     
-    async timeoutPromise(ms,timeoutVar) {
-        return new Promise((_, reject) => {
-            timeoutVar = setTimeout(() => {
-                clearTimeout(timeout); // Clear the timeout if it hasn't already been cleared
-                reject(new Error('Request timed out'));
-            }, ms);
-        });
-    }
+    
     
     
 
@@ -107,7 +101,7 @@ class OpenAIUtility {
             });
             */
             console.log("Now submitting prompt to OpenAI...");
-            const completion = await this.createWithTimeoutMaxRetries(messages,deletionCutoff.response_max_tokens);
+            const completion = await this.chatGPTCreate(messages,deletionCutoff.response_max_tokens);
             console.log(`and the response has returned from OpenAI`);
             const prompt_tokens = completion.usage.prompt_tokens;
             const completion_tokens = completion.usage.completion_tokens;
