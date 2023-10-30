@@ -4,6 +4,7 @@ class TokenCounter{
 
     constructor(){
         this.enc = get_encoding('cl100k_base');
+        this.response_min_tokens = parseInt(process.env.RESPONSE_MIN_TOKENS);
     }
     
     encode(str){
@@ -29,8 +30,8 @@ class TokenCounter{
         //predict the total (prompt + response) tokens that OpenAI will calculate, using
         //the RESPONSE_MIN_TOKENS to give a conservative estimate of the response tokens
         //RESPONSE_MIN_TOKENS should be set based on the response length specified in the initial system prompts
-        console.log({tokenCount_remaining},process.env.RESPONSE_MIN_TOKENS);
-        const projectedTotalTokens = tokenCount_remaining + process.env.RESPONSE_MIN_TOKENS;
+        console.log({tokenCount_remaining},this.response_min_tokens);
+        const projectedTotalTokens = tokenCount_remaining + this.response_min_tokens;
         console.log({projectedTotalTokens});
         return projectedTotalTokens > process.env.OPENAI_MAX_TOKENS;
     }
