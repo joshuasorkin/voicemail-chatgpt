@@ -35,6 +35,7 @@ class TokenCounter{
     }
 
     noResponseTokensAvailable(response_max_tokens){
+        console.log({response_max_tokens})
         return response_max_tokens <= 0;
     }
     //if the call's current token count is > OPENAI_MAX_TOKENS,
