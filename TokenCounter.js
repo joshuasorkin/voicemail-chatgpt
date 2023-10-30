@@ -25,6 +25,13 @@ class TokenCounter{
         return result;
     }
 
+    totalPromptTokensExceedsMaxTokens(tokenCount_remaining){
+        return tokenCount_remaining + process.env.RESPONSE_MIN_TOKENS > process.env.OPENAI_MAX_TOKENS;
+    }
+
+    noResponseTokensAvailable(response_max_tokens){
+        return response_max_tokens <= 0;
+    }
     //if the call's current token count is > OPENAI_MAX_TOKENS,
     //find how many messages need to be deleted from the beginning of userMessages
     //to lower the token count below the maximum
@@ -42,7 +49,7 @@ class TokenCounter{
         //note that we add RESPONSE_MIN_TOKENS because we want to only exit this loop once
         //we've discarded enough messages to free up enough tokens for a standard full-length answer
         //todo: make these boolean checks into functions to improve readability
-        while ((tokenCount_remaining + process.env.RESPONSE_MIN_TOKENS > process.env.OPENAI_MAX_TOKENS || response_max_tokens <= 0) && index < userMessages.length) {
+        while ((this.totalPromptTokensExceedsMaxTokens(tokenCount_remaining) || this.noResponseTokensAvailable(response_max_tokens)) && index < userMessages.length) {
             let tokenCount_message;
             //check if we have an OpenAI-provided token count for this message
             if (userMessages[index].token_count){

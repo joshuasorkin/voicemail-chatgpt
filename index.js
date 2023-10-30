@@ -164,7 +164,7 @@ async function processCall(call,absoluteUrl,personality){
     }
     catch(error){
         console.log({error});
-        const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request.",absoluteUrl);
+        const twiml = twiml_sayRedirect("Sorry, there was an error while processing your request. If you get this message repeatedly, please hang up and call back to start a new session with me.",absoluteUrl);
         const call_twilio = await client.calls(call.callSid).fetch();
         if (call_twilio.status === 'completed' || call_twilio.status === 'canceled'){
             return new VoiceResponse().say("Thank you for using the system.");
