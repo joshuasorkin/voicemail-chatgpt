@@ -10,7 +10,9 @@ class OpenAIUtility {
             apiKey:process.env.OPENAI_API_KEY
         });
         this.tokenCounter = new TokenCounter();
-
+        this.maxTime = 30000;
+        this.model = 'gpt-3.5-turbo';
+        this.maxRetries = 3;
     }
 
     
@@ -18,7 +20,7 @@ class OpenAIUtility {
         try{
             const completion = await this.openai.chat.completions.create({
                 messages: personalityMessages,
-                model: 'gpt-3.5-turbo'
+                model: this.model
             });
             return completion.usage.prompt_tokens;
         }
@@ -26,6 +28,50 @@ class OpenAIUtility {
             throw exception;
         }
     }
+
+    //runs ChatGPT completion
+    async chatGPTCreate(messages,max_tokens){
+        const completion = await this.openai.chat.completions.create({
+            messages: messages,
+            model: this.model,
+            max_tokens:max_tokens
+        });
+        return completion;
+    }
+
+    async createWithTimeoutMaxRetries(messages,max_tokens) {
+        let retries = 0;
+    
+        //this runs the ChatGPT generate and retries it if the request takes
+        //too long to return
+        async function createWithTimeoutRetry(messages,max_tokens) {
+            try {
+                const result = await Promise.race([this.chatGPTCreate(messages,max_tokens), timeoutPromise()]);
+                clearTimeout(timeout);
+                return result;
+            } catch (error) {
+                console.log("OpenAI request timed out, retrying...")
+                if (retries < this.maxRetries) {
+                    retries++;
+                    return createWithTimeoutRetry(messages,max_tokens); // Retry the request
+                } else {
+                    throw new Error('Max retries reached, request failed.');
+                }
+            }
+        }
+    
+        return createWithTimeoutRetry(messages,max_tokens);
+    }
+    
+    timeoutPromise() {
+        return new Promise((_, reject) => {
+            setTimeout(() => {
+                reject(new Error('Request timed out'));
+            }, this.maxTime);
+        });
+    }
+    
+    
 
     async chatGPTGenerate(call,personality) {
         try{
