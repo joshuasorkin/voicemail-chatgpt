@@ -35,7 +35,7 @@ class OpenAIUtility {
         do {
             response = await this.openai.chat.completions.create({
                 messages: messages,
-                model: model,
+                model: this.model,
                 max_tokens: maxTokens
             });
         } while (response.choices[0].finish_reason === 'incomplete');
