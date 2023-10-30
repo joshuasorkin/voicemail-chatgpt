@@ -58,7 +58,7 @@ class OpenAIUtility {
                 messages.push(message);
             });
             */
-            
+            console.log("Now submitting prompt to OpenAI...");
             const completion = await this.openai.chat.completions.create({
             messages: messages,
             model: 'gpt-3.5-turbo',
