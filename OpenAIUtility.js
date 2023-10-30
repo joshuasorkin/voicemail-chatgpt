@@ -51,7 +51,7 @@ class OpenAIUtility {
     
         while (retries < maxRetries) {
             try {
-                const completionPromise = generateCompleteResponse(messages, maxTokens);
+                const completionPromise = this.generateCompleteResponse(messages, maxTokens);
                 const completion = await Promise.race([
                     completionPromise,
                     new Promise((_, reject) =>
