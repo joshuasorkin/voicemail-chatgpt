@@ -28,6 +28,22 @@ class OpenAIUtility {
         }
     }
 
+    //to ensure that the response is complete and that we haven't generated a
+    //response that exceeded maxTokens and was therefore truncated to an incomplete response
+    async generateCompleteResponse(messages, maxTokens) {
+        let response;
+        do {
+            response = await this.openai.chat.completions.create({
+                messages: messages,
+                model: this.model,
+                max_tokens: maxTokens
+            });
+        } while (response.choices[0].finish_reason === 'incomplete');
+    
+        // Now response.choices[0].text will contain the complete response within the specified max_tokens limit
+        return response.choices[0].text.trim();
+    }
+
     async chatGPTCreate(messages, maxTokens) {
         const maxRetries = 3;
         const timeout = 30000; // 30 seconds
@@ -35,11 +51,7 @@ class OpenAIUtility {
     
         while (retries < maxRetries) {
             try {
-                const completionPromise = this.openai.chat.completions.create({
-                    messages: messages,
-                    model: this.model,
-                    max_tokens: maxTokens
-                });
+                const completionPromise = this.generateCompleteResponse(messages, maxTokens);
     
                 const completion = await Promise.race([
                     completionPromise,
