@@ -29,7 +29,7 @@ class TokenCounter{
         //predict the total (prompt + response) tokens that OpenAI will calculate, using
         //the RESPONSE_MIN_TOKENS to give a conservative estimate of the response tokens
         //RESPONSE_MIN_TOKENS should be set based on the response length specified in the initial system prompts
-        console.log({tokenCount_Remaining},process.env.RESPONSE_MIN_TOKENS);
+        console.log({tokenCount_remaining},process.env.RESPONSE_MIN_TOKENS);
         const projectedTotalTokens = tokenCount_remaining + process.env.RESPONSE_MIN_TOKENS;
         console.log({projectedTotalTokens});
         return projectedTotalTokens > process.env.OPENAI_MAX_TOKENS;
