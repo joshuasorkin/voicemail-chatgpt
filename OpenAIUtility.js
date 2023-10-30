@@ -63,7 +63,7 @@ class OpenAIUtility {
         return createWithTimeoutRetry(messages,max_tokens);
     }
     
-    timeoutPromise(ms) {
+    async timeoutPromise(ms) {
         return new Promise((_, reject) => {
             timeout = setTimeout(() => {
                 clearTimeout(timeout); // Clear the timeout if it hasn't already been cleared
