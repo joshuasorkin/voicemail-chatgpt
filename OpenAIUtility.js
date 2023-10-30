@@ -35,13 +35,13 @@ class OpenAIUtility {
         do {
             response = await this.openai.chat.completions.create({
                 messages: messages,
-                model: this.model,
+                model: model,
                 max_tokens: maxTokens
             });
         } while (response.choices[0].finish_reason === 'incomplete');
     
         // Now response.choices[0].text will contain the complete response within the specified max_tokens limit
-        return response.choices[0].text.trim();
+        return response;
     }
 
     async chatGPTCreate(messages, maxTokens) {
@@ -51,8 +51,7 @@ class OpenAIUtility {
     
         while (retries < maxRetries) {
             try {
-                const completionPromise = this.generateCompleteResponse(messages, maxTokens);
-    
+                const completionPromise = generateCompleteResponse(messages, maxTokens);
                 const completion = await Promise.race([
                     completionPromise,
                     new Promise((_, reject) =>
