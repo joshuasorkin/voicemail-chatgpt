@@ -64,10 +64,6 @@ class OpenAIUtility {
         // If all retries fail, throw an error or handle it as needed
         throw new Error(`Failed after ${maxRetries} retries.`);
     }
-    
-    
-    
-    
 
     async chatGPTGenerate(call,personality) {
         try{
