@@ -32,12 +32,10 @@ class TokenCounter{
         //RESPONSE_MIN_TOKENS should be set based on the response length specified in the initial system prompts
         console.log({tokenCount_remaining},this.response_min_tokens);
         const projectedTotalTokens = tokenCount_remaining + this.response_min_tokens;
-        console.log({projectedTotalTokens});
         return projectedTotalTokens > process.env.OPENAI_MAX_TOKENS;
     }
 
     noResponseTokensAvailable(response_max_tokens){
-        console.log({response_max_tokens})
         return response_max_tokens <= 0;
     }
     //if the call's current token count is > OPENAI_MAX_TOKENS,
