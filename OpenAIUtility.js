@@ -38,6 +38,8 @@ class OpenAIUtility {
                 model: this.model,
                 max_tokens: maxTokens
             });
+            const finish_reason = response.choices[0];
+            console.log({finish_reason});
         } while (response.choices[0].finish_reason === 'incomplete');
     
         // Now response.choices[0].text will contain the complete response within the specified max_tokens limit
