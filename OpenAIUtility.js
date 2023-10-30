@@ -43,9 +43,7 @@ class OpenAIUtility {
                     const finish_reason = response.choices[0].finish_reason;
                     console.log({finish_reason});
                 } while (response.choices[0].finish_reason === 'incomplete');
-    
-                const completeResponse = response.choices[0].text.trim();
-                resolve(completeResponse);
+                resolve(response);
             } catch (error) {
                 reject(error);
             }
