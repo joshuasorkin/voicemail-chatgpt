@@ -19,7 +19,18 @@ class TokenCounter{
             console.log({currentValue});
             console.log({accumulator});
             //use OpenAI-provided token count if available, otherwise use tiktoken
-            const messageTokenCount = currentValue.token_count ? currentValue.token_count : this.enc.encode(currentValue.content).length;
+            let messageTokenCount;
+            if(currentValue.token_count){
+                messageTokenCount = currentValue.token_count;
+            } 
+            else{
+                if(currentValue.content){
+                    messageTokenCount = this.enc.encode(currentValue.content).length;
+                }
+                else{
+                    messageTokenCount = 0;
+                }
+            }
             return accumulator + messageTokenCount;
         },initialValue);
         console.log("reduce result:",result);
