@@ -10,7 +10,7 @@ class OpenAIUtility {
             apiKey:process.env.OPENAI_API_KEY
         });
         this.tokenCounter = new TokenCounter();
-        this.maxTime = 30000;
+        this.maxTime = 10000;
         this.model = 'gpt-3.5-turbo';
     }
 
@@ -65,7 +65,7 @@ class OpenAIUtility {
                         setTimeout(() => reject(new Error('Request timed out')), timeout)
                     )
                 ]);
-    
+                clearTimeout(timeout);
                 return completion;
             } catch (error) {
                 if (error.message === 'Request timed out') {
@@ -83,6 +83,7 @@ class OpenAIUtility {
         throw new Error(`Failed after ${maxRetries} retries.`);
     }
 
+    //todo: need to break this up into sub-functions, it's doing way too much
     async chatGPTGenerate(call,personality) {
         try{
             const userMessages = call.userMessages;
