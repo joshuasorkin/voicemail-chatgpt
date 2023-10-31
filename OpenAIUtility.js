@@ -97,10 +97,13 @@ class OpenAIUtility {
                 for (let index=startIndex;index<userMessages.length;index++){
                     const message = userMessages[index];
                     //OpenAI requires that messages only have `role` and `content` properties
-                    messages.push({
-                        role:message.role,
-                        content:message.content
-                    });
+                    //check for blank content as that can cause an error
+                    if(message.content){
+                        messages.push({
+                            role:message.role,
+                            content:message.content
+                        });
+                    }
                 }
             }
             else{
