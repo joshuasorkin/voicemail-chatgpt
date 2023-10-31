@@ -53,7 +53,7 @@ class OpenAIUtility {
 
     async chatGPTCreate(messages, maxTokens) {
         const maxRetries = 3;
-        const timeout = 30000; // 30 seconds
+        const timeout = 10000; // 10 seconds
         let retries = 0;
     
         while (retries < maxRetries) {
