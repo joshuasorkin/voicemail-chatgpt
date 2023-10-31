@@ -42,7 +42,7 @@ class OpenAIUtility {
                     });
                     const finish_reason = response.choices[0].finish_reason;
                     console.log({finish_reason});
-                } while (response.choices[0].finish_reason === 'incomplete');
+                } while (response.choices[0].finish_reason === 'length');
                 resolve(response);
             } catch (error) {
                 reject(error);
